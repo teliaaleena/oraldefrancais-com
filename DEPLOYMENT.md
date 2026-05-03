@@ -12,6 +12,8 @@ Document de référence pour le déploiement et la maintenance d'**oraldefrancai
 - Pour modifier : édite un fichier sur GitHub (web UI) ou en local (git CLI), push sur `main`, attends 30-60s
 - Si cassé : va dans Cloudflare → Pages → `oraldefrancais-com` → Deployments → rollback à la version précédente
 
+> **Prérequis critique pour les déploiements automatiques** : l'app GitHub **"Cloudflare Workers and Pages"** doit être installée **sur le compte de Télia** (`teliaaleena`) et autorisée sur le repo `oraldefrancais-com`. Sans ça, les commits ne déclenchent pas de build (cf. [Bug "disconnected from your Git account"](#bug-disconnected-from-your-git-account)).
+
 ---
 
 ## Vue d'ensemble
@@ -270,6 +272,44 @@ GitHub garde tout :
 2. Cliquer sur un commit pour voir l'état du code à ce moment-là
 3. Bouton "Browse files" pour explorer tout le repo à ce moment-là
 
+### Bug "disconnected from your Git account"
+
+**Symptôme** : sur Cloudflare Pages → `oraldefrancais-com`, un bandeau bleu indique *"This project is disconnected from your Git account. This may cause deployments to fail."*. Tes commits sur GitHub ne déclenchent plus de nouveau build automatiquement (la liste des Deployments reste figée sur un vieux commit).
+
+**Cause** : l'app GitHub "Cloudflare Workers and Pages" n'est pas (ou plus) installée sur le compte GitHub de Télia (`teliaaleena`), ou n'a pas accès au repo `oraldefrancais-com`. Sans cette installation côté **owner du repo**, GitHub n'envoie pas de webhook à Cloudflare. Un collaborator (Vincent) qui installe l'app sur son propre compte ne suffit pas — les webhooks GitHub Apps ne se déclenchent que sur les repos détenus par le compte qui a installé l'app.
+
+**Particulièrement piégeux après un GitHub Import** : l'import crée un nouveau repo, mais l'install de l'app Cloudflare ne se propage pas automatiquement. À refaire manuellement.
+
+**Solution (à faire par Télia, depuis sa session GitHub)** :
+
+1. Aller sur https://github.com/apps/cloudflare-workers-and-pages
+2. Cliquer **Configure** (ou **Install** si jamais installée)
+3. Si plusieurs comptes apparaissent, choisir **`teliaaleena`**
+4. Dans **Repository access** : sélectionner **"Only select repositories"** → cocher **`oraldefrancais-com`**
+5. Cliquer **Install** (ou **Save**)
+
+**Vérification** : 
+1. Vincent recharge Cloudflare Pages → `oraldefrancais-com` → Settings. Le bandeau bleu doit avoir disparu.
+2. Test : éditer `README.md` sur GitHub (ajouter un espace), commit. Un nouveau deployment doit apparaître automatiquement dans Cloudflare en ~30 secondes.
+
+### Recréer le projet Cloudflare Pages from scratch (si tout le reste a échoué)
+
+À utiliser uniquement si le projet Cloudflare est complètement orphelin (bandeau "disconnected" + impossible de Manage le repo + pas de bouton "Connect to Git" + commit vide ne déclenche rien). Procédure non destructive côté code (le repo GitHub n'est pas touché). Le site sera down 2-3 minutes le temps de rerattacher le custom domain.
+
+1. **Détacher le custom domain** : projet → onglet Custom domains → `oraldefrancais.com` → "..." → Remove
+2. **Supprimer le projet** : projet → Settings → General (sidebar) → tout en bas, section Delete project → confirmer
+3. **Recréer** : Workers & Pages → Create → Pages → Connect to Git → autoriser GitHub si nécessaire → choisir `teliaaleena/oraldefrancais-com` → Begin setup
+4. **Config build** :
+   - Project name : `oraldefrancais-com` (exactement le même nom)
+   - Production branch : `main`
+   - Framework preset : None
+   - Build command : *(vide)*
+   - Build output directory : `/`
+5. **Save and Deploy**, attendre "Success"
+6. **Tester sur la preview URL** (`xxxxx.oraldefrancais-com.pages.dev`) avant de rerattacher le domaine
+7. **Rerattacher le domaine** : Custom domains → Set up a custom domain → `oraldefrancais.com` → Activate domain
+8. **Faire l'install GitHub App** (cf. section ci-dessus) si pas déjà fait — sinon le webhook restera cassé sur le nouveau projet aussi
+
 ### Le domaine `oraldefrancais.com` ne marche plus du tout (même `oraldefrancais-com.pages.dev` non plus)
 
 Ça veut dire que le compte Cloudflare a un problème (suspension, paiement, etc.).
@@ -318,6 +358,8 @@ La landing `oraldefrancais.com` (racine) est dans `/index.html` — fichier sép
 - **Mai 2026 (P5)** : refonte palette (Light `#f8fafc` + electric `#0ea5e9` + hot pink `#ec4899` ; Dark `#0a1929` + electric `#38bdf8` + pink `#f472b6`), typo Space Grotesk + JetBrains Mono, bordures rgba blanches, fix mode fantôme (textarea transparent en `.ghost-on`).
 
 - **Mai 2026 — migration de domaine** : passage de `teliamoreau.com` à `oraldefrancais.com` pour transformer l'outil personnel en outil collectif partageable. Nouveau repo `teliaaleena/oraldefrancais-com` créé via GitHub Import depuis l'ancien repo. Nouveau projet Cloudflare Pages connecté.
+
+- **3 mai 2026 — incident "disconnected" post-migration** : après l'import GitHub, les commits sur le nouveau repo ne déclenchaient plus de build Cloudflare, alors que la config était correcte (bon repo, bonne branche, custom domain bien rattaché). Bandeau bleu "disconnected from your Git account" sur Cloudflare. Cause root : l'app GitHub "Cloudflare Workers and Pages" n'était installée que sur le compte Vincent (collaborator), pas sur le compte Télia (owner). Les webhooks GitHub Apps ne se déclenchent que côté owner. Solution : recreate from scratch du projet Pages + install de l'app sur le compte Télia. Procédure de récupération documentée dans Dépannage.
 
 - **Décision permanente** : pas de login utilisateur. Données en `localStorage` uniquement, avec bouton Export/Import pour sync manuelle cross-device. Justification : login = serveur = point de panne supplémentaire = barrière à l'usage. Coût en simplicité ne valait pas le bénéfice de sync auto, surtout pour un public d'élèves mineurs (RGPD).
 

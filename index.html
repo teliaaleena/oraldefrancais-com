@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Télia Moreau</title>
-<meta name="description" content="Site personnel de Télia Moreau.">
-<meta property="og:title" content="Télia Moreau">
-<meta property="og:description" content="Site personnel. Outil de révision pour l'oral du bac de français.">
+<title>Oral de français · Outil de révision</title>
+<meta name="description" content="Outil libre pour préparer l'oral du bac de français. Phrase par phrase, à ton rythme, sans compte.">
+<meta property="og:title" content="Oral de français · Outil de révision">
+<meta property="og:description" content="Outil libre pour préparer l'oral du bac de français. Phrase par phrase, à ton rythme, sans compte.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://teliamoreau.com">
-<meta property="og:image" content="https://teliamoreau.com/og-image.svg">
+<meta property="og:url" content="https://oraldefrancais.com">
+<meta property="og:image" content="https://oraldefrancais.com/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Télia Moreau">
-<meta name="twitter:image" content="https://teliamoreau.com/og-image.svg">
+<meta name="twitter:title" content="Oral de français · Outil de révision">
+<meta name="twitter:image" content="https://oraldefrancais.com/og-image.svg">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#fefcf8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -199,19 +199,17 @@ main {
   font-size: 13px;
   letter-spacing: 0.04em;
   margin-bottom: 24px;
-  
 }
 h1 {
-  font-size: clamp(56px, 9vw, 120px);
+  font-size: clamp(40px, 6.4vw, 84px);
   font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   margin-bottom: 28px;
   color: var(--ink);
 }
 h1 .first {
   display: block;
-  
 }
 h1 .last {
   display: inline-block;
@@ -221,23 +219,20 @@ h1 .last {
   transform: rotate(-2deg);
   margin-top: 12px;
   color: var(--ink);
-  
 }
 .bio {
   font-size: 19px;
   line-height: 1.55;
   color: var(--ink-2);
-  max-width: 38ch;
+  max-width: 44ch;
   margin-bottom: 40px;
   font-weight: 500;
-  
 }
 .bio strong {
   color: var(--ink);
   font-weight: 700;
 }
 .cta-wrap {
-  
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -283,7 +278,6 @@ h1 .last {
 /* Hero right - illustrative card */
 .hero-right {
   position: relative;
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -312,7 +306,6 @@ h1 .last {
   border-radius: 4px;
   transform: rotate(-3deg);
   opacity: 0.7;
-  /* simulates washi tape */
 }
 .note-tag {
   display: inline-block;
@@ -361,47 +354,58 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   font-size: 12px;
   font-weight: 600;
   color: var(--ink-3);
   padding-top: 24px;
   letter-spacing: 0.02em;
 }
+footer .footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
 footer .domain strong {
   color: var(--pink-deep);
   font-weight: 700;
 }
-
-/* Animations */
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+footer .credit {
+  color: var(--ink-3);
 }
-@keyframes rise-rotate {
-  from { opacity: 0; transform: translateY(14px) rotate(-2deg); }
-  to { opacity: 1; transform: translateY(0) rotate(-2deg); }
+footer .source-link {
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+footer .source-link:hover {
+  color: var(--pink-deep);
+  border-bottom-color: var(--pink-deep);
 }
 
 /* Mobile */
 @media (max-width: 760px) {
   .page { padding: 20px 22px; }
-  .topbar .mark { font-size: 16px; }
-  .topbar .mark::before { width: 28px; height: 28px; border-radius: 8px; }
+  .topbar .mark-text { font-size: 14px; }
+  .topbar .mark-square { width: 30px; height: 30px; font-size: 18px; }
   .topbar .place { font-size: 11px; }
   main { padding: 32px 0 24px; }
   .hero { grid-template-columns: 1fr; gap: 40px; }
-  h1 { font-size: clamp(46px, 13vw, 72px); }
+  h1 { font-size: clamp(34px, 8.5vw, 52px); line-height: 1.05; }
   h1 .last { padding: 0 12px 4px; border-radius: 14px; }
   .eyebrow { font-size: 12px; }
   .bio { font-size: 17px; max-width: none; }
   .cta { font-size: 16px; padding: 16px 26px; }
   .note-card { padding: 28px 24px 24px; transform: rotate(0deg); max-width: none; }
   .note-quote { font-size: 18px; }
-  footer { font-size: 11px; flex-wrap: wrap; gap: 10px; }
+  footer { font-size: 11px; }
 }
 @media (max-width: 380px) {
   .page { padding: 16px 18px; }
-  h1 { font-size: clamp(42px, 12vw, 60px); }
+  h1 { font-size: clamp(30px, 8vw, 44px); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -419,27 +423,27 @@ footer .domain strong {
 
   <header class="topbar">
     <a href="/" class="mark">
-      <span class="mark-square">t</span>
-      <span class="mark-text">éliamoreau.com</span>
+      <span class="mark-square">o</span>
+      <span class="mark-text">raldefrancais.com</span>
     </a>
-    <span class="place">Phuket · Première</span>
+    <span class="place">Outil de révision</span>
   </header>
 
   <main id="main-content">
     <section class="hero">
 
       <div class="hero-left">
-        <span class="eyebrow">Site personnel</span>
+        <span class="eyebrow">Oral du bac de français</span>
         <h1>
-          <span class="first">Télia</span>
-          <span class="last">Moreau.</span>
+          <span class="first">Réviser l'oral du bac</span>
+          <span class="last">de français.</span>
         </h1>
         <p class="bio">
-          Élève en <strong>Première</strong> au lycée français de Phuket. Cette page rassemble mes outils et projets personnels. Pour l'instant, un seul, mais c'est le plus utile : <strong>réviser l'oral du bac de français</strong>.
+          Un outil libre pour préparer l'EAF. <strong>Phrase par phrase</strong>, à ton rythme, sans compte. Construis ton plan, analyse tes textes, entraîne-toi en simulation orale.
         </p>
         <div class="cta-wrap">
-          <a href="/revision" class="cta">Réviser pour l'oral</a>
-          <span class="cta-meta">Outil personnel · sans compte · gratuit</span>
+          <a href="/revision" class="cta">Commencer</a>
+          <span class="cta-meta">Sans compte · sans pub · gratuit</span>
         </div>
       </div>
 
@@ -455,7 +459,11 @@ footer .domain strong {
   </main>
 
   <footer>
-    <span class="domain">teliamoreau<strong>.</strong>com</span>
+    <div class="footer-left">
+      <span class="domain">oraldefrancais<strong>.</strong>com</span>
+      <span class="credit">Créé par Télia Moreau</span>
+      <a href="https://github.com/teliaaleena/oraldefrancais-com" class="source-link" rel="noopener">Code source ouvert</a>
+    </div>
     <span>2026</span>
   </footer>
 

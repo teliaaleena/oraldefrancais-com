@@ -2003,6 +2003,272 @@ body {
 }
 .step1-mouvements-cards.visible { display: grid; }
 
+/* B4.3 — Segments du passage : bordure gauche colorée + numéro romain marge */
+.passage-segment {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.passage-segment-mouvement .passage-segment-roman {
+  text-align: right;
+  padding-top: 4px;
+  padding-right: 6px;
+  font-family: 'Spectral', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-2));
+  line-height: 1.4;
+}
+.passage-segment-free .passage-segment-roman {
+  /* slot vide pour aligner la grille même si pas de numéro */
+}
+.passage-segment-mouvement .passage-segment-body {
+  border-left: 3px solid var(--mov-color, var(--cream-3));
+  padding-left: 14px;
+  padding-top: 2px;
+  padding-bottom: 4px;
+}
+.passage-segment-free .passage-segment-body {
+  padding-left: 14px;
+  padding-top: 2px;
+  padding-bottom: 4px;
+  border-left: 3px dashed var(--cream-3);
+}
+.passage-segment-body p { margin-bottom: 0.6em; }
+.passage-segment-body p:last-child { margin-bottom: 0; }
+.passage-readonly-body { user-select: text; }
+
+/* B4.3 — Cards mouvements éditables */
+.mouvement-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  border: 1.5px solid var(--white-line);
+  border-left: 3px solid var(--cream-3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color var(--t-base);
+}
+.mouvement-card-posed {
+  border-left-color: var(--mov-color, var(--cream-3));
+}
+.mouvement-card-empty {
+  border-style: dashed;
+  background: var(--cream-2);
+}
+.mouvement-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mouvement-card-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-3));
+}
+.mouvement-card-empty .mouvement-card-num {
+  color: var(--ink-3);
+}
+.mouvement-card-delete {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 50%;
+  transition: all var(--t-fast);
+  font-family: inherit;
+}
+.mouvement-card-delete:hover {
+  background: var(--pink-deep);
+  color: white;
+}
+.mouvement-card-title {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 6px 0;
+  border-bottom: 1.5px solid var(--cream-3);
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+.mouvement-card-title:focus {
+  border-bottom-color: var(--mov-color, var(--ink));
+}
+.mouvement-card-title::placeholder {
+  color: var(--ink-3);
+  font-weight: 500;
+  font-style: italic;
+}
+.mouvement-card-hint {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin: 0;
+  line-height: 1.5;
+}
+.mouvement-card-hint em {
+  font-size: 11px;
+  color: var(--ink-3);
+  opacity: 0.7;
+}
+
+/* TODO 1 — Status badge sur cards mouvements posés (étape 1) */
+.mouvement-card-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--cream-3);
+  color: var(--ink-2);
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.mouvement-card-status-todo {
+  background: var(--cream-3);
+  color: var(--ink-2);
+}
+.mouvement-card-status-revoir {
+  background: var(--revoir-deep, #be123c);
+  color: white;
+}
+.mouvement-card-status-done {
+  background: var(--done-deep, #047857);
+  color: white;
+}
+.mouvement-card-status-empty {
+  background: transparent;
+  color: var(--ink-3);
+  font-style: italic;
+  border: 1px dashed var(--cream-3);
+}
+
+/* TODO 2 — Notice migration ancien format (étape 1) */
+.step1-legacy-notice-block {
+  background: var(--cream-2);
+  border-left: 3px solid var(--electric);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.step1-legacy-notice-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--electric-deep, var(--electric));
+  margin-bottom: 6px;
+}
+.step1-legacy-notice-text {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.step1-legacy-notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.step1-legacy-notice-list li {
+  font-size: 13px;
+  color: var(--ink);
+  padding-left: 8px;
+}
+.step1-legacy-notice-list strong {
+  font-family: 'Spectral', serif;
+  font-weight: 700;
+  color: var(--electric-deep, var(--electric));
+  margin-right: 4px;
+}
+
+/* B4.3 — Selection popover (apparaît au-dessus de la sélection sur le passage) */
+.selection-popover {
+  position: absolute;
+  background: var(--white);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  z-index: 10000;
+  font-family: 'Space Grotesk', sans-serif;
+  animation: popover-in 0.15s ease;
+}
+@keyframes popover-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.selection-popover-label {
+  font-size: 12px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.selection-popover-msg {
+  font-size: 12px;
+  color: var(--ink-2);
+  font-weight: 500;
+  max-width: 280px;
+  line-height: 1.4;
+}
+.selection-popover-btn {
+  font-family: 'Spectral', serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 12px;
+  background: transparent;
+  border: 1.5px solid var(--mov-color, var(--cream-3));
+  color: var(--mov-color, var(--ink));
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  min-width: 32px;
+}
+.selection-popover-btn:hover:not(:disabled) {
+  background: var(--mov-color);
+  color: white;
+}
+.selection-popover-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.selection-popover-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--cream-3);
+}
+.selection-popover-cancel {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-md);
+  transition: all var(--t-fast);
+}
+.selection-popover-cancel:hover {
+  background: var(--cream-2);
+  color: var(--ink);
+}
+
 /* Flashcard à trous */
 .flashcard {
   background: var(--white);
@@ -2146,6 +2412,220 @@ body {
   gap: 32px;
   align-items: start;
 }
+
+/* B5 — Onglets navigation entre mouvements (étape 2) */
+.mouvements-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--cream-3);
+  overflow-x: auto;
+  padding-bottom: 0;
+}
+.mouvement-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--cream-2);
+  border: 1.5px solid var(--white-line);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t-fast);
+  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+}
+.mouvement-tab:hover {
+  background: var(--white);
+  color: var(--ink);
+}
+.mouvement-tab.active {
+  background: var(--white);
+  color: var(--ink);
+  border-bottom-color: var(--mov-color, var(--electric));
+}
+.mouvement-tab-num {
+  font-family: 'Spectral', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-3));
+  line-height: 1;
+}
+.mouvement-tab-title {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mouvement-tab-count {
+  font-size: 11px;
+  background: var(--cream-3);
+  color: var(--ink-2);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+}
+.mouvement-tab.active .mouvement-tab-count {
+  background: var(--mov-color, var(--electric));
+  color: white;
+}
+
+/* B5c — Indicateurs status sur tabs */
+.mouvement-tab.mov-status-revoir .mouvement-tab-count {
+  background: var(--revoir-deep, #f43f5e);
+  color: white;
+}
+.mouvement-tab.mov-status-done .mouvement-tab-count {
+  background: var(--done-deep, #15803d);
+  color: white;
+}
+.mouvement-tab.mov-status-empty .mouvement-tab-count {
+  opacity: 0.5;
+}
+.mouvement-tab-orphan {
+  --mov-color: var(--revoir-deep, #f43f5e);
+  border-style: dashed;
+}
+.mouvement-tab-orphan .mouvement-tab-count {
+  background: var(--revoir-deep, #f43f5e);
+  color: white;
+}
+.mouvement-tab-review {
+  --mov-color: var(--electric);
+}
+.mouvement-tab-review .mouvement-tab-count {
+  background: var(--electric);
+  color: white;
+}
+
+/* B5c — Animation fade-in à chaque changement de tab body */
+.step2-mouvement-body {
+  animation: fade-in-up 0.2s ease-out;
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* B5 — Body conteneur et fallback */
+.step2-mouvement-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.step2-fallback-notice {
+  background: var(--cream-2);
+  border: 1.5px dashed var(--cream-3);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.step2-fallback-notice code {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  font-size: 13px;
+  background: var(--white);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--cream-3);
+  color: var(--ink);
+}
+.step2-fallback-empty {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+/* B5 — Citation passage avec bordure colorée */
+.mouvement-citation {
+  background: var(--cream-2);
+  border-left: 4px solid var(--mov-color, var(--cream-3));
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 18px 22px;
+  font-family: 'Spectral', serif;
+}
+.mouvement-citation-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cream-3);
+  font-family: 'Space Grotesk', sans-serif;
+}
+.mouvement-citation-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-3));
+}
+.mouvement-citation-titre {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.mouvement-citation-body {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.mouvement-citation-body p { margin-bottom: 0.8em; }
+.mouvement-citation-body p:last-child { margin-bottom: 0; }
+.mouvement-citation-body .pkey {
+  background: var(--electric);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-weight: 700;
+  color: white;
+}
+
+/* B5 — Bloc phrases-clés sous la citation */
+.mouvement-phrases-block {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1.5px solid var(--white-line);
+  box-shadow: var(--shadow-soft);
+}
+.mouvement-phrases-head {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-3));
+  margin: 0 0 16px;
+}
+
+/* B5 — Bloc mini-conclusion/transition */
+.mouvement-synth-block {
+  background: var(--cream-2);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1.5px solid var(--white-line);
+  border-left: 4px solid var(--mov-color, var(--cream-3));
+}
+.mouvement-synth-head {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--mov-color, var(--ink-3));
+  margin: 0 0 16px;
+}
+
+/* B5 — Conteneur phrases-block (anciennement .analysis-panel sans sticky) */
+.phrases-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .passage-panel {
   background: var(--cream-2);
   border-radius: var(--radius-lg);
@@ -3317,12 +3797,11 @@ kbd {
             <div class="passage-readonly-body" id="passage-readonly-body"></div>
           </aside>
 
-          <!-- Cards mouvements : cachées en B4.2, rendues visibles dès B4.3 par ajout classe .visible -->
-          <div class="step1-mouvements-cards" id="step1-mouvements-cards"></div>
+          <!-- Notice migration ancien format (rendue par renderMouvementsCards) -->
+          <div id="step1-legacy-notice"></div>
 
-          <!-- Champ legacy mouvements : conservé en hidden pour compatibilité étape 2/3.
-               Sera retiré en B4.3 quand mouvementsData devient source de vérité partout. -->
-          <textarea id="mouvements" style="display:none" oninput="updateProgress()"></textarea>
+          <!-- Cards mouvements : visibles dès qu'au moins un mouvement est posé -->
+          <div class="step1-mouvements-cards" id="step1-mouvements-cards"></div>
         </div>
       </div>
     </div>
@@ -3336,66 +3815,13 @@ kbd {
     <div id="step-2" class="step-content" style="display:none">
       <div id="review-banner-container"></div>
       <div id="oublis-notice-container"></div>
-      <div class="phrases-layout">
-        <div class="passage-panel" id="passage-rendered"></div>
-        <aside class="analysis-panel">
-          <!-- 1. Header -->
-          <div class="panel-nav">
-            <span class="panel-counter" id="phrase-counter-label">Phrase <strong>1</strong> sur 0</span>
-            <div class="panel-nav-btns">
-              <button onclick="prevPhrase()" aria-label="Phrase précédente" data-tooltip="Phrase précédente" class="tooltip-top">‹</button>
-              <button onclick="nextPhrase()" aria-label="Phrase suivante" data-tooltip="Phrase suivante" class="tooltip-top">›</button>
-            </div>
-          </div>
 
-          <!-- 2. Phrase -->
-          <div class="panel-phrase-text" id="panel-phrase-text">—</div>
+      <!-- B5 — Onglets de navigation entre mouvements (rempli dynamiquement par renderStep2) -->
+      <div class="mouvements-tabs" id="mouvements-tabs" role="tablist" aria-label="Mouvements"></div>
 
-          <!-- 3. Ton analyse (textarea + ghost overlay) -->
-          <div class="analysis-input-area">
-            <div class="label-line">Ton analyse</div>
-            <div class="analysis-stack">
-              <div class="ghost-overlay" id="ghost-overlay" aria-hidden="true"></div>
-              <textarea class="analysis-textarea" id="analysis-input" placeholder="Écris ton analyse ici..." rows="4" oninput="onAnalysisInput()"></textarea>
-            </div>
-          </div>
+      <!-- B5 — Conteneur principal : citation + phrases + synthèse, rendu par renderStep2 -->
+      <div class="step2-mouvement-body" id="step2-mouvement-body"></div>
 
-          <!-- 4. Correction modèle (hidden by default) -->
-          <div class="correction-block">
-            <div class="correction-block-head">
-              <span class="correction-block-label">Correction modèle</span>
-              <button class="reveal-btn" id="reveal-correction-btn" onclick="toggleCorrection()" aria-expanded="false">Voir</button>
-            </div>
-            <div class="correction-area hidden" id="correction-area">
-              <div class="correction-text" id="correction-text">—</div>
-            </div>
-          </div>
-
-          <!-- 5. Boutons Correct / À revoir (3D Duolingo style) -->
-          <div class="autoeval-row">
-            <button class="duo-btn duo-btn-correct" id="btn-correct" onclick="markPhrase('correct')">
-              <span class="duo-btn-glyph">✓</span>
-              <span class="duo-btn-label">Correct</span>
-            </button>
-            <button class="duo-btn duo-btn-revoir" id="btn-revoir" onclick="markPhrase('revoir')">
-              <span class="duo-btn-glyph">↻</span>
-              <span class="duo-btn-label">À revoir</span>
-            </button>
-          </div>
-
-          <!-- 6. Hint clavier -->
-          <div class="kbd-hint"><kbd>Enter</kbd> suivante · <kbd>C</kbd> correct · <kbd>R</kbd> à revoir</div>
-
-          <!-- 7. Pied de panel : phantom mode toggle (3D pill) -->
-          <div class="panel-footer">
-            <button class="phantom-pill" id="phantom-pill" onclick="togglePhantom()" aria-pressed="false">
-              <span class="phantom-pill-dot" aria-hidden="true"></span>
-              <span class="phantom-pill-label">Mode fantôme</span>
-              <span class="phantom-pill-state" id="phantom-state">désactivé</span>
-            </button>
-          </div>
-        </aside>
-      </div>
     </div>
     <div class="step-footer" id="step-2-footer" style="display:none">
       <button class="btn" onclick="gotoStep(1)">← Cadre</button>
@@ -3830,7 +4256,25 @@ function openAmbianceFromBanner() {
       if(e.key === 'Escape') {
         closeAmbiancePopover();
         closeAllMenus();
+        hideSelectionPopover();
       }
+    });
+    // B4.3 — Selection on passage triggers popover (mouseup desktop, touchend mobile)
+    document.addEventListener('mouseup', (e) => {
+      // Si le clic est sur le popover lui-même, ne pas le fermer
+      if(e.target.closest('.selection-popover')) return;
+      // Délai 0 pour laisser le temps au navigateur de finaliser la sélection
+      setTimeout(handlePassageSelection, 0);
+    });
+    document.addEventListener('touchend', (e) => {
+      if(e.target.closest('.selection-popover')) return;
+      setTimeout(handlePassageSelection, 0);
+    });
+    // Clic ailleurs ferme le popover (sauf sur le popover lui-même ou sur le passage)
+    document.addEventListener('click', (e) => {
+      if(e.target.closest('.selection-popover')) return;
+      if(e.target.closest('#passage-readonly-body')) return;
+      if(selectionPopover) hideSelectionPopover();
     });
   }
   if(document.readyState === 'loading') {
@@ -3936,8 +4380,13 @@ function getCardStatus(t, phrasesData) {
   const filled = phrasesData.filter(p => p.analysis && p.analysis.trim()).length;
   const revoirCount = phrasesData.filter(p => p.status === 'revoir').length;
   if(revoirCount > 0) return 'revoir';
-  // Compute overall completion percentage including step1 & synthese
-  const step1Done = [t.problematique, t.mouvements, t.introduction].filter(f => f && f.trim()).length;
+  // Cadre = 3 critères : problématique + intro + ≥2 mouvements posés (cohérent updateProgress)
+  const movsPosed = (t.mouvementsData || []).length;
+  const step1Done = [
+    !!(t.problematique && t.problematique.trim()),
+    !!(t.introduction && t.introduction.trim()),
+    movsPosed >= 2
+  ].filter(Boolean).length;
   const movs = (t.mouvements || '').split('\n').filter(l => l.trim());
   const synthFields = (t.synthese || []).flatMap(s => [s.miniconclusion, s.transition]).filter(f => f && f.trim()).length;
   let totalSynth = Math.min(movs.length, 2) * 2;
@@ -4013,9 +4462,31 @@ function extractPhrases(passage) {
   while((m = regex.exec(passage)) !== null) {
     const inner = m[1];
     const parts = inner.split('|');
-    results.push({ text: parts[0].trim(), correction: parts[1] ? parts[1].trim() : '', analysis: '', status: null });
+    results.push({
+      text: parts[0].trim(),
+      correction: parts[1] ? parts[1].trim() : '',
+      analysis: '',
+      status: null,
+      offset: m.index // B5 — position du `[` dans le passage brut, pour filtrer par mouvement
+    });
   }
   return results;
+}
+
+// B5 — Retourne les indices (dans le tableau global `phrases`) des phrases
+// qui appartiennent au mouvement de numéro donné. Utilise les offsets du passage
+// pour matcher : phrase est dans le mouvement si phrase.offset ∈ [start, end[.
+function phraseIndicesForMouvement(t, numero) {
+  if(!t || !t.mouvementsData) return [];
+  const m = t.mouvementsData.find(x => x.numero === numero);
+  if(!m) return [];
+  const indices = [];
+  phrases.forEach((p, i) => {
+    if(typeof p.offset === 'number' && p.offset >= m.startOffset && p.offset < m.endOffset) {
+      indices.push(i);
+    }
+  });
+  return indices;
 }
 
 function renderPassage(passage, phrasesArr, activeIdx) {
@@ -4125,7 +4596,15 @@ function saveAndStudy() {
   if(currentTextId !== null) {
     const idx = texts.findIndex(t => t.id === currentTextId);
     if(idx >= 0) {
-      texts[idx] = {...texts[idx], title, passage, problematiqueModele, introductionModele, conclusionModele};
+      // B4.3 — Si le passage a changé, reset les mouvements (offsets devenus invalides)
+      const oldPassage = texts[idx].passage || '';
+      const passageChanged = oldPassage !== passage;
+      const update = { ...texts[idx], title, passage, problematiqueModele, introductionModele, conclusionModele };
+      if(passageChanged) {
+        update.mouvementsData = [];
+        update.mouvements = '';
+      }
+      texts[idx] = update;
       save();
       if(returnStep && returnTextId && parseInt(returnTextId) === currentTextId) {
         sessionStorage.removeItem('returnToStep');
@@ -4157,12 +4636,13 @@ function openText(idx) {
   currentPhraseIdx = 0;
   reviewMode = false;
   reviewIndices = [];
+  currentMouvementTab = null; // B5 — reset pour que renderPhraseStep décide à l'arrivée
   unlockedSteps = new Set([1]);
   document.getElementById('study-title-display').textContent = t.title;
   document.getElementById('problematique').value = t.problematique || '';
-  document.getElementById('mouvements').value = t.mouvements || '';
   document.getElementById('introduction').value = t.introduction || '';
   renderPassageReadonly(t.passage);
+  renderMouvementsCards(t);
   buildSyntheseFields(t);
   buildProblematiqueFlashcard(t);
   buildIntroFlashcard(t);
@@ -4172,16 +4652,145 @@ function openText(idx) {
   gotoStep(1);
 }
 
+// ═══════════════════════════════════════════════
+// B4.3 — MOUVEMENTS : DÉCOUPAGE INTERACTIF DU PASSAGE
+// ═══════════════════════════════════════════════
+// Source de vérité : t.mouvementsData = [{ numero, titre, startOffset, endOffset }]
+// Offsets calculés sur le passage BRUT (incluant marqueurs [phrase|correction]).
+// t.mouvements (string "I. titre\nII. titre") est resynchronisé après chaque
+// modif pour préserver la compatibilité étape 2 (phrases) et étape 3 (synthèse).
+
+const MOUVEMENT_COLORS = {
+  1: { hex: '#0ea5e9', name: 'bleu' },
+  2: { hex: '#ec4899', name: 'rose' },
+  3: { hex: '#15803d', name: 'vert' }
+};
+
+// Resynchronise t.mouvements (string legacy) à partir de t.mouvementsData.
+// Appelée après toute modif de mouvementsData. Garantit que étape 2/3 voient
+// des mouvements cohérents tant que B5 n'a pas migré ces étapes.
+function syncMouvementsString(t) {
+  if(!t.mouvementsData) t.mouvementsData = [];
+  const sorted = [...t.mouvementsData].sort((a, b) => a.numero - b.numero);
+  t.mouvements = sorted.map(m => {
+    const titre = (m.titre || '').trim();
+    return titre ? `${roman(m.numero)}. ${titre}` : `${roman(m.numero)}.`;
+  }).join('\n');
+}
+
+function roman(n) {
+  return ['', 'I', 'II', 'III'][n] || '';
+}
+
+// Vrai si [a,b] et [c,d] se chevauchent (intervalles fermés-ouverts: [start, end))
+function rangesOverlap(a, b, c, d) {
+  return a < d && c < b;
+}
+
+// Vérifie si un range candidat est valide vis-à-vis des mouvements existants :
+// - pas de chevauchement avec un mouvement existant (autre que celui qu'on remplace)
+// - contiguïté respectée si on insère entre deux mouvements posés
+function validateMouvementRange(t, numero, startOffset, endOffset) {
+  if(startOffset >= endOffset) return { ok: false, reason: 'Sélection vide.' };
+  const others = (t.mouvementsData || []).filter(m => m.numero !== numero);
+  for(const m of others) {
+    if(rangesOverlap(startOffset, endOffset, m.startOffset, m.endOffset)) {
+      return { ok: false, reason: `Chevauchement avec mouvement ${roman(m.numero)}.` };
+    }
+  }
+  // Contiguïté : si on pose le II et qu'il existe un I, II doit toucher la fin de I.
+  // Idem III doit toucher la fin de II.
+  const sortedExisting = others.sort((a, b) => a.numero - b.numero);
+  // Le mouvement numero qu'on tente de poser : son voisin précédent doit finir où on commence
+  const prev = sortedExisting.find(m => m.numero === numero - 1);
+  if(prev && prev.endOffset !== startOffset) {
+    return { ok: false, reason: `Le mouvement ${roman(numero)} doit commencer juste après la fin du ${roman(numero - 1)}.` };
+  }
+  const next = sortedExisting.find(m => m.numero === numero + 1);
+  if(next && next.startOffset !== endOffset) {
+    return { ok: false, reason: `Le mouvement ${roman(numero)} doit finir juste avant le début du ${roman(numero + 1)}.` };
+  }
+  return { ok: true };
+}
+
+// Trouve quels numéros (1, 2, 3) sont disponibles pour la sélection courante.
+// Règles : on ne peut poser que des numéros qui respectent contiguïté ET ordre logique.
+// Si I déjà posé → seul II proposable (qui doit toucher fin de I)
+// Si I+II posés → seul III proposable (qui doit toucher fin de II)
+// Si rien → I proposable
+// Si on resélectionne un numéro existant → bloqué (sécurité Q3=B)
+function availableMouvementNumbers(t, startOffset, endOffset) {
+  const data = t.mouvementsData || [];
+  const taken = new Set(data.map(m => m.numero));
+  const result = [];
+  // Vérifier d'abord que la sélection ne chevauche aucun mouvement existant
+  for(const m of data) {
+    if(rangesOverlap(startOffset, endOffset, m.startOffset, m.endOffset)) {
+      return []; // Q3=B : bloquer si zone déjà attribuée
+    }
+  }
+  // Logique séquentielle : on doit poser dans l'ordre I → II → III
+  if(!taken.has(1)) {
+    result.push(1);
+  } else if(!taken.has(2)) {
+    const I = data.find(m => m.numero === 1);
+    if(I && I.endOffset === startOffset) result.push(2);
+  } else if(!taken.has(3)) {
+    const II = data.find(m => m.numero === 2);
+    if(II && II.endOffset === startOffset) result.push(3);
+  }
+  return result;
+}
+
+// ═══════════════════════════════════════════════
+// PASSAGE READONLY (étape 1 — render avec mouvements visuels + sélection)
+// ═══════════════════════════════════════════════
 function renderPassageReadonly(passage) {
   const el = document.getElementById('passage-readonly-body');
   if(!el) return;
-  // render the passage with key phrases highlighted (no clicks)
-  let html = passage.replace(/\[([^\]]+)\]/g, (m, inner) => {
+  const t = texts.find(x => x.id === currentTextId);
+  const movs = (t && t.mouvementsData) ? [...t.mouvementsData].sort((a,b) => a.startOffset - b.startOffset) : [];
+
+  // Construire des segments du passage : couvert par mouvement N ou non-assigné
+  const segments = [];
+  let cursor = 0;
+  for(const m of movs) {
+    if(m.startOffset > cursor) {
+      segments.push({ type: 'free', start: cursor, end: m.startOffset });
+    }
+    segments.push({ type: 'mouvement', numero: m.numero, start: m.startOffset, end: m.endOffset });
+    cursor = m.endOffset;
+  }
+  if(cursor < passage.length) {
+    segments.push({ type: 'free', start: cursor, end: passage.length });
+  }
+
+  // Render chaque segment. data-offset-start/end permet de reconstruire la sélection char-précise.
+  const html = segments.map(seg => {
+    const raw = passage.slice(seg.start, seg.end);
+    const inner = renderPassageInner(raw, seg.start);
+    if(seg.type === 'mouvement') {
+      const color = MOUVEMENT_COLORS[seg.numero].hex;
+      return `<div class="passage-segment passage-segment-mouvement" data-numero="${seg.numero}" data-seg-start="${seg.start}" data-seg-end="${seg.end}" style="--mov-color: ${color}"><span class="passage-segment-roman">${roman(seg.numero)}</span><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
+    }
+    return `<div class="passage-segment passage-segment-free" data-seg-start="${seg.start}" data-seg-end="${seg.end}"><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+// Rend un fragment du passage (avec marqueurs [phrase|correction]) en HTML.
+// Retourne du HTML sûr. Les sauts de ligne deviennent <br>, les paragraphes <p>.
+// data-source-len sur chaque pkey = longueur du marker source `[texte|correction]`,
+// pour que domToPassageOffset puisse réconcilier offsets DOM ↔ passage brut.
+function renderPassageInner(raw, offsetBase) {
+  let html = raw.replace(/\[([^\]]+)\]/g, (m, inner) => {
     const txt = escapeHtml(inner.split('|')[0].trim());
-    return `<span class="pkey">${txt}</span>`;
+    const sourceLen = m.length; // longueur totale du marker incl. crochets et |correction
+    return `<span class="pkey" data-source-len="${sourceLen}">${txt}</span>`;
   });
   html = html.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
-  el.innerHTML = html;
+  return html;
 }
 
 function togglePassageView() {
@@ -4190,6 +4799,327 @@ function togglePassageView() {
   if(!panel) return;
   panel.classList.toggle('collapsed');
   if(txtBtn) txtBtn.textContent = panel.classList.contains('collapsed') ? 'Déplier' : 'Replier';
+}
+
+// ═══════════════════════════════════════════════
+// SÉLECTION + POPUP CONTEXTUEL
+// ═══════════════════════════════════════════════
+let selectionPopover = null;
+let pendingSelection = null; // { startOffset, endOffset }
+
+// Calcule l'offset char dans le passage brut depuis un Node DOM + offset DOM.
+// Utilise data-offset-base sur l'élément .passage-segment-body parent pour
+// retrouver la position dans le passage source.
+// Pour les <span class="pkey"> (qui rendent un marker `[texte|correction]`),
+// on utilise data-source-len pour réconcilier la longueur DOM (texte court visible)
+// avec la longueur source (marker complet). Si la sélection tombe DANS un pkey,
+// on snap au début ou à la fin du marker (impossible de pointer mid-marker).
+function domToPassageOffset(node, offset) {
+  // Trouver l'ancêtre .passage-segment-body
+  let el = node.nodeType === 3 ? node.parentElement : node;
+  let body = null;
+  while(el) {
+    if(el.classList && el.classList.contains('passage-segment-body')) { body = el; break; }
+    el = el.parentElement;
+  }
+  if(!body) return null;
+  const base = parseInt(body.dataset.offsetBase || '0');
+
+  // Détecter si node est à l'intérieur d'un pkey (snap au début ou à la fin)
+  let pkeyAncestor = null;
+  let scanEl = node.nodeType === 3 ? node.parentElement : node;
+  while(scanEl && scanEl !== body) {
+    if(scanEl.classList && scanEl.classList.contains('pkey')) {
+      pkeyAncestor = scanEl;
+      break;
+    }
+    scanEl = scanEl.parentElement;
+  }
+
+  let count = 0;
+  let snapped = false;
+  function walk(el) {
+    if(snapped) return true;
+    // Si on rencontre un pkey
+    if(el.nodeType === 1 && el.classList && el.classList.contains('pkey')) {
+      const sourceLen = parseInt(el.dataset.sourceLen || '0');
+      // Si node est dans ce pkey : snap au début ou à la fin selon offset
+      if(pkeyAncestor === el) {
+        // Calcul : combien de chars visibles dans le pkey avant node+offset ?
+        // Si on est à 0 ou en début → snap début. Sinon → snap fin.
+        const visibleLen = el.textContent.length;
+        // Approche pragmatique : si on est dans la 1ère moitié du visible → début, sinon fin
+        let posInPkey = 0;
+        function countInPkey(n) {
+          if(n === node) { posInPkey += offset; return true; }
+          if(n.nodeType === 3) { posInPkey += n.nodeValue.length; return false; }
+          for(const c of n.childNodes) if(countInPkey(c)) return true;
+          return false;
+        }
+        countInPkey(el);
+        // Snap : début ou fin du marker source selon position relative
+        if(posInPkey * 2 <= visibleLen) {
+          // Snap au début : count reste tel quel (avant le pkey)
+        } else {
+          // Snap à la fin : count += sourceLen
+          count += sourceLen;
+        }
+        snapped = true;
+        return true;
+      }
+      // Sinon, ajouter la longueur source du marker (sans descendre dans le texte visible)
+      count += sourceLen;
+      return false;
+    }
+    // Cas node atteint
+    if(el === node) {
+      count += offset;
+      return true;
+    }
+    if(el.nodeType === 3) {
+      count += el.nodeValue.length;
+      return false;
+    }
+    if(el.tagName === 'BR') {
+      count += 1;
+      return false;
+    }
+    if(el.tagName === 'P') {
+      const prevP = el.previousElementSibling;
+      if(prevP && prevP.tagName === 'P') count += 2;
+    }
+    for(const child of el.childNodes) {
+      if(walk(child)) return true;
+    }
+    return false;
+  }
+  walk(body);
+  return base + count;
+}
+
+function handlePassageSelection() {
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+    hideSelectionPopover();
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  // Vérifier que la sélection est entièrement dans le passage-readonly-body
+  const body = document.getElementById('passage-readonly-body');
+  if(!body || !body.contains(range.commonAncestorContainer)) {
+    hideSelectionPopover();
+    return;
+  }
+  const startOff = domToPassageOffset(range.startContainer, range.startOffset);
+  const endOff = domToPassageOffset(range.endContainer, range.endOffset);
+  if(startOff === null || endOff === null || startOff >= endOff) {
+    hideSelectionPopover();
+    return;
+  }
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  const available = availableMouvementNumbers(t, startOff, endOff);
+  if(available.length === 0) {
+    // Soit chevauchement, soit ordre invalide. On affiche un popover désactivé.
+    showSelectionPopover(range, startOff, endOff, [], 'Cette zone ne peut pas être assignée. Supprime un mouvement existant ou sélectionne ailleurs.');
+    return;
+  }
+  pendingSelection = { startOffset: startOff, endOffset: endOff };
+  showSelectionPopover(range, startOff, endOff, available, null);
+}
+
+function showSelectionPopover(range, startOff, endOff, availableNumbers, message) {
+  hideSelectionPopover();
+  const rect = range.getBoundingClientRect();
+  const pop = document.createElement('div');
+  pop.className = 'selection-popover';
+  pop.id = 'selection-popover';
+  let inner = '';
+  if(message) {
+    inner = `<span class="selection-popover-msg">${escapeHtml(message)}</span>`;
+  } else {
+    inner = '<span class="selection-popover-label">Définir comme :</span>';
+    for(const n of [1, 2, 3]) {
+      const isAvailable = availableNumbers.includes(n);
+      const color = MOUVEMENT_COLORS[n].hex;
+      inner += `<button class="selection-popover-btn" ${isAvailable ? '' : 'disabled'} ${isAvailable ? `onclick="confirmMouvement(${n})"` : ''} style="--mov-color: ${color}">${roman(n)}</button>`;
+    }
+    inner += '<span class="selection-popover-divider"></span>';
+  }
+  inner += '<button class="selection-popover-cancel" onclick="hideSelectionPopover()">Annuler</button>';
+  pop.innerHTML = inner;
+  document.body.appendChild(pop);
+  // Positionner au-dessus de la sélection, centré
+  const popRect = pop.getBoundingClientRect();
+  let top = rect.top + window.scrollY - popRect.height - 8;
+  let left = rect.left + window.scrollX + (rect.width / 2) - (popRect.width / 2);
+  // Clamp horizontal aux marges fenêtre
+  const margin = 8;
+  if(left < margin) left = margin;
+  if(left + popRect.width > window.innerWidth - margin) left = window.innerWidth - popRect.width - margin;
+  if(top < window.scrollY + margin) top = rect.bottom + window.scrollY + 8; // bascule sous si pas de place
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  selectionPopover = pop;
+}
+
+function hideSelectionPopover() {
+  if(selectionPopover) {
+    selectionPopover.remove();
+    selectionPopover = null;
+  }
+  pendingSelection = null;
+}
+
+function confirmMouvement(numero) {
+  if(!pendingSelection) return;
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  const { startOffset, endOffset } = pendingSelection;
+  const validation = validateMouvementRange(t, numero, startOffset, endOffset);
+  if(!validation.ok) {
+    alert(validation.reason);
+    hideSelectionPopover();
+    return;
+  }
+  if(!t.mouvementsData) t.mouvementsData = [];
+  // Retirer un éventuel ancien mouvement de même numéro (ne devrait pas arriver Q3=B mais sécurité)
+  t.mouvementsData = t.mouvementsData.filter(m => m.numero !== numero);
+  t.mouvementsData.push({ numero, titre: '', startOffset, endOffset });
+  syncMouvementsString(t);
+  save();
+  hideSelectionPopover();
+  window.getSelection().removeAllRanges();
+  renderPassageReadonly(t.passage);
+  renderMouvementsCards(t);
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════════
+// CARDS MOUVEMENTS (sous le passage)
+// ═══════════════════════════════════════════════
+// TODO 2 — Détecte si un texte a un ancien format `t.mouvements` (string lignes)
+// sans `t.mouvementsData` rempli, et retourne la liste des titres parsés.
+// Si rien à migrer, retourne null.
+function legacyMouvementsTitles(t) {
+  if(!t) return null;
+  if(t.mouvementsData && t.mouvementsData.length > 0) return null;
+  const raw = (t.mouvements || '').trim();
+  if(!raw) return null;
+  // Lignes non vides du format "I. Titre" ou "II. Titre" ou juste "Titre"
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l);
+  if(lines.length === 0) return null;
+  // Strip leading "I. " "II. " "III. " si présent, garder juste le titre
+  return lines.map(l => l.replace(/^(?:I{1,3}\.|[1-3]\.)\s*/, '').trim()).filter(Boolean);
+}
+
+function renderMouvementsCards(t) {
+  const container = document.getElementById('step1-mouvements-cards');
+  const noticeContainer = document.getElementById('step1-legacy-notice');
+  if(!container) return;
+
+  // TODO 2 — Notice migration : si ancien format string détecté
+  if(noticeContainer) {
+    const legacy = legacyMouvementsTitles(t);
+    if(legacy && legacy.length > 0) {
+      const itemsHtml = legacy.map((titre, i) => `<li><strong>${roman(i + 1)}.</strong> ${escapeHtml(titre)}</li>`).join('');
+      noticeContainer.innerHTML = `
+        <div class="step1-legacy-notice-block">
+          <div class="step1-legacy-notice-title">Anciens mouvements détectés</div>
+          <p class="step1-legacy-notice-text">Ces titres viennent d'une version précédente. Re-sélectionne-les sur le passage ci-dessus pour les définir avec leurs limites.</p>
+          <ul class="step1-legacy-notice-list">${itemsHtml}</ul>
+        </div>
+      `;
+    } else {
+      noticeContainer.innerHTML = '';
+    }
+  }
+
+  const data = t.mouvementsData || [];
+  if(data.length === 0) {
+    container.classList.remove('visible');
+    container.innerHTML = '';
+    return;
+  }
+  container.classList.add('visible');
+  const sorted = [...data].sort((a, b) => a.numero - b.numero);
+  const slots = [];
+  for(let n = 1; n <= 3; n++) {
+    const m = sorted.find(x => x.numero === n);
+    if(m) {
+      slots.push({ numero: n, posed: true, mouvement: m });
+    } else {
+      const maxPosed = Math.max(0, ...sorted.map(x => x.numero));
+      if(n === maxPosed + 1) {
+        slots.push({ numero: n, posed: false, optional: n >= 3 });
+      }
+    }
+  }
+  container.innerHTML = slots.map(slot => {
+    const color = MOUVEMENT_COLORS[slot.numero].hex;
+    if(slot.posed) {
+      const m = slot.mouvement;
+      const titre = escapeHtml(m.titre || '');
+      const placeholder = `Donne un titre au mouvement ${roman(slot.numero)}…`;
+      // TODO 1 — Status badge : nb phrases analysées vs total + couleur statut
+      const phraseIndices = phraseIndicesForMouvement(t, slot.numero);
+      const status = mouvementStatus(t, slot.numero);
+      let statusBadge = '';
+      if(phraseIndices.length === 0) {
+        statusBadge = '<span class="mouvement-card-status mouvement-card-status-empty">Pas de phrases-clés</span>';
+      } else {
+        const analysed = phraseIndices.filter(i => phrases[i] && phrases[i].analysis && phrases[i].analysis.trim()).length;
+        statusBadge = `<span class="mouvement-card-status mouvement-card-status-${status}">${analysed}/${phraseIndices.length} analysées</span>`;
+      }
+      return `
+        <div class="mouvement-card mouvement-card-posed" style="--mov-color: ${color}">
+          <div class="mouvement-card-head">
+            <span class="mouvement-card-num">MOUVEMENT ${roman(slot.numero)}</span>
+            <button class="mouvement-card-delete" onclick="deleteMouvement(${slot.numero})" aria-label="Supprimer ce mouvement">×</button>
+          </div>
+          <input class="mouvement-card-title" type="text" value="${titre}" placeholder="${placeholder}" oninput="updateMouvementTitre(${slot.numero}, this.value)" />
+          ${statusBadge}
+        </div>`;
+    }
+    return `
+      <div class="mouvement-card mouvement-card-empty">
+        <div class="mouvement-card-head">
+          <span class="mouvement-card-num">MOUVEMENT ${roman(slot.numero)}</span>
+        </div>
+        <p class="mouvement-card-hint">Sélectionne un passage dans le texte ci-dessus${slot.optional ? '<br><em>(optionnel)</em>' : ''}.</p>
+      </div>`;
+  }).join('');
+}
+
+function updateMouvementTitre(numero, val) {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t || !t.mouvementsData) return;
+  const m = t.mouvementsData.find(x => x.numero === numero);
+  if(!m) return;
+  m.titre = val;
+  syncMouvementsString(t);
+  save();
+  updateProgress();
+}
+
+function deleteMouvement(numero) {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t || !t.mouvementsData) return;
+  // Si on supprime un mouvement intermédiaire, on supprime aussi tous les suivants
+  // (sinon on casse la contiguïté). Ex: supprimer II → III aussi sauté.
+  const removed = t.mouvementsData.filter(m => m.numero >= numero);
+  if(removed.length > 1) {
+    const list = removed.map(m => roman(m.numero)).join(', ');
+    if(!confirm(`Supprimer le mouvement ${roman(numero)} effacera aussi les mouvements suivants (${list}). Continuer ?`)) return;
+  } else {
+    if(!confirm(`Supprimer le mouvement ${roman(numero)} ?`)) return;
+  }
+  t.mouvementsData = t.mouvementsData.filter(m => m.numero < numero);
+  syncMouvementsString(t);
+  save();
+  renderPassageReadonly(t.passage);
+  renderMouvementsCards(t);
+  updateProgress();
 }
 
 function buildSyntheseFields(t) {
@@ -4260,50 +5190,384 @@ function gotoStep(n) {
     else if(i === n) tab.classList.add('active');
     else if(!unlockedSteps.has(i)) tab.classList.add('locked');
   });
+  if(n === 1) {
+    // TODO 1 — rerender cards mouvements pour mettre à jour les status badges
+    const t = texts.find(x => x.id === currentTextId);
+    if(t) renderMouvementsCards(t);
+  }
   if(n === 2) renderPhraseStep();
   document.getElementById('oublis-notice-container').innerHTML = '';
 }
 
 function unlockStep(n) { unlockedSteps.add(n); }
 
+// ═══════════════════════════════════════════════
+// B5 — STEP 2 : NAVIGATION PAR MOUVEMENTS
+// ═══════════════════════════════════════════════
+// État runtime : quel onglet est actif (numéro mouvement, 'all' fallback, 'review', ou 'orphan')
+let currentMouvementTab = null;
+
+// B5c — Retourne les indices des phrases qui ne sont dans AUCUN mouvement défini.
+// Utile pour signaler à Télia une phrase mal positionnée.
+function orphanPhraseIndices(t) {
+  if(!t || !t.mouvementsData || t.mouvementsData.length === 0) return [];
+  const result = [];
+  phrases.forEach((p, i) => {
+    if(typeof p.offset !== 'number') return;
+    const inMouvement = t.mouvementsData.some(m => p.offset >= m.startOffset && p.offset < m.endOffset);
+    if(!inMouvement) result.push(i);
+  });
+  return result;
+}
+
+// B5c — Status d'un mouvement (pour le badge sur le tab)
+// Retourne 'empty' (pas de phrases), 'todo' (phrases pas encore traitées),
+// 'revoir' (au moins 1 à revoir), 'done' (toutes correct)
+function mouvementStatus(t, numero) {
+  const indices = phraseIndicesForMouvement(t, numero);
+  if(indices.length === 0) return 'empty';
+  const statuses = indices.map(i => phrases[i] && phrases[i].status);
+  if(statuses.some(s => s === 'revoir')) return 'revoir';
+  if(statuses.every(s => s === 'correct')) return 'done';
+  return 'todo';
+}
+
+// Point d'entrée appelé par gotoStep(2). Décide quel onglet montrer et rend tout.
 function renderPhraseStep() {
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
-  const panel = document.getElementById('passage-rendered');
-  panel.innerHTML = renderPassage(t.passage, phrases, currentPhraseIdx);
-  selectPhrase(currentPhraseIdx);
+
+  // Mode review : un seul onglet "Oublis" avec les phrases à revoir
+  if(reviewMode) {
+    currentMouvementTab = 'review';
+  } else if(t.mouvementsData && t.mouvementsData.length > 0) {
+    // Au moins un mouvement défini : tenter de garder l'onglet courant ou prendre le premier
+    const sortedNumeros = t.mouvementsData.map(m => m.numero).sort((a, b) => a - b);
+    const validTabs = [...sortedNumeros];
+    if(orphanPhraseIndices(t).length > 0) validTabs.push('orphan');
+    if(!validTabs.includes(currentMouvementTab)) {
+      currentMouvementTab = sortedNumeros[0];
+    }
+  } else {
+    // Aucun mouvement : fallback "Toutes les phrases" (ancien comportement)
+    currentMouvementTab = 'all';
+  }
+
+  renderMouvementsTabs(t);
+  renderMouvementBody(t);
+}
+
+function renderMouvementsTabs(t) {
+  const container = document.getElementById('mouvements-tabs');
+  if(!container) return;
+
+  if(reviewMode) {
+    container.innerHTML = `<button class="mouvement-tab active mouvement-tab-review" data-tab="review">Oublis (${reviewIndices.length})</button>`;
+    return;
+  }
+
+  const data = (t.mouvementsData || []).slice().sort((a, b) => a.numero - b.numero);
+
+  if(data.length === 0) {
+    container.innerHTML = `<button class="mouvement-tab active" data-tab="all">Toutes les phrases (${phrases.length})</button>`;
+    return;
+  }
+
+  let html = data.map(m => {
+    const indices = phraseIndicesForMouvement(t, m.numero);
+    const isActive = m.numero === currentMouvementTab;
+    const color = MOUVEMENT_COLORS[m.numero].hex;
+    const titre = m.titre ? escapeHtml(m.titre) : `Mouvement ${roman(m.numero)}`;
+    const status = mouvementStatus(t, m.numero);
+    return `<button class="mouvement-tab ${isActive ? 'active' : ''} mov-status-${status}" data-tab="${m.numero}" onclick="setMouvementTab(${m.numero})" style="--mov-color: ${color}">
+      <span class="mouvement-tab-num">${roman(m.numero)}</span>
+      <span class="mouvement-tab-title">${titre}</span>
+      <span class="mouvement-tab-count">${indices.length}</span>
+    </button>`;
+  }).join('');
+
+  // B5c — Onglet "Hors mouvements" si phrases orphelines
+  const orphans = orphanPhraseIndices(t);
+  if(orphans.length > 0) {
+    const isActive = currentMouvementTab === 'orphan';
+    html += `<button class="mouvement-tab mouvement-tab-orphan ${isActive ? 'active' : ''}" data-tab="orphan" onclick="setMouvementTab('orphan')">
+      <span class="mouvement-tab-title">Hors mouvements</span>
+      <span class="mouvement-tab-count">${orphans.length}</span>
+    </button>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function setMouvementTab(numero) {
+  if(currentMouvementTab === numero) return;
+  saveCurrentAnalysis();
+  currentMouvementTab = numero;
+  // Reset l'index phrase au premier du nouveau scope
+  const t = texts.find(x => x.id === currentTextId);
+  if(t) {
+    let indices;
+    if(numero === 'orphan') indices = orphanPhraseIndices(t);
+    else if(numero === 'all') indices = phrases.map((_, i) => i);
+    else indices = phraseIndicesForMouvement(t, numero);
+    if(indices.length > 0) currentPhraseIdx = indices[0];
+  }
+  renderMouvementsTabs(t);
+  renderMouvementBody(t);
+}
+
+// Rend le contenu de l'onglet actif : citation + phrases-clés + mini-conclu/transition
+function renderMouvementBody(t) {
+  const container = document.getElementById('step2-mouvement-body');
+  if(!container) return;
+
+  // Cas review mode
+  if(reviewMode) {
+    container.innerHTML = renderPhrasesBlock(t, reviewIndices, null, true);
+    afterRenderBody();
+    return;
+  }
+
+  // Cas fallback "all" : aucun mouvement défini
+  if(currentMouvementTab === 'all') {
+    if(phrases.length === 0) {
+      // Passage vide ou sans phrases-clés : 1 seul message clair
+      container.innerHTML = `<div class="step2-fallback-notice step2-fallback-empty">Pas encore de phrases-clés. Va dans «&nbsp;Modifier le passage&nbsp;» pour en ajouter avec la syntaxe <code>[phrase|correction]</code>, et définis tes mouvements en étape 1.</div>`;
+      return;
+    }
+    // Passage avec phrases mais sans mouvements : notice + bloc phrases
+    const allIndices = phrases.map((_, i) => i);
+    container.innerHTML = `
+      <div class="step2-fallback-notice">Aucun mouvement défini. Définis-les en étape 1 pour mieux structurer ton étude.</div>
+      ${renderPhrasesBlock(t, allIndices, null, false)}
+    `;
+    afterRenderBody();
+    return;
+  }
+
+  // B5c — Cas "orphan" : phrases avec offsets hors de tous les mouvements
+  if(currentMouvementTab === 'orphan') {
+    const orphans = orphanPhraseIndices(t);
+    container.innerHTML = `
+      <div class="step2-fallback-notice">Ces phrases-clés ne tombent dans aucun mouvement défini. Vérifie tes mouvements (étape 1) ou modifie le passage pour repositionner ces phrases.</div>
+      <div class="mouvement-phrases-block">
+        <h3 class="mouvement-phrases-head">Phrases hors mouvements</h3>
+        ${renderPhrasesBlock(t, orphans, null, false)}
+      </div>
+    `;
+    afterRenderBody();
+    return;
+  }
+
+  // Cas mouvement spécifique
+  const m = (t.mouvementsData || []).find(x => x.numero === currentMouvementTab);
+  if(!m) {
+    container.innerHTML = `<div class="step2-fallback-notice">Mouvement introuvable.</div>`;
+    return;
+  }
+  const color = MOUVEMENT_COLORS[m.numero].hex;
+  const indices = phraseIndicesForMouvement(t, m.numero);
+  const passageExtract = t.passage.slice(m.startOffset, m.endOffset);
+  const passageHtml = renderPassageInner(passageExtract, m.startOffset);
+  const synthIdx = m.numero - 1; // index dans t.synthese
+  const synth = (t.synthese || [])[synthIdx] || {};
+
+  container.innerHTML = `
+    <!-- Citation passage avec bordure colorée -->
+    <div class="mouvement-citation" style="--mov-color: ${color}">
+      <div class="mouvement-citation-head">
+        <span class="mouvement-citation-num">Mouvement ${roman(m.numero)}</span>
+        <span class="mouvement-citation-titre">${m.titre ? escapeHtml(m.titre) : '(sans titre)'}</span>
+      </div>
+      <div class="mouvement-citation-body">${passageHtml}</div>
+    </div>
+
+    <!-- Phrases-clés à analyser -->
+    <div class="mouvement-phrases-block" style="--mov-color: ${color}">
+      <h3 class="mouvement-phrases-head">Phrases-clés à analyser</h3>
+      ${indices.length === 0
+        ? `<div class="step2-fallback-notice">Pas encore de phrases-clés dans ce mouvement. Va dans «&nbsp;Modifier le passage&nbsp;» pour en ajouter avec la syntaxe [phrase|correction].</div>`
+        : renderPhrasesBlock(t, indices, m.numero, false)
+      }
+    </div>
+
+    <!-- Mini-conclusion + transition -->
+    <div class="mouvement-synth-block" style="--mov-color: ${color}">
+      <h3 class="mouvement-synth-head">Mini-conclusion &amp; transition</h3>
+      <div class="synthese-field">
+        <div class="synthese-field-label">Mini-conclusion <span class="field-state ${synth.miniconclusion ? 'filled' : 'empty'}" id="step2-mc-tag-${m.numero}">${synth.miniconclusion ? 'rempli' : 'vide'}</span></div>
+        <textarea class="synthese-textarea" id="step2-mc-${m.numero}" placeholder="Bilan de la partie..." rows="2" oninput="updateSyntheseFromStep2(${m.numero})">${escapeHtml(synth.miniconclusion || '')}</textarea>
+      </div>
+      ${m.numero < 3 ? `
+      <div class="synthese-field">
+        <div class="synthese-field-label">Transition <span class="field-state ${synth.transition ? 'filled' : 'empty'}" id="step2-tr-tag-${m.numero}">${synth.transition ? 'rempli' : 'vide'}</span></div>
+        <textarea class="synthese-textarea" id="step2-tr-${m.numero}" placeholder="Vers la partie suivante..." rows="2" oninput="updateSyntheseFromStep2(${m.numero})">${escapeHtml(synth.transition || '')}</textarea>
+      </div>` : ''}
+    </div>
+  `;
+  afterRenderBody();
+}
+
+// Rend le sous-bloc phrases (navigation < > + texte phrase + analyse + correction + boutons + phantom).
+// indices = liste des indices dans le tableau global `phrases` à montrer
+// numeroForCitation = numéro mouvement (pour citation passage en haut), null sinon
+// isReview = true en mode oublis (compteur différent)
+function renderPhrasesBlock(t, indices, numeroForCitation, isReview) {
+  if(indices.length === 0) {
+    return `<div class="step2-fallback-notice">Aucune phrase à étudier ici.</div>`;
+  }
+  // Si currentPhraseIdx n'est pas dans les indices courants, prendre le premier
+  if(!indices.includes(currentPhraseIdx)) currentPhraseIdx = indices[0];
+
+  return `
+    <div class="phrases-panel">
+      <!-- Header navigation -->
+      <div class="panel-nav">
+        <span class="panel-counter" id="phrase-counter-label">…</span>
+        <div class="panel-nav-btns">
+          <button onclick="prevPhrase()" aria-label="Phrase précédente" data-tooltip="Phrase précédente" class="tooltip-top">‹</button>
+          <button onclick="nextPhrase()" aria-label="Phrase suivante" data-tooltip="Phrase suivante" class="tooltip-top">›</button>
+        </div>
+      </div>
+
+      <!-- Phrase texte -->
+      <div class="panel-phrase-text" id="panel-phrase-text">—</div>
+
+      <!-- Analyse -->
+      <div class="analysis-input-area">
+        <div class="label-line">Ton analyse</div>
+        <div class="analysis-stack">
+          <div class="ghost-overlay" id="ghost-overlay" aria-hidden="true"></div>
+          <textarea class="analysis-textarea" id="analysis-input" placeholder="Écris ton analyse ici..." rows="4" oninput="onAnalysisInput()"></textarea>
+        </div>
+      </div>
+
+      <!-- Correction -->
+      <div class="correction-block">
+        <div class="correction-block-head">
+          <span class="correction-block-label">Correction modèle</span>
+          <button class="reveal-btn" id="reveal-correction-btn" onclick="toggleCorrection()" aria-expanded="false">Voir</button>
+        </div>
+        <div class="correction-area hidden" id="correction-area">
+          <div class="correction-text" id="correction-text">—</div>
+        </div>
+      </div>
+
+      <!-- B5b — Flashcard à trous (générée si la correction contient des (mots) entre parenthèses) -->
+      <div id="phrase-flashcard-zone"></div>
+
+      <!-- Boutons Correct / À revoir -->
+      <div class="autoeval-row">
+        <button class="duo-btn duo-btn-correct" id="btn-correct" onclick="markPhrase('correct')">
+          <span class="duo-btn-glyph">✓</span>
+          <span class="duo-btn-label">Correct</span>
+        </button>
+        <button class="duo-btn duo-btn-revoir" id="btn-revoir" onclick="markPhrase('revoir')">
+          <span class="duo-btn-glyph">↻</span>
+          <span class="duo-btn-label">À revoir</span>
+        </button>
+      </div>
+
+      <!-- Hint clavier -->
+      <div class="kbd-hint"><kbd>Enter</kbd> suivante · <kbd>C</kbd> correct · <kbd>R</kbd> à revoir</div>
+
+      <!-- Phantom mode -->
+      <div class="panel-footer">
+        <button class="phantom-pill" id="phantom-pill" onclick="togglePhantom()" aria-pressed="false">
+          <span class="phantom-pill-dot" aria-hidden="true"></span>
+          <span class="phantom-pill-label">Mode fantôme</span>
+          <span class="phantom-pill-state" id="phantom-state">désactivé</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Après chaque (re-)render du body, rebrancher l'état de la phrase courante
+function afterRenderBody() {
+  if(typeof currentPhraseIdx === 'number' && phrases[currentPhraseIdx]) {
+    selectPhrase(currentPhraseIdx);
+  }
+}
+
+// Mise à jour de t.synthese[numero-1] depuis les inputs étape 2
+function updateSyntheseFromStep2(numero) {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  if(!t.synthese) t.synthese = [];
+  const i = numero - 1;
+  if(!t.synthese[i]) t.synthese[i] = {};
+  const mcEl = document.getElementById(`step2-mc-${numero}`);
+  const trEl = document.getElementById(`step2-tr-${numero}`);
+  if(mcEl) t.synthese[i].miniconclusion = mcEl.value;
+  if(trEl) t.synthese[i].transition = trEl.value;
+  // Tags rempli/vide
+  const mcTag = document.getElementById(`step2-mc-tag-${numero}`);
+  const trTag = document.getElementById(`step2-tr-tag-${numero}`);
+  if(mcTag) {
+    const v = (t.synthese[i].miniconclusion || '').trim();
+    mcTag.textContent = v ? 'rempli' : 'vide';
+    mcTag.className = 'field-state ' + (v ? 'filled' : 'empty');
+  }
+  if(trTag) {
+    const v = (t.synthese[i].transition || '').trim();
+    trTag.textContent = v ? 'rempli' : 'vide';
+    trTag.className = 'field-state ' + (v ? 'filled' : 'empty');
+  }
+  save();
+  updateProgress();
 }
 
 function selectPhrase(idx) {
   saveCurrentAnalysis();
   currentPhraseIdx = idx;
-  document.querySelectorAll('.phrase-highlight').forEach(el => {
-    el.classList.toggle('active', parseInt(el.dataset.idx) === idx);
-  });
   const p = phrases[idx];
   if(!p) return;
   const counterEl = document.getElementById('phrase-counter-label');
-  if(reviewMode) {
-    counterEl.innerHTML = `Révision <strong>${reviewIndices.indexOf(idx)+1}</strong> sur ${reviewIndices.length}`;
-  } else {
-    counterEl.innerHTML = `Phrase <strong>${idx+1}</strong> sur ${phrases.length}`;
+  if(counterEl) {
+    // B5 — Compteur relatif à l'onglet courant (mouvement, review, ou all)
+    const t = texts.find(x => x.id === currentTextId);
+    let scopeIndices, scopeLabel;
+    if(reviewMode) {
+      scopeIndices = reviewIndices;
+      scopeLabel = 'Révision';
+    } else if(typeof currentMouvementTab === 'number' && t) {
+      scopeIndices = phraseIndicesForMouvement(t, currentMouvementTab);
+      scopeLabel = 'Phrase';
+    } else {
+      scopeIndices = phrases.map((_, i) => i);
+      scopeLabel = 'Phrase';
+    }
+    const pos = scopeIndices.indexOf(idx);
+    counterEl.innerHTML = `${scopeLabel} <strong>${pos + 1}</strong> sur ${scopeIndices.length}`;
   }
-  document.getElementById('panel-phrase-text').textContent = p.text;
-  const correctionTxt = p.correction || '(pas de correction modèle)';
-  document.getElementById('correction-text').textContent = correctionTxt;
-  document.getElementById('analysis-input').value = p.analysis || '';
-  document.getElementById('step2-status').textContent = `${phrases.filter(x => x.analysis?.trim()).length}/${phrases.length} phrases analysées`;
+  const phraseTextEl = document.getElementById('panel-phrase-text');
+  if(phraseTextEl) phraseTextEl.textContent = p.text;
+  const correctionEl = document.getElementById('correction-text');
+  if(correctionEl) correctionEl.textContent = p.correction || '(pas de correction modèle)';
+  const inputEl = document.getElementById('analysis-input');
+  if(inputEl) inputEl.value = p.analysis || '';
+  const statusEl = document.getElementById('step2-status');
+  if(statusEl) statusEl.textContent = `${phrases.filter(x => x.analysis?.trim()).length}/${phrases.length} phrases analysées`;
   const btnC = document.getElementById('btn-correct');
   const btnR = document.getElementById('btn-revoir');
   if(btnC && btnR) {
     btnC.classList.toggle('selected', p.status === 'correct');
     btnR.classList.toggle('selected', p.status === 'revoir');
   }
-  // Reset correction visibility on each phrase change (always hidden by default)
   correctionVisible = false;
   applyCorrectionVisibility();
-  // Phantom mode is persistent across phrases — re-apply with new correction
   applyPhantomMode();
+  // B5b — Flashcard à trous : générée à partir de la correction si elle contient (mots).
+  // Le préfixe inclut l'index pour reset les inputs à chaque changement de phrase.
+  const fcZone = document.getElementById('phrase-flashcard-zone');
+  if(fcZone) {
+    if(p.correction && /\([^)]+\)/.test(p.correction)) {
+      renderFlashcard('phrase-flashcard-zone', p.correction, `fc-phrase-${idx}`, 'Texte à trous');
+    } else {
+      fcZone.innerHTML = '';
+    }
+  }
   updateProgress();
 }
 
@@ -4356,24 +5620,32 @@ function saveCurrentAnalysis() {
   }
 }
 
+// B5 — Helper qui retourne la liste des indices de phrases pour le scope courant
+function currentScopeIndices() {
+  if(reviewMode) return reviewIndices;
+  const t = texts.find(x => x.id === currentTextId);
+  if(typeof currentMouvementTab === 'number' && t) {
+    return phraseIndicesForMouvement(t, currentMouvementTab);
+  }
+  return phrases.map((_, i) => i);
+}
+
 function prevPhrase() {
   saveCurrentAnalysis();
-  if(reviewMode) {
-    const pos = reviewIndices.indexOf(currentPhraseIdx);
-    if(pos > 0) selectPhrase(reviewIndices[pos-1]);
-  } else {
-    if(currentPhraseIdx > 0) selectPhrase(currentPhraseIdx-1);
-  }
+  const scope = currentScopeIndices();
+  const pos = scope.indexOf(currentPhraseIdx);
+  if(pos > 0) selectPhrase(scope[pos - 1]);
 }
 
 function nextPhrase() {
   saveCurrentAnalysis();
-  if(reviewMode) {
-    const pos = reviewIndices.indexOf(currentPhraseIdx);
-    if(pos < reviewIndices.length-1) selectPhrase(reviewIndices[pos+1]);
-    else endReviewMode();
+  const scope = currentScopeIndices();
+  const pos = scope.indexOf(currentPhraseIdx);
+  if(pos < scope.length - 1) {
+    selectPhrase(scope[pos + 1]);
   } else {
-    if(currentPhraseIdx < phrases.length-1) selectPhrase(currentPhraseIdx+1);
+    // Fin du scope : si review → endReview, sinon → onAllPhrasesDone (déclenche notice)
+    if(reviewMode) endReviewMode();
     else onAllPhrasesDone();
   }
 }
@@ -4391,6 +5663,8 @@ function markPhrase(status) {
   }
   document.getElementById('btn-correct').classList.toggle('selected', status === 'correct');
   document.getElementById('btn-revoir').classList.toggle('selected', status === 'revoir');
+  // B5c — rerender tabs pour mettre à jour les badges status (revoir/done)
+  if(t && !reviewMode) renderMouvementsTabs(t);
   setTimeout(() => nextPhrase(), 220);
 }
 
@@ -4428,23 +5702,15 @@ function startReviewMode() {
   if(reviewIndices.length === 0) { dismissReviewBanner(); return; }
   reviewMode = true;
   dismissReviewBanner();
-  const counterWrap = document.getElementById('phrase-counter-label');
-  if(counterWrap && !document.getElementById('review-mode-pill')) {
-    const pill = document.createElement('span');
-    pill.className = 'review-mode-pill';
-    pill.textContent = '↻ Mode révision';
-    pill.id = 'review-mode-pill';
-    counterWrap.parentElement.appendChild(pill);
-  }
-  selectPhrase(reviewIndices[0]);
+  // B5 — rerender pour afficher l'onglet "Oublis" et le bloc phrases filtré
+  currentPhraseIdx = reviewIndices[0];
+  renderPhraseStep();
 }
 
 function endReviewMode() {
   reviewMode = false;
   const lastIdx = reviewIndices[reviewIndices.length-1] || 0;
   reviewIndices = [];
-  const pill = document.getElementById('review-mode-pill');
-  if(pill) pill.remove();
   const container = document.getElementById('review-banner-container');
   container.innerHTML = `
     <div class="review-banner success">
@@ -4454,7 +5720,10 @@ function endReviewMode() {
       </div>
       <button class="btn-review-skip" onclick="dismissReviewBanner()">OK</button>
     </div>`;
-  selectPhrase(lastIdx);
+  // B5 — sortie du mode review : revenir aux onglets normaux
+  currentPhraseIdx = lastIdx;
+  currentMouvementTab = null; // reset pour que renderPhraseStep redécide
+  renderPhraseStep();
 }
 
 function toggleCorrection() {
@@ -4474,12 +5743,21 @@ function updateProgress() {
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
   t.problematique = document.getElementById('problematique')?.value || '';
-  t.mouvements = document.getElementById('mouvements')?.value || '';
+  // B4.3 — t.mouvements n'est plus lu depuis un textarea : la source de vérité
+  // est t.mouvementsData (synchronisé via syncMouvementsString à chaque modif).
   t.introduction = document.getElementById('introduction')?.value || '';
   t.bilan = document.getElementById('bilan')?.value || '';
   t.ouverture = document.getElementById('ouverture')?.value || '';
   save();
-  const step1Fields = [t.problematique, t.mouvements, t.introduction].filter(f => f.trim()).length;
+  // Cadre = 3 critères : problématique remplie, introduction remplie, ≥2 mouvements posés.
+  // (Q1 = 2 mouvements minimum pour passer étape suivante, 3 max.)
+  const movsPosed = (t.mouvementsData || []).length;
+  const cadreFields = [
+    !!(t.problematique && t.problematique.trim()),
+    !!(t.introduction && t.introduction.trim()),
+    movsPosed >= 2
+  ].filter(Boolean).length;
+  const step1Fields = cadreFields; // alias pour compat code existant ci-dessous
   const analysedPhrases = phrases.filter(p => p.analysis?.trim()).length;
   const movs = (t.mouvements || '').split('\n').filter(l => l.trim());
   const movCount = movs.length;
@@ -4500,11 +5778,15 @@ function updateProgress() {
   document.getElementById('study-meta').textContent = `${analysedPhrases}/${phrases.length} phrases · ${step1Fields}/3 cadre · ${wordsWritten} mots`;
   const hint = document.getElementById('step1-hint');
   if(hint) {
-    if(step1Fields === 3) {
-      hint.textContent = '✓ Prêt à analyser les phrases.';
+    if(cadreFields === 3) {
+      hint.textContent = '✓ Cadre prêt. Tu peux passer aux phrases.';
       hint.classList.add('ready');
     } else {
-      hint.textContent = 'Remplis problématique, mouvements et introduction pour continuer.';
+      const missing = [];
+      if(!(t.problematique && t.problematique.trim())) missing.push('problématique');
+      if(!(t.introduction && t.introduction.trim())) missing.push('introduction');
+      if(movsPosed < 2) missing.push(`${2 - movsPosed} mouvement${2 - movsPosed > 1 ? 's' : ''} à définir`);
+      hint.textContent = 'À compléter : ' + missing.join(', ') + '.';
       hint.classList.remove('ready');
     }
   }
@@ -4576,6 +5858,7 @@ function resetProgress() {
   if(!ok) return;
   t.problematique = '';
   t.mouvements = '';
+  t.mouvementsData = [];
   t.introduction = '';
   t.bilan = '';
   t.ouverture = '';

@@ -4441,7 +4441,7 @@ function openAmbianceFromBanner() {
       if(e.key === 'Escape') {
         closeAmbiancePopover();
         closeAllMenus();
-        hideSelectionPopover();
+        cancelSelection();
       }
     });
     // B4.3 — Selection on passage triggers popover (mouseup desktop, touchend mobile)
@@ -4459,7 +4459,7 @@ function openAmbianceFromBanner() {
     document.addEventListener('click', (e) => {
       if(e.target.closest('.selection-popover')) return;
       if(e.target.closest('#passage-readonly-body')) return;
-      if(selectionPopover) hideSelectionPopover();
+      if(selectionPopover) cancelSelection();
     });
   }
   if(document.readyState === 'loading') {
@@ -5169,20 +5169,20 @@ function domToPassageOffset(node, offset) {
 function handlePassageSelection() {
   const sel = window.getSelection();
   if(!sel || sel.rangeCount === 0 || sel.isCollapsed) {
-    hideSelectionPopover();
+    cancelSelection();
     return;
   }
   const range = sel.getRangeAt(0);
   // Vérifier que la sélection est entièrement dans le passage-readonly-body
   const body = document.getElementById('passage-readonly-body');
   if(!body || !body.contains(range.commonAncestorContainer)) {
-    hideSelectionPopover();
+    cancelSelection();
     return;
   }
   const startOff = domToPassageOffset(range.startContainer, range.startOffset);
   const endOff = domToPassageOffset(range.endContainer, range.endOffset);
   if(startOff === null || endOff === null || startOff >= endOff) {
-    hideSelectionPopover();
+    cancelSelection();
     return;
   }
   const t = texts.find(x => x.id === currentTextId);
@@ -5215,7 +5215,7 @@ function showSelectionPopover(range, startOff, endOff, availableNumbers, message
     }
     inner += '<span class="selection-popover-divider"></span>';
   }
-  inner += '<button class="selection-popover-cancel" onclick="hideSelectionPopover()">Annuler</button>';
+  inner += '<button class="selection-popover-cancel" onclick="cancelSelection()">Annuler</button>';
   pop.innerHTML = inner;
   document.body.appendChild(pop);
   // Positionner au-dessus de la sélection, centré
@@ -5232,11 +5232,19 @@ function showSelectionPopover(range, startOff, endOff, availableNumbers, message
   selectionPopover = pop;
 }
 
+// Retire UNIQUEMENT le popover du DOM. Ne touche pas à pendingSelection
+// (utilisé par showSelectionPopover pour idempotence avant ré-affichage).
 function hideSelectionPopover() {
   if(selectionPopover) {
     selectionPopover.remove();
     selectionPopover = null;
   }
+}
+
+// Annule la sélection en cours : retire popover ET vide pendingSelection.
+// À appeler quand l'utilisateur clique Annuler / Escape / clic outside.
+function cancelSelection() {
+  hideSelectionPopover();
   pendingSelection = null;
 }
 
@@ -5248,7 +5256,7 @@ function confirmMouvement(numero) {
   const validation = validateMouvementRange(t, numero, startOffset, endOffset);
   if(!validation.ok) {
     alert(validation.reason);
-    hideSelectionPopover();
+    cancelSelection();
     return;
   }
   if(!t.mouvementsData) t.mouvementsData = [];
@@ -5257,7 +5265,7 @@ function confirmMouvement(numero) {
   t.mouvementsData.push({ numero, titre: '', startOffset, endOffset });
   syncMouvementsString(t);
   save();
-  hideSelectionPopover();
+  cancelSelection();
   window.getSelection().removeAllRanges();
   renderPassageReadonly(t.passage);
   renderMouvementsCards(t);

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="22" fill="#ec4899"/>
-  <text x="50" y="73" font-family="Space Grotesk, -apple-system, sans-serif" font-size="62" font-weight="700" fill="#ffffff" text-anchor="middle">t</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g transform="rotate(-6 16 16)">
+    <rect x="3" y="3" width="26" height="26" rx="7" fill="#ec4899"/>
+    <text x="16" y="23" text-anchor="middle" font-family="Space Grotesk, system-ui, sans-serif" font-weight="700" font-style="italic" font-size="20" fill="#ffffff">o</text>
+  </g>
 </svg>

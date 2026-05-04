@@ -1,3 +1,4 @@
+[DEPLOYMENT.md](https://github.com/user-attachments/files/27366879/DEPLOYMENT.md)
 # DEPLOYMENT — oraldefrancais.com
 
 Comment le site se déploie, où sont les comptes, quoi faire si quelque chose casse.
@@ -71,15 +72,16 @@ oraldefrancais-com/
 
 ## Modifications qui touchent plusieurs fichiers — règle d'or
 
-Le module **Ambiance** (palettes Pop/Midnight/Sunset/Cyber/Matcha + TryMe avec ses 20 palettes) est volontairement **dupliqué dans 3 fichiers** : `index.html`, `faq/index.html`, `revision/index.html`. Pas de système d'import partagé en HTML pur.
+Le module **Ambiance** (palettes Pop/Midnight/Sunset/Cyber/Matcha + TryMe avec ses 20 palettes) est volontairement **dupliqué dans 4 fichiers** : `index.html`, `faq/index.html`, `revision/index.html`, et `404.html`. Pas de système d'import partagé en HTML pur.
 
-Si tu changes une couleur de thème ou une palette TryMe, tu dois faire le changement dans **les 3 fichiers**, sinon Télia voit "Sakura vif" sur revision et autre chose sur la FAQ.
+Si tu changes une couleur de thème ou une palette TryMe, tu dois faire le changement dans **les 4 fichiers**, sinon Télia voit "Sakura vif" sur revision et autre chose sur la FAQ.
+
+> Note : le 404 ne contient pas le menu Ambiance (page d'erreur, action unique = retour accueil), mais il a quand même les 20 palettes pour respecter le thème actif quand l'utilisateur tombe dessus.
 
 **Workflow obligatoire :**
 1. Modifier le 1er fichier (par ex. `revision/index.html`) → commit → attendre déploiement → vérifier live
-2. Si OK, modifier le 2ᵉ fichier → commit → vérifier
-3. Pareil pour le 3ᵉ
-4. **Ne jamais commit les 3 fichiers en un seul commit** : si l'un casse, les 3 partent en prod en même temps et tout est en panne
+2. Si OK, modifier les 3 autres → commit → vérifier
+3. **Ne jamais commit les 4 fichiers en un seul commit** : si l'un casse, les 4 partent en prod en même temps et tout est en panne
 
 Détail du module et de ses helpers : voir `README.md`, section "Module Ambiance — duplication assumée".
 
@@ -184,7 +186,7 @@ Le site se redéploie en 30-60s avec l'ancienne version qui marchait.
 - **Toujours tester sur mobile** (375px largeur) après une modification visible — Télia révise sur son téléphone.
 - **Le contenu vit dans `content/programme-2026.json`** — pas besoin de toucher au HTML pour ajouter une œuvre.
 - **Pas de framework, pas de build step, pas de `npm install`.** Si quelqu'un te propose d'ajouter React, Vite, Astro, dis non. C'est volontaire pour que tu puisses maintenir le site dans 6 mois.
-- **Module Ambiance dupliqué dans 3 fichiers** : si tu changes une palette, fais-le dans les 3, un commit par fichier (voir section dédiée plus haut).
+- **Module Ambiance dupliqué dans 4 fichiers** (index, faq, revision, 404) : si tu changes une palette, fais-le dans les 4, un commit par fichier (voir section dédiée plus haut).
 
 ---
 

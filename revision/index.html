@@ -4927,17 +4927,21 @@ function validateMouvementRange(t, numero, startOffset, endOffset) {
       return { ok: false, reason: `Chevauchement avec mouvement ${roman(m.numero)}.` };
     }
   }
-  // Contiguïté : si on pose le II et qu'il existe un I, II doit toucher la fin de I.
-  // Idem III doit toucher la fin de II.
+  // Contiguïté souple : tolère un gap whitespace (espaces, sauts de ligne)
+  // entre la fin du précédent et le début du nouveau (l'utilisateur n'a pas
+  // à sélectionner pile au caractère près après un retour à la ligne).
   const sortedExisting = others.sort((a, b) => a.numero - b.numero);
-  // Le mouvement numero qu'on tente de poser : son voisin précédent doit finir où on commence
   const prev = sortedExisting.find(m => m.numero === numero - 1);
-  if(prev && prev.endOffset !== startOffset) {
-    return { ok: false, reason: `Le mouvement ${roman(numero)} doit commencer juste après la fin du ${roman(numero - 1)}.` };
+  if(prev) {
+    if(prev.endOffset > startOffset || !isOnlyWhitespaceBetween(t.passage, prev.endOffset, startOffset)) {
+      return { ok: false, reason: `Le mouvement ${roman(numero)} doit commencer juste après la fin du ${roman(numero - 1)}.` };
+    }
   }
   const next = sortedExisting.find(m => m.numero === numero + 1);
-  if(next && next.startOffset !== endOffset) {
-    return { ok: false, reason: `Le mouvement ${roman(numero)} doit finir juste avant le début du ${roman(numero + 1)}.` };
+  if(next) {
+    if(endOffset > next.startOffset || !isOnlyWhitespaceBetween(t.passage, endOffset, next.startOffset)) {
+      return { ok: false, reason: `Le mouvement ${roman(numero)} doit finir juste avant le début du ${roman(numero + 1)}.` };
+    }
   }
   return { ok: true };
 }
@@ -4948,6 +4952,16 @@ function validateMouvementRange(t, numero, startOffset, endOffset) {
 // Si I+II posés → seul III proposable (qui doit toucher fin de II)
 // Si rien → I proposable
 // Si on resélectionne un numéro existant → bloqué (sécurité Q3=B)
+// Vérifie si la portion de passage entre `from` et `to` ne contient que des
+// caractères blancs (espaces, tabs, sauts de ligne). Permet de tolérer un
+// petit trou entre 2 mouvements contigus (Télia n'a pas à cliquer pile au
+// caractère près après un retour à la ligne).
+function isOnlyWhitespaceBetween(passage, from, to) {
+  if(from >= to) return true;
+  const slice = passage.slice(from, to);
+  return /^\s*$/.test(slice);
+}
+
 function availableMouvementNumbers(t, startOffset, endOffset) {
   const data = t.mouvementsData || [];
   const taken = new Set(data.map(m => m.numero));
@@ -4959,14 +4973,20 @@ function availableMouvementNumbers(t, startOffset, endOffset) {
     }
   }
   // Logique séquentielle : on doit poser dans l'ordre I → II → III
+  // Contiguïté souple : tolère un gap whitespace entre la fin du précédent
+  // et le début du nouveau (l'utilisateur n'a pas à sélectionner pile au char près).
   if(!taken.has(1)) {
     result.push(1);
   } else if(!taken.has(2)) {
     const I = data.find(m => m.numero === 1);
-    if(I && I.endOffset === startOffset) result.push(2);
+    if(I && I.endOffset <= startOffset && isOnlyWhitespaceBetween(t.passage, I.endOffset, startOffset)) {
+      result.push(2);
+    }
   } else if(!taken.has(3)) {
     const II = data.find(m => m.numero === 2);
-    if(II && II.endOffset === startOffset) result.push(3);
+    if(II && II.endOffset <= startOffset && isOnlyWhitespaceBetween(t.passage, II.endOffset, startOffset)) {
+      result.push(3);
+    }
   }
   return result;
 }
@@ -5252,12 +5272,24 @@ function confirmMouvement(numero) {
   if(!pendingSelection) return;
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
-  const { startOffset, endOffset } = pendingSelection;
+  let { startOffset, endOffset } = pendingSelection;
   const validation = validateMouvementRange(t, numero, startOffset, endOffset);
   if(!validation.ok) {
     alert(validation.reason);
     cancelSelection();
     return;
+  }
+  // Étendre les offsets pour absorber le gap whitespace avec les voisins :
+  // si I finit à 656 et II commence à 660 (4 espaces entre), on étend II
+  // pour qu'il commence à 656 → pas de trou entre les segments rendus.
+  const others = (t.mouvementsData || []).filter(m => m.numero !== numero).sort((a,b) => a.numero - b.numero);
+  const prev = others.find(m => m.numero === numero - 1);
+  if(prev && prev.endOffset < startOffset && isOnlyWhitespaceBetween(t.passage, prev.endOffset, startOffset)) {
+    startOffset = prev.endOffset;
+  }
+  const next = others.find(m => m.numero === numero + 1);
+  if(next && endOffset < next.startOffset && isOnlyWhitespaceBetween(t.passage, endOffset, next.startOffset)) {
+    endOffset = next.startOffset;
   }
   if(!t.mouvementsData) t.mouvementsData = [];
   // Retirer un éventuel ancien mouvement de même numéro (ne devrait pas arriver Q3=B mais sécurité)

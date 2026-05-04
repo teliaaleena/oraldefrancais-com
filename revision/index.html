@@ -2063,6 +2063,41 @@ body {
 .passage-segment-body p:last-child { margin-bottom: 0; }
 .passage-readonly-body { user-select: text; }
 
+/* Notice "passage cassé" : alerte visuelle + bouton réparer */
+.passage-broken-notice {
+  background: #fef3c7;
+  border: 1.5px solid #fcd34d;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.passage-broken-notice-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #78350f;
+}
+.passage-broken-notice-text strong { color: #422006; }
+.passage-broken-notice-btn {
+  align-self: flex-start;
+  background: #d97706;
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--t-base);
+}
+.passage-broken-notice-btn:hover {
+  background: #b45309;
+  transform: translateY(-1px);
+}
+
 /* B4.3 — Cards mouvements éditables */
 .mouvement-card {
   background: var(--white);
@@ -4732,9 +4767,34 @@ function deleteText(idx) {
 
 // Helper interne : lit les inputs du formulaire, valide, sauvegarde dans texts[]
 // et localStorage. Retourne { ok, idx, isNew } ou { ok: false, reason }.
+// Normalise un passage qui aurait été collé dans un format "un mot par ligne"
+// (PDF copié, OCR mal interprété, etc.). Détecte si la moyenne de mots par
+// ligne est < 1.5 → considère que c'est cassé et joint tout en une ligne en
+// préservant la ponctuation française. Sinon retourne le passage inchangé
+// (pour préserver poésie en vers, prose multi-paragraphes, etc.).
+function normalizePassage(passage) {
+  if(!passage || typeof passage !== 'string') return passage;
+  const lines = passage.split('\n');
+  if(lines.length < 5) return passage;
+  const nonEmpty = lines.filter(l => l.trim());
+  if(nonEmpty.length === 0) return passage;
+  const avgWordsPerLine = nonEmpty
+    .map(l => l.trim().split(/\s+/).length)
+    .reduce((a, b) => a + b, 0) / nonEmpty.length;
+  if(avgWordsPerLine >= 1.5) return passage;
+  // Texte cassé : joindre toutes les lignes par espace, nettoyer ponctuation
+  let joined = nonEmpty.map(l => l.trim()).join(' ');
+  joined = joined.replace(/ +([,.;:!?\)»])/g, '$1');
+  joined = joined.replace(/([\(«]) +/g, '$1');
+  joined = joined.replace(/ +/g, ' ');
+  return joined.trim();
+}
+
 function persistTextFromForm() {
   const title = document.getElementById('text-title-input').value.trim();
-  const passage = document.getElementById('passage-input').value.trim();
+  let passage = document.getElementById('passage-input').value.trim();
+  // Normaliser au cas où le passage a été collé en format "1 mot par ligne"
+  passage = normalizePassage(passage);
   const problematiqueModele = document.getElementById('problematique-modele-input').value.trim();
   const introductionModele = document.getElementById('intro-modele-input').value.trim();
   const conclusionModele = document.getElementById('conclu-modele-input').value.trim();
@@ -4914,6 +4974,35 @@ function availableMouvementNumbers(t, startOffset, endOffset) {
 // ═══════════════════════════════════════════════
 // PASSAGE READONLY (étape 1 — render avec mouvements visuels + sélection)
 // ═══════════════════════════════════════════════
+// Détecte si un passage a été collé en format "1 mot par ligne" (PDF/OCR cassé).
+// Renvoie true si la moyenne mots/ligne est < 1.5 et qu'il y a au moins 5 lignes.
+function isPassageBroken(passage) {
+  if(!passage || typeof passage !== 'string') return false;
+  const lines = passage.split('\n');
+  if(lines.length < 5) return false;
+  const nonEmpty = lines.filter(l => l.trim());
+  if(nonEmpty.length < 5) return false;
+  const avgWordsPerLine = nonEmpty
+    .map(l => l.trim().split(/\s+/).length)
+    .reduce((a, b) => a + b, 0) / nonEmpty.length;
+  return avgWordsPerLine < 1.5;
+}
+
+// Réparer le passage du texte courant : normaliser + reset mouvements (offsets invalides)
+function repairCurrentTextPassage() {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  const fixed = normalizePassage(t.passage);
+  if(fixed === t.passage) return; // rien à faire
+  t.passage = fixed;
+  t.mouvementsData = [];
+  t.mouvements = '';
+  save();
+  renderPassageReadonly(t.passage);
+  renderMouvementsCards(t);
+  updateProgress();
+}
+
 function renderPassageReadonly(passage) {
   const el = document.getElementById('passage-readonly-body');
   if(!el) return;
@@ -4945,7 +5034,19 @@ function renderPassageReadonly(passage) {
     return `<div class="passage-segment passage-segment-free" data-seg-start="${seg.start}" data-seg-end="${seg.end}"><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
   }).join('');
 
-  el.innerHTML = html;
+  // Notice si passage cassé (1 mot par ligne) : proposer de réparer
+  let notice = '';
+  if(isPassageBroken(passage)) {
+    notice = `<div class="passage-broken-notice">
+      <div class="passage-broken-notice-text">
+        <strong>Ce passage est mal mis en forme</strong> (un mot par ligne).
+        La réparation va le remettre en lignes normales et <strong>réinitialiser les mouvements</strong> déjà posés.
+      </div>
+      <button type="button" class="passage-broken-notice-btn" onclick="repairCurrentTextPassage()">Réparer le passage</button>
+    </div>`;
+  }
+
+  el.innerHTML = notice + html;
 }
 
 // Rend un fragment du passage (avec marqueurs [phrase|correction]) en HTML.

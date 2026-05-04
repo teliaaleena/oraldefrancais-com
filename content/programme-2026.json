@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "session": "2026",
+    "source": "Programme officiel BO + capitainestudy.fr janvier 2026",
+    "derniere_maj": "2026-05-03",
+    "note": "Pour ajouter ou modifier une oeuvre, edite ce fichier directement sur GitHub. Schema: voie -> objets_etude[] -> oeuvres[]. Chaque oeuvre a un id stable (slug auteur-titre) utilise comme cle dans le localStorage."
+  },
+  "objets_etude": [
+    { "id": "litterature-idees", "label": "Litterature d'idees", "siecles": "XVIe – XVIIIe siecle" },
+    { "id": "theatre",           "label": "Theatre",              "siecles": "XVIIe – XXIe siecle" },
+    { "id": "poesie",            "label": "Poesie",               "siecles": "XIXe – XXIe siecle" },
+    { "id": "roman",             "label": "Roman et recit",       "siecles": "Moyen Age – XXIe siecle" }
+  ],
+  "voies": {
+    "generale": {
+      "label": "Voie generale",
+      "oeuvres": [
+        { "id": "laboetie-servitude",       "objet": "litterature-idees", "auteur": "Etienne de La Boetie", "titre": "Discours de la servitude volontaire", "parcours": "« Defendre » et « entretenir » la liberte", "lecture": "Oeuvre integrale" },
+        { "id": "fontenelle-pluralite",     "objet": "litterature-idees", "auteur": "Bernard de Fontenelle", "titre": "Entretiens sur la pluralite des mondes", "parcours": "Le gout de la science", "lecture": "Oeuvre integrale" },
+        { "id": "graffigny-peruvienne",     "objet": "litterature-idees", "auteur": "Francoise de Graffigny", "titre": "Lettres d'une Peruvienne", "parcours": "Un nouvel univers s'est offert a mes yeux", "lecture": "Oeuvre integrale (edition augmentee 1752)" },
+        { "id": "corneille-menteur",        "objet": "theatre",           "auteur": "Pierre Corneille", "titre": "Le Menteur", "parcours": "Mensonge et comedie", "lecture": "Oeuvre integrale" },
+        { "id": "musset-onnebadinepas",     "objet": "theatre",           "auteur": "Alfred de Musset", "titre": "On ne badine pas avec l'amour", "parcours": "Les jeux du coeur et de la parole", "lecture": "Oeuvre integrale" },
+        { "id": "sarraute-pourunoui",       "objet": "theatre",           "auteur": "Nathalie Sarraute", "titre": "Pour un oui ou pour un non", "parcours": "Theatre et dispute", "lecture": "Oeuvre integrale" },
+        { "id": "rimbaud-cahierdouai",      "objet": "poesie",            "auteur": "Arthur Rimbaud", "titre": "Cahier de Douai", "parcours": "Emancipations creatrices", "lecture": "Oeuvre integrale (22 poemes)" },
+        { "id": "ponge-rage",               "objet": "poesie",            "auteur": "Francis Ponge", "titre": "La rage de l'expression", "parcours": "Dans l'atelier du poete", "lecture": "Oeuvre integrale" },
+        { "id": "dorion-mesforets",         "objet": "poesie",            "auteur": "Helene Dorion", "titre": "Mes forets", "parcours": "La poesie, la nature, l'intime", "lecture": "Oeuvre integrale" },
+        { "id": "prevost-manonlescaut",     "objet": "roman",             "auteur": "Abbe Prevost", "titre": "Manon Lescaut", "parcours": "Personnages en marge, plaisirs du romanesque", "lecture": "Oeuvre integrale" },
+        { "id": "balzac-peaudechagrin",     "objet": "roman",             "auteur": "Honore de Balzac", "titre": "La Peau de chagrin", "parcours": "Les romans de l'energie : creation et destruction", "lecture": "Oeuvre integrale" },
+        { "id": "colette-sido-vrilles",     "objet": "roman",             "auteur": "Colette", "titre": "Sido suivi de Les Vrilles de la vigne", "parcours": "La celebration du monde", "lecture": "Oeuvre integrale" }
+      ]
+    },
+    "techno": {
+      "label": "Voie technologique",
+      "oeuvres": [
+        { "id": "laboetie-servitude",         "objet": "litterature-idees", "auteur": "Etienne de La Boetie", "titre": "Discours de la servitude volontaire", "parcours": "« Defendre » et « entretenir » la liberte", "lecture": "Oeuvre integrale" },
+        { "id": "fontenelle-pluralite-techno","objet": "litterature-idees", "auteur": "Bernard de Fontenelle", "titre": "Entretiens sur la pluralite des mondes", "parcours": "Le gout de la science", "lecture": "Extrait — Premier, Second et Troisieme Soirs" },
+        { "id": "graffigny-peruvienne-techno","objet": "litterature-idees", "auteur": "Francoise de Graffigny", "titre": "Lettres d'une Peruvienne", "parcours": "Un nouvel univers s'est offert a mes yeux", "lecture": "Extrait — introduction + Lettres XXVIII, XXIX, XXX, XXXIV" },
+        { "id": "corneille-menteur",          "objet": "theatre",           "auteur": "Pierre Corneille", "titre": "Le Menteur", "parcours": "Mensonge et comedie", "lecture": "Oeuvre integrale" },
+        { "id": "musset-onnebadinepas",       "objet": "theatre",           "auteur": "Alfred de Musset", "titre": "On ne badine pas avec l'amour", "parcours": "Les jeux du coeur et de la parole", "lecture": "Oeuvre integrale" },
+        { "id": "sarraute-pourunoui",         "objet": "theatre",           "auteur": "Nathalie Sarraute", "titre": "Pour un oui ou pour un non", "parcours": "Theatre et dispute", "lecture": "Oeuvre integrale" },
+        { "id": "rimbaud-cahierdouai-techno", "objet": "poesie",            "auteur": "Arthur Rimbaud", "titre": "Cahier de Douai", "parcours": "Emancipations creatrices", "lecture": "Extrait — 22 poemes (de Premiere soiree a Ma Boheme)" },
+        { "id": "ponge-rage-techno",          "objet": "poesie",            "auteur": "Francis Ponge", "titre": "La rage de l'expression", "parcours": "Dans l'atelier du poete", "lecture": "Extrait — de Berges de la Loire au Mimosa" },
+        { "id": "dorion-mesforets",           "objet": "poesie",            "auteur": "Helene Dorion", "titre": "Mes forets", "parcours": "La poesie, la nature, l'intime", "lecture": "Oeuvre integrale" },
+        { "id": "prevost-manonlescaut",       "objet": "roman",             "auteur": "Abbe Prevost", "titre": "Manon Lescaut", "parcours": "Personnages en marge, plaisirs du romanesque", "lecture": "Oeuvre integrale" },
+        { "id": "balzac-memoires",            "objet": "roman",             "auteur": "Honore de Balzac", "titre": "Memoires de deux jeunes mariees", "parcours": "Raison et sentiments", "lecture": "Oeuvre integrale" },
+        { "id": "colette-sido-vrilles",       "objet": "roman",             "auteur": "Colette", "titre": "Sido suivi de Les Vrilles de la vigne", "parcours": "La celebration du monde", "lecture": "Oeuvre integrale" }
+      ]
+    }
+  },
+  "faq": [
+    { "q": "Combien de temps dure l'epreuve ecrite du bac de francais ?", "r": "L'epreuve ecrite dure 4 heures. L'eleve doit choisir entre un commentaire de texte et une dissertation, en s'appuyant sur les oeuvres et parcours etudies pendant l'annee." },
+    { "q": "Comment se deroule l'oral du bac de francais ?", "r": "L'oral dure 20 minutes, apres 30 minutes de preparation. L'eleve presente un texte choisi dans sa liste personnelle, puis echange avec l'examinateur sur son parcours de lecture et les oeuvres etudiees en classe." },
+    { "q": "Dois-je lire toutes les oeuvres au programme ?", "r": "Non. Le professeur choisit une seule oeuvre par objet d'etude, soit quatre oeuvres au total sur l'annee. Connaitre la liste complete reste utile pour elargir sa culture litteraire." },
+    { "q": "Comment bien se preparer a l'epreuve orale ?", "r": "Faire des fiches synthetiques sur chaque oeuvre etudiee, s'entrainer a presenter un texte a l'oral, et bien reviser les parcours associes. S'exercer devant un ami ou se filmer peut aider a progresser." },
+    { "q": "Les notes du bac de francais comptent-elles pour le controle continu ?", "r": "Oui. La note ecrite et la note orale du bac de francais sont integrees au dossier Parcoursup et peuvent peser dans l'evaluation globale du baccalaureat." }
+  ]
+}

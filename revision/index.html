@@ -5031,7 +5031,7 @@ function renderPassageReadonly(passage) {
       const color = MOUVEMENT_COLORS[seg.numero].hex;
       return `<div class="passage-segment passage-segment-mouvement" data-numero="${seg.numero}" data-seg-start="${seg.start}" data-seg-end="${seg.end}" style="--mov-color: ${color}"><span class="passage-segment-roman">${roman(seg.numero)}</span><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
     }
-    return `<div class="passage-segment passage-segment-free" data-seg-start="${seg.start}" data-seg-end="${seg.end}"><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
+    return `<div class="passage-segment passage-segment-free" data-seg-start="${seg.start}" data-seg-end="${seg.end}"><span class="passage-segment-roman" aria-hidden="true"></span><div class="passage-segment-body" data-offset-base="${seg.start}">${inner}</div></div>`;
   }).join('');
 
   // Notice si passage cassé (1 mot par ligne) : proposer de réparer

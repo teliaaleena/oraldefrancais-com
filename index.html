@@ -171,6 +171,108 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+.topbar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+/* ─────────────────────────────────────────
+   AMBIANCE PICKER (header button + popover)
+   /!\ Bloc dupliqué dans index.html (root), faq/index.html, revision/index.html
+   /!\ Si tu modifies, modifie les 3 fichiers
+   ───────────────────────────────────────── */
+.ambiance-wrap { position: relative; display: inline-flex; align-items: center; }
+.ambiance-btn {
+  background: var(--cream-2);
+  border: 1.5px solid var(--cream-3);
+  font-family: inherit;
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--t-base);
+}
+.ambiance-btn:hover { border-color: var(--pink-deep); color: var(--ink); }
+.ambiance-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--pink-deep);
+  display: inline-block;
+}
+.ambiance-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--cream);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+  min-width: 220px;
+  z-index: 50;
+  display: none;
+}
+.ambiance-popover.open { display: block; }
+.ambiance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.ambiance-option {
+  background: transparent;
+  border: 1.5px solid transparent;
+  font-family: inherit;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  transition: all var(--t-fast);
+}
+.ambiance-option:hover { background: var(--cream-2); }
+.ambiance-option.active { border-color: var(--pink-deep); background: var(--cream-2); }
+.ambiance-swatch {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--electric), var(--pink-deep));
+  flex-shrink: 0;
+}
+.ambiance-option[data-value="pop"] .ambiance-swatch      { background: linear-gradient(135deg, #0ea5e9, #ec4899); }
+.ambiance-option[data-value="midnight"] .ambiance-swatch { background: linear-gradient(135deg, #0a1929, #38bdf8); }
+.ambiance-option[data-value="sunset"] .ambiance-swatch   { background: linear-gradient(135deg, #ea580c, #f43f5e); }
+.ambiance-option[data-value="cyber"] .ambiance-swatch    { background: linear-gradient(135deg, #06b6d4, #d946ef); }
+.ambiance-option[data-value="matcha"] .ambiance-swatch   { background: linear-gradient(135deg, #15803d, #f59e0b); }
+.ambiance-option-tryme .tryme-swatch {
+  background: conic-gradient(from 0deg, #0ea5e9, #ec4899, #15803d, #f59e0b, #6d28d9, #0ea5e9);
+  position: relative;
+}
+.ambiance-option-tryme .tryme-swatch::after {
+  content: '?';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+@media (max-width: 600px) {
+  .ambiance-popover { right: -8px; min-width: 200px; }
+  .ambiance-btn { padding: 6px 10px; font-size: 12px; }
+  .topbar-right { gap: 8px; }
+}
 .topbar .mark {
   display: inline-flex;
   align-items: center;
@@ -851,7 +953,25 @@ footer .source-link:hover {
         <span class="wordmark-highlight"><span>oral</span></span><span>defrancais</span><span class="wordmark-tld">.com</span>
       </span>
     </a>
-    <span class="place">Outil de révision</span>
+    <div class="topbar-right">
+      <span class="place">Outil de révision</span>
+      <div class="ambiance-wrap">
+        <button class="ambiance-btn" type="button" onclick="toggleAmbiancePopover()" aria-haspopup="true" aria-expanded="false" aria-label="Choisir l'ambiance">
+          <span class="ambiance-dot" aria-hidden="true"></span>
+          Ambiance
+        </button>
+        <div class="ambiance-popover" id="ambiance-popover" role="menu" aria-label="Choisir une ambiance">
+          <div class="ambiance-grid">
+            <button class="ambiance-option" data-value="pop"      onclick="setTheme('pop')"      role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Pop</button>
+            <button class="ambiance-option" data-value="midnight" onclick="setTheme('midnight')" role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Midnight</button>
+            <button class="ambiance-option" data-value="sunset"   onclick="setTheme('sunset')"   role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Sunset</button>
+            <button class="ambiance-option" data-value="cyber"    onclick="setTheme('cyber')"    role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Cyber</button>
+            <button class="ambiance-option" data-value="matcha"   onclick="setTheme('matcha')"   role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Matcha</button>
+            <button class="ambiance-option ambiance-option-tryme" data-value="tryme" onclick="setTheme('tryme')" role="menuitemradio" title="Une palette aléatoire à chaque clic"><span class="ambiance-swatch tryme-swatch" aria-hidden="true"></span>TryMe</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
   <main id="main-content">
@@ -986,8 +1106,8 @@ const onbState = {
 
 // ── INIT ────────────────────────────────────
 (function onbInit(){
-  // Force Pop default at homepage load — never inherit prefers-color-scheme dark
-  // (only honour explicit user choice from prior visit)
+  // Au premier chargement (pas de theme stocké), respecter prefers-color-scheme
+  // (dark → midnight, sinon → pop). Dès qu'un choix utilisateur est sauvé, il prime.
   let saved = null;
   try { saved = localStorage.getItem('theme'); } catch(e) {}
   const validThemes = ['pop','midnight','sunset','cyber','matcha','tryme'];
@@ -996,23 +1116,23 @@ const onbState = {
     else if(saved === 'dark') saved = 'midnight';
     else saved = null;
   }
-  if(saved) {
-    document.documentElement.setAttribute('data-theme', saved);
-    // Restore TryMe palette if applicable. ONB_TRYME_PALETTES is declared further down in
-    // this script with `const`, which means the IIFE executes BEFORE it's initialised.
-    // We defer the restoration to the next microtask so the const is available.
-    if(saved === 'tryme') {
-      Promise.resolve().then(() => {
-        try {
-          const idx = parseInt(localStorage.getItem('tryme_palette_idx'), 10);
-          if(!isNaN(idx) && typeof onbApplyTryMe === 'function') {
-            onbApplyTryMe(idx);
-          }
-        } catch(e) {}
-      });
-    }
+  if(!saved) {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    saved = prefersDark ? 'midnight' : 'pop';
   }
-  // else: :root is Pop, no attribute needed
+  document.documentElement.setAttribute('data-theme', saved);
+  // Restore TryMe palette if applicable. TRYME_PALETTES is declared further down
+  // in this script with `const`; defer to next microtask so the const exists.
+  if(saved === 'tryme') {
+    Promise.resolve().then(() => {
+      try {
+        const idx = parseInt(localStorage.getItem('tryme_palette_idx'), 10);
+        if(!isNaN(idx) && typeof onbApplyTryMe === 'function') {
+          onbApplyTryMe(idx);
+        }
+      } catch(e) {}
+    });
+  }
 
   // If already onboarded, redirect main CTA to /revision/ (not /onboarding/) — already done in CTA href
   // and don't show modal
@@ -1128,56 +1248,148 @@ function onbUpdateNav() {
 
 // ── STEP 1 — AMBIANCE ─────────────────────
 // ── TryMe palette: 20 curated combos shared with /revision/ ──
-const ONB_TRYME_PALETTES = [
-  { primary: '#0ea5e9', accent: '#ec4899', bg: '#f8fafc' },
-  { primary: '#6366f1', accent: '#f43f5e', bg: '#f8fafc' },
-  { primary: '#0284c7', accent: '#a855f7', bg: '#f8fafc' },
-  { primary: '#0d9488', accent: '#f97316', bg: '#f8fafc' },
-  { primary: '#7c3aed', accent: '#fbbf24', bg: '#fafaf9' },
-  { primary: '#2563eb', accent: '#10b981', bg: '#f8fafc' },
-  { primary: '#be185d', accent: '#0ea5e9', bg: '#fff7fb' },
-  { primary: '#15803d', accent: '#e11d48', bg: '#f7fdf9' },
-  { primary: '#1e40af', accent: '#facc15', bg: '#f8fafc' },
-  { primary: '#9333ea', accent: '#06b6d4', bg: '#fbfaff' },
-  { primary: '#475569', accent: '#f43f5e', bg: '#f8fafc' },
-  { primary: '#0f766e', accent: '#fb923c', bg: '#f6fdfb' },
-  { primary: '#1d4ed8', accent: '#ec4899', bg: '#f8fafc' },
-  { primary: '#a16207', accent: '#0ea5e9', bg: '#fffbf2' },
-  { primary: '#7e22ce', accent: '#22c55e', bg: '#fbfaff' },
-  { primary: '#0891b2', accent: '#d946ef', bg: '#f6fcfd' },
-  { primary: '#dc2626', accent: '#0ea5e9', bg: '#fefafa' },
-  { primary: '#4338ca', accent: '#fb7185', bg: '#fafaff' },
-  { primary: '#0369a1', accent: '#facc15', bg: '#f8fbfd' },
-  { primary: '#5b21b6', accent: '#f97316', bg: '#fbf9ff' }
+// ════════════════════════════════════════════════
+// AMBIANCE & TRYME — bloc partagé (palettes 13-tokens)
+// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html
+// /!\ Si tu modifies, modifie les 3 fichiers
+// ════════════════════════════════════════════════
+const TRYME_PALETTES = [
+  { label: 'Parchemin',          cream: '#fffbeb', cream2: '#fde68a', cream3: '#fcd34d', white: '#fffef5', whiteLine: '#fbe086', ink: '#422006', ink2: '#713f12', ink3: '#a16207', electric: '#b45309', pink: '#92400e' },
+  { label: 'Sakura vif',         cream: '#fdf2f8', cream2: '#fbcfe8', cream3: '#f9a8d4', white: '#fffafd', whiteLine: '#f7c2dc', ink: '#500724', ink2: '#831843', ink3: '#9d174d', electric: '#be185d', pink: '#db2777' },
+  { label: 'Lagon',              cream: '#ecfeff', cream2: '#a5f3fc', cream3: '#67e8f9', white: '#f8feff', whiteLine: '#9dedf5', ink: '#164e63', ink2: '#155e75', ink3: '#0e7490', electric: '#0e7490', pink: '#0d9488' },
+  { label: 'Bordeaux ivoire',    cream: '#fef2f2', cream2: '#fecaca', cream3: '#fca5a5', white: '#fff8f8', whiteLine: '#fcc1c1', ink: '#450a0a', ink2: '#7f1d1d', ink3: '#991b1b', electric: '#991b1b', pink: '#a16207' },
+  { label: 'Lavande nuit',       cream: '#f5f3ff', cream2: '#ddd6fe', cream3: '#c4b5fd', white: '#fbfaff', whiteLine: '#d4cbfb', ink: '#2e1065', ink2: '#4c1d95', ink3: '#5b21b6', electric: '#6d28d9', pink: '#be185d' },
+  { label: 'Citron vert',        cream: '#f7fee7', cream2: '#d9f99d', cream3: '#bef264', white: '#fcfff5', whiteLine: '#cef090', ink: '#1a2e05', ink2: '#365314', ink3: '#4d7c0f', electric: '#4d7c0f', pink: '#a16207' },
+  { label: 'Chêne brun',         cream: '#fafaf9', cream2: '#d6d3d1', cream3: '#a8a29e', white: '#fdfcfb', whiteLine: '#cdc9c5', ink: '#1c1917', ink2: '#44403c', ink3: '#57534e', electric: '#78350f', pink: '#92400e' },
+  { label: 'Sarcelle profonde',  cream: '#f0fdfa', cream2: '#99f6e4', cream3: '#5eead4', white: '#f8fefd', whiteLine: '#90efdd', ink: '#042f2e', ink2: '#134e4a', ink3: '#115e59', electric: '#115e59', pink: '#0f766e' },
+  { label: 'Terracotta',         cream: '#fffbf5', cream2: '#fed7aa', cream3: '#fdba74', white: '#fffdfa', whiteLine: '#fcd0a3', ink: '#422006', ink2: '#7c2d12', ink3: '#9a3412', electric: '#9a3412', pink: '#b91c1c' },
+  { label: 'Marrakech',          cream: '#fef3c7', cream2: '#fcd34d', cream3: '#fbbf24', white: '#fffaeb', whiteLine: '#fbcb3a', ink: '#451a03', ink2: '#78350f', ink3: '#9a3412', electric: '#c2410c', pink: '#15803d' },
+  { label: 'Brutaliste',         cream: '#ffffff', cream2: '#e4e4e7', cream3: '#a1a1aa', white: '#ffffff', whiteLine: '#18181b', ink: '#18181b', ink2: '#27272a', ink3: '#52525b', electric: '#18181b', pink: '#18181b' },
+  { label: 'Framboise',          cream: '#fff1f2', cream2: '#fecdd3', cream3: '#fda4af', white: '#fffafb', whiteLine: '#fbc0c8', ink: '#4c0519', ink2: '#881337', ink3: '#9f1239', electric: '#be123c', pink: '#9d174d' },
+  { label: 'Synthwave',          cream: '#1a0b2e', cream2: '#2d1b4e', cream3: '#4c1d95', white: '#241540', whiteLine: '#5b21b6', ink: '#f5f3ff', ink2: '#ddd6fe', ink3: '#c4b5fd', electric: '#f0abfc', pink: '#22d3ee' },
+  { label: 'Terminal',           cream: '#0a0e0a', cream2: '#0f1a13', cream3: '#065f46', white: '#0d1410', whiteLine: '#047857', ink: '#d1fae5', ink2: '#a7f3d0', ink3: '#6ee7b7', electric: '#34d399', pink: '#22d3ee' },
+  { label: 'GitHub nuit',        cream: '#0c1117', cream2: '#161b22', cream3: '#1e293b', white: '#10161e', whiteLine: '#30363d', ink: '#e6edf3', ink2: '#cbd5e1', ink3: '#94a3b8', electric: '#fbbf24', pink: '#fb7185' },
+  { label: 'Bois & or',          cream: '#1a1410', cream2: '#2a1f17', cream3: '#78350f', white: '#241a14', whiteLine: '#92400e', ink: '#fef3c7', ink2: '#fde68a', ink3: '#fcd34d', electric: '#fbbf24', pink: '#f97316' },
+  { label: 'Forêt nuit',         cream: '#0d1f17', cream2: '#15301f', cream3: '#14532d', white: '#102a1a', whiteLine: '#166534', ink: '#d1fae5', ink2: '#bbf7d0', ink3: '#86efac', electric: '#fb923c', pink: '#fbbf24' },
+  { label: 'Velours rouge',      cream: '#1a0d0d', cream2: '#2a1414', cream3: '#7f1d1d', white: '#241010', whiteLine: '#991b1b', ink: '#fee2e2', ink2: '#fecaca', ink3: '#fca5a5', electric: '#f87171', pink: '#fb923c' },
+  { label: 'Vapor',              cream: '#18181b', cream2: '#27272a', cream3: '#3f3f46', white: '#1f1f23', whiteLine: '#52525b', ink: '#fafafa', ink2: '#d4d4d8', ink3: '#a1a1aa', electric: '#f472b6', pink: '#22d3ee' },
+  { label: 'Indigo galaxie',     cream: '#0e0a1a', cream2: '#1a1735', cream3: '#312e81', white: '#181030', whiteLine: '#4338ca', ink: '#e0e7ff', ink2: '#c7d2fe', ink3: '#a5b4fc', electric: '#818cf8', pink: '#f472b6' }
 ];
 let onbTryMeIdx = null;
 
 function onbApplyTryMe(idx) {
-  const p = ONB_TRYME_PALETTES[idx];
+  const p = TRYME_PALETTES[idx];
   if(!p) return;
   const root = document.documentElement;
-  root.style.setProperty('--electric',      p.primary);
-  root.style.setProperty('--electric-deep', p.primary);
-  root.style.setProperty('--pink-deep',     p.accent);
-  root.style.setProperty('--pink-darker',   p.accent);
-  root.style.setProperty('--cream',         p.bg);
+  root.style.setProperty('--cream',         p.cream);
+  root.style.setProperty('--cream-2',       p.cream2);
+  root.style.setProperty('--cream-3',       p.cream3);
+  root.style.setProperty('--white',         p.white);
+  root.style.setProperty('--white-line',    p.whiteLine);
+  root.style.setProperty('--ink',           p.ink);
+  root.style.setProperty('--ink-2',         p.ink2);
+  root.style.setProperty('--ink-3',         p.ink3);
+  root.style.setProperty('--electric',      p.electric);
+  root.style.setProperty('--electric-deep', p.electric);
+  root.style.setProperty('--pink',          p.pink);
+  root.style.setProperty('--pink-deep',     p.pink);
+  root.style.setProperty('--pink-darker',   p.pink);
   onbTryMeIdx = idx;
+  localStorage.setItem('tryme_palette_idx', String(idx));
 }
 function onbClearTryMe() {
   const root = document.documentElement;
-  ['--electric', '--electric-deep', '--pink-deep', '--pink-darker', '--cream'].forEach(v => {
-    root.style.removeProperty(v);
-  });
+  ['--cream','--cream-2','--cream-3','--white','--white-line',
+   '--ink','--ink-2','--ink-3',
+   '--electric','--electric-deep',
+   '--pink','--pink-deep','--pink-darker'].forEach(v => root.style.removeProperty(v));
   onbTryMeIdx = null;
 }
+
+// ── Header Ambiance picker (header button, distinct from onboarding step 1)
+const AMBIANCE_VALUES = ['pop','midnight','sunset','cyber','matcha','tryme'];
+const AMBIANCE_LEGACY = { 'light': 'pop', 'dark': 'midnight' };
+
+function pickTryMePaletteIdx() {
+  const prev = parseInt(localStorage.getItem('tryme_palette_idx'), 10);
+  let idx = Math.floor(Math.random() * TRYME_PALETTES.length);
+  if(!isNaN(prev) && idx === prev && TRYME_PALETTES.length > 1) {
+    idx = (idx + 1) % TRYME_PALETTES.length;
+  }
+  return idx;
+}
+
+function rerollTryMe() {
+  const idx = pickTryMePaletteIdx();
+  onbApplyTryMe(idx);
+  updateAmbianceButtons('tryme');
+}
+
+function setTheme(theme) {
+  if(AMBIANCE_LEGACY[theme]) theme = AMBIANCE_LEGACY[theme];
+  if(!AMBIANCE_VALUES.includes(theme)) theme = 'pop';
+  if(theme === 'tryme') {
+    document.documentElement.setAttribute('data-theme', 'tryme');
+    rerollTryMe();
+  } else {
+    onbClearTryMe();
+    document.documentElement.setAttribute('data-theme', theme);
+    updateAmbianceButtons(theme);
+  }
+  localStorage.setItem('theme', theme);
+  // Sync onboarding step 1 cards if onboarding modal is currently open
+  if(typeof onbSelectAmbianceUI === 'function') {
+    try { onbSelectAmbianceUI(theme); } catch(e) {}
+  }
+}
+
+function updateAmbianceButtons(theme) {
+  document.querySelectorAll('.ambiance-option').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.value === theme);
+  });
+  const dot = document.querySelector('.ambiance-btn .ambiance-dot');
+  if(dot) {
+    const styles = getComputedStyle(document.documentElement);
+    dot.style.background = styles.getPropertyValue('--pink-deep').trim() || '#ec4899';
+  }
+}
+
+function toggleAmbiancePopover() {
+  const pop = document.getElementById('ambiance-popover');
+  const btn = document.querySelector('.ambiance-btn');
+  if(!pop) return;
+  const isOpen = pop.classList.toggle('open');
+  if(btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function closeAmbiancePopover() {
+  const pop = document.getElementById('ambiance-popover');
+  const btn = document.querySelector('.ambiance-btn');
+  if(pop) pop.classList.remove('open');
+  if(btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('theme') || 'pop';
+  updateAmbianceButtons(saved);
+  document.addEventListener('click', (e) => {
+    const pop = document.getElementById('ambiance-popover');
+    if(pop && pop.classList.contains('open') && !e.target.closest('.ambiance-wrap')) {
+      closeAmbiancePopover();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeAmbiancePopover();
+  });
+});
 
 function onbSelectAmbiance(amb) {
   onbState.ambiance = amb;
   if(amb === 'tryme') {
     // Re-roll on every click of TryMe (different palette each time)
-    let idx = Math.floor(Math.random() * ONB_TRYME_PALETTES.length);
-    if(onbTryMeIdx !== null && idx === onbTryMeIdx && ONB_TRYME_PALETTES.length > 1) {
-      idx = (idx + 1) % ONB_TRYME_PALETTES.length;
+    let idx = Math.floor(Math.random() * TRYME_PALETTES.length);
+    if(onbTryMeIdx !== null && idx === onbTryMeIdx && TRYME_PALETTES.length > 1) {
+      idx = (idx + 1) % TRYME_PALETTES.length;
     }
     onbApplyTryMe(idx);
     document.documentElement.setAttribute('data-theme', 'tryme');

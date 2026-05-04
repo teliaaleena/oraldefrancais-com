@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/27366893/README.md)
 # oraldefrancais.com — site
 
 Site statique de révision de l'oral de français (EAF). 3 pages :
@@ -79,15 +80,16 @@ Charles Baudelaire publie [L'Albatros|son poème emblématique] en (1859), dans 
 
 Les 3 pages partagent un **menu Ambiance** dans le header (5 ambiances fixes : Pop, Midnight, Sunset, Cyber, Matcha + 1 surprise : **TryMe** qui tire l'une des 20 palettes nouvelles à chaque clic).
 
-**⚠️ Le code Ambiance complet (palettes + helpers) est dupliqué dans les 3 fichiers HTML** parce qu'on n'a pas de système d'import partagé en HTML pur. Si tu modifies une palette ou ajoutes/supprimes une palette, tu dois faire le changement dans **3 endroits** :
+**⚠️ Le code Ambiance complet (palettes + helpers) est dupliqué dans les 4 fichiers HTML** parce qu'on n'a pas de système d'import partagé en HTML pur. Si tu modifies une palette ou ajoutes/supprimes une palette, tu dois faire le changement dans **4 endroits** :
 
 | Fichier | Cherche cette ligne |
 |---|---|
 | `index.html` (landing) | `const TRYME_PALETTES = [` |
 | `faq/index.html` | `const TRYME_PALETTES = [` |
 | `revision/index.html` | `const TRYME_PALETTES = [` |
+| `404.html` | `const TRYME_PALETTES = [` |
 
-Le bloc fait ~22 lignes (20 palettes + commentaires). Les 3 doivent être **strictement identiques** sinon Télia voit "Sakura vif" sur l'une et autre chose sur l'autre.
+Le bloc fait ~22 lignes (20 palettes + commentaires). Les 4 doivent être **strictement identiques** sinon Télia voit "Sakura vif" sur l'une et autre chose sur l'autre.
 
 Cherche aussi le bloc commentaire `AMBIANCE & TRYME — bloc partagé` dans chaque fichier : il marque le début et la fin du bloc à synchroniser.
 
@@ -141,15 +143,15 @@ Dans le bloc `AMBIANCE & TRYME — bloc partagé` :
 
 ### Si tu veux ajouter une 21ᵉ palette
 
-1. Ouvre les 3 `index.html` ci-dessus
+1. Ouvre les 4 fichiers HTML ci-dessus
 2. Cherche `const TRYME_PALETTES = [`
-3. Ajoute la nouvelle palette **dans les 3 fichiers** avec exactement le même contenu (copier-coller)
+3. Ajoute la nouvelle palette **dans les 4 fichiers** avec exactement le même contenu (copier-coller)
 4. Vérifie le contraste ink/cream ≥ 4.5
 5. Commit + push → auto-deploy Cloudflare
 
 ### Si tu veux changer les 5 ambiances fixes
 
-Elles sont définies en CSS via `[data-theme="pop|midnight|sunset|cyber|matcha"]` dans chaque `<style>` des 3 fichiers. Même règle : modifier les 3 fichiers en parallèle.
+Elles sont définies en CSS via `[data-theme="pop|midnight|sunset|cyber|matcha"]` dans chaque `<style>` des 4 fichiers. Même règle : modifier les 4 fichiers en parallèle.
 
 ### Comportement par défaut au premier chargement
 
@@ -157,7 +159,7 @@ Si l'utilisateur n'a jamais choisi d'ambiance (`localStorage.theme` vide) :
 - Si son OS est en mode sombre (`prefers-color-scheme: dark`) → Midnight
 - Sinon → Pop
 
-Dès qu'il clique une ambiance, son choix est sauvé dans `localStorage.theme` et la détection système ne reprend plus la main. Le choix persiste sur les 3 pages (même origin = même `localStorage`).
+Dès qu'il clique une ambiance, son choix est sauvé dans `localStorage.theme` et la détection système ne reprend plus la main. Le choix persiste sur toutes les pages du site (même origin = même `localStorage`), 404 incluse.
 
 ## Bugs connus & réparations
 
@@ -193,6 +195,6 @@ Pour une modif simple (texte, couleur, copy) :
 4. Cloudflare Pages déploie auto en 30-60s
 5. Hard refresh sur le navigateur (Cmd+Shift+R Mac / Ctrl+Shift+R PC) pour voir
 
-Pour une modif qui touche les 3 pages (ambiance, palette, header) :
-- Faire les 3 commits l'un après l'autre, vérifier après chaque que le site marche encore
-- Ne **jamais** faire un seul commit qui modifie les 3 fichiers en même temps : si l'un casse, les 3 sont déployés ensemble et tout est en panne
+Pour une modif qui touche le module Ambiance (palette, helpers, ambiance fixe) :
+- Faire les 4 commits l'un après l'autre (index, faq, revision, 404), vérifier après chaque que le site marche encore
+- Ne **jamais** faire un seul commit qui modifie les 4 fichiers en même temps : si l'un casse, les 4 sont déployés ensemble et tout est en panne

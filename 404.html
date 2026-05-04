@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Page introuvable · Télia Moreau</title>
+<title>Page introuvable · oraldefrancais.com</title>
 <meta name="description" content="Cette page n'existe pas.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#fefcf8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
 :root {
   --cream: #f8fafc;
   --cream-2: #f1f5f9;
+  --cream-3: #e2e8f0;
   --ink: #0f172a;
   --ink-2: #334155;
   --ink-3: #64748b;
@@ -24,15 +25,36 @@
   --shadow-pink: 0 4px 16px rgba(236, 72, 153, 0.28);
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --cream: #0a1929;
     --cream-2: #102a43;
+    --cream-3: #1e3a5f;
     --ink: #f8fafc;
     --ink-2: #cbd5e1;
     --ink-3: #94a3b8;
     --pink-deep: #f472b6;
     --pink-darker: #ec4899;
   }
+}
+[data-theme="midnight"] {
+  --cream: #0a1929; --cream-2: #102a43; --cream-3: #1e3a5f;
+  --ink: #f8fafc; --ink-2: #cbd5e1; --ink-3: #94a3b8;
+  --pink: #f9a8d4; --pink-deep: #f472b6; --pink-darker: #ec4899;
+}
+[data-theme="sunset"] {
+  --cream: #fff5ec; --cream-2: #ffe9d4; --cream-3: #ffd9b8;
+  --ink: #431407; --ink-2: #7c2d12; --ink-3: #c2410c;
+  --pink: #fda4af; --pink-deep: #f43f5e; --pink-darker: #e11d48;
+}
+[data-theme="cyber"] {
+  --cream: #f0f9ff; --cream-2: #e0f2fe; --cream-3: #bae6fd;
+  --ink: #1e1b4b; --ink-2: #4c1d95; --ink-3: #6d28d9;
+  --pink: #c4b5fd; --pink-deep: #d946ef; --pink-darker: #c026d3;
+}
+[data-theme="matcha"] {
+  --cream: #f0fdf4; --cream-2: #dcfce7; --cream-3: #bbf7d0;
+  --ink: #052e16; --ink-2: #166534; --ink-3: #15803d;
+  --pink: #fcd34d; --pink-deep: #f59e0b; --pink-darker: #d97706;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -48,7 +70,7 @@ body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
-/* Decorative blobs */
+/* Decorative blobs — sourcés depuis vars pour suivre le thème */
 .blob {
   position: fixed;
   border-radius: 50%;
@@ -57,9 +79,11 @@ body {
   pointer-events: none;
 }
 .blob-1 { width: 350px; height: 350px; background: var(--pink); top: -80px; right: -80px; }
-.blob-2 { width: 300px; height: 300px; background: #bae6fd; bottom: -60px; left: -60px; }
-@media (prefers-color-scheme: dark) { .blob { opacity: 0.15; } }
-
+.blob-2 { width: 300px; height: 300px; background: var(--cream-3); bottom: -60px; left: -60px; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .blob { opacity: 0.15; }
+}
+[data-theme="midnight"] .blob { opacity: 0.15; }
 main {
   position: relative;
   z-index: 2;
@@ -126,6 +150,74 @@ p {
 .cta:focus-visible { outline: 2.5px solid var(--pink-deep); outline-offset: 4px; }
 ::selection { background: var(--pink); color: var(--ink); }
 </style>
+<script>
+// ════════════════════════════════════════════════════════════════
+// AMBIANCE & TRYME — bloc partagé (extrait minimum pour la 404)
+// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html, 404.html
+// /!\ Si tu modifies les palettes, modifie les 4 fichiers et garde-les synchronisés
+// ════════════════════════════════════════════════════════════════
+const TRYME_PALETTES = [
+  { label: 'Parchemin', cream: '#fffbeb', cream2: '#fde68a', cream3: '#fcd34d', white: '#fffef5', whiteLine: '#fbe086', ink: '#422006', ink2: '#713f12', ink3: '#a16207', electric: '#b45309', pink: '#92400e' },
+  { label: 'Sakura vif', cream: '#fdf2f8', cream2: '#fbcfe8', cream3: '#f9a8d4', white: '#fffafd', whiteLine: '#f7c2dc', ink: '#500724', ink2: '#831843', ink3: '#9d174d', electric: '#be185d', pink: '#db2777' },
+  { label: 'Lagon', cream: '#ecfeff', cream2: '#a5f3fc', cream3: '#67e8f9', white: '#f8feff', whiteLine: '#9dedf5', ink: '#164e63', ink2: '#155e75', ink3: '#0e7490', electric: '#0e7490', pink: '#0d9488' },
+  { label: 'Bordeaux ivoire', cream: '#fef2f2', cream2: '#fecaca', cream3: '#fca5a5', white: '#fff8f8', whiteLine: '#fcc1c1', ink: '#450a0a', ink2: '#7f1d1d', ink3: '#991b1b', electric: '#991b1b', pink: '#a16207' },
+  { label: 'Lavande nuit', cream: '#f5f3ff', cream2: '#ddd6fe', cream3: '#c4b5fd', white: '#fbfaff', whiteLine: '#d4cbfb', ink: '#2e1065', ink2: '#4c1d95', ink3: '#5b21b6', electric: '#6d28d9', pink: '#be185d' },
+  { label: 'Citron vert', cream: '#f7fee7', cream2: '#d9f99d', cream3: '#bef264', white: '#fcfff5', whiteLine: '#cef090', ink: '#1a2e05', ink2: '#365314', ink3: '#4d7c0f', electric: '#4d7c0f', pink: '#a16207' },
+  { label: 'Chêne brun', cream: '#fafaf9', cream2: '#d6d3d1', cream3: '#a8a29e', white: '#fdfcfb', whiteLine: '#cdc9c5', ink: '#1c1917', ink2: '#44403c', ink3: '#57534e', electric: '#78350f', pink: '#92400e' },
+  { label: 'Sarcelle profonde', cream: '#f0fdfa', cream2: '#99f6e4', cream3: '#5eead4', white: '#f8fefd', whiteLine: '#90efdd', ink: '#042f2e', ink2: '#134e4a', ink3: '#115e59', electric: '#115e59', pink: '#0f766e' },
+  { label: 'Terracotta', cream: '#fffbf5', cream2: '#fed7aa', cream3: '#fdba74', white: '#fffdfa', whiteLine: '#fcd0a3', ink: '#422006', ink2: '#7c2d12', ink3: '#9a3412', electric: '#9a3412', pink: '#b91c1c' },
+  { label: 'Marrakech', cream: '#fef3c7', cream2: '#fcd34d', cream3: '#fbbf24', white: '#fffaeb', whiteLine: '#fbcb3a', ink: '#451a03', ink2: '#78350f', ink3: '#9a3412', electric: '#c2410c', pink: '#15803d' },
+  { label: 'Brutaliste', cream: '#ffffff', cream2: '#e4e4e7', cream3: '#a1a1aa', white: '#ffffff', whiteLine: '#18181b', ink: '#18181b', ink2: '#27272a', ink3: '#52525b', electric: '#18181b', pink: '#18181b' },
+  { label: 'Framboise', cream: '#fff1f2', cream2: '#fecdd3', cream3: '#fda4af', white: '#fffafb', whiteLine: '#fbc0c8', ink: '#4c0519', ink2: '#881337', ink3: '#9f1239', electric: '#be123c', pink: '#9d174d' },
+  { label: 'Synthwave', cream: '#1a0b2e', cream2: '#2d1b4e', cream3: '#4c1d95', white: '#241540', whiteLine: '#5b21b6', ink: '#f5f3ff', ink2: '#ddd6fe', ink3: '#c4b5fd', electric: '#f0abfc', pink: '#22d3ee' },
+  { label: 'Terminal', cream: '#0a0e0a', cream2: '#0f1a13', cream3: '#065f46', white: '#0d1410', whiteLine: '#047857', ink: '#d1fae5', ink2: '#a7f3d0', ink3: '#6ee7b7', electric: '#34d399', pink: '#22d3ee' },
+  { label: 'GitHub nuit', cream: '#0c1117', cream2: '#161b22', cream3: '#1e293b', white: '#10161e', whiteLine: '#30363d', ink: '#e6edf3', ink2: '#cbd5e1', ink3: '#94a3b8', electric: '#fbbf24', pink: '#fb7185' },
+  { label: 'Bois & or', cream: '#1a1410', cream2: '#2a1f17', cream3: '#78350f', white: '#241a14', whiteLine: '#92400e', ink: '#fef3c7', ink2: '#fde68a', ink3: '#fcd34d', electric: '#fbbf24', pink: '#f97316' },
+  { label: 'Forêt nuit', cream: '#0d1f17', cream2: '#15301f', cream3: '#14532d', white: '#102a1a', whiteLine: '#166534', ink: '#d1fae5', ink2: '#bbf7d0', ink3: '#86efac', electric: '#fb923c', pink: '#fbbf24' },
+  { label: 'Velours rouge', cream: '#1a0d0d', cream2: '#2a1414', cream3: '#7f1d1d', white: '#241010', whiteLine: '#991b1b', ink: '#fee2e2', ink2: '#fecaca', ink3: '#fca5a5', electric: '#f87171', pink: '#fb923c' },
+  { label: 'Vapor', cream: '#18181b', cream2: '#27272a', cream3: '#3f3f46', white: '#1f1f23', whiteLine: '#52525b', ink: '#fafafa', ink2: '#d4d4d8', ink3: '#a1a1aa', electric: '#f472b6', pink: '#22d3ee' },
+  { label: 'Indigo galaxie', cream: '#0e0a1a', cream2: '#1a1735', cream3: '#312e81', white: '#181030', whiteLine: '#4338ca', ink: '#e0e7ff', ink2: '#c7d2fe', ink3: '#a5b4fc', electric: '#818cf8', pink: '#f472b6' }
+];
+
+function applyTryMePalette(idx) {
+  const p = TRYME_PALETTES[idx];
+  if(!p) return;
+  const root = document.documentElement;
+  root.style.setProperty('--cream',         p.cream);
+  root.style.setProperty('--cream-2',       p.cream2);
+  root.style.setProperty('--cream-3',       p.cream3);
+  root.style.setProperty('--white',         p.white);
+  root.style.setProperty('--white-line',    p.whiteLine);
+  root.style.setProperty('--ink',           p.ink);
+  root.style.setProperty('--ink-2',         p.ink2);
+  root.style.setProperty('--ink-3',         p.ink3);
+  root.style.setProperty('--electric',      p.electric);
+  root.style.setProperty('--pink',          p.pink);
+  root.style.setProperty('--pink-deep',     p.pink);
+  root.style.setProperty('--pink-darker',   p.pink);
+}
+
+// Restaurer l'ambiance choisie par l'utilisateur sur les autres pages.
+// Si pas de préférence stockée : la media query CSS prend le relais (light/dark auto).
+(function(){
+  try {
+    var saved = localStorage.getItem('theme');
+    var legacy = { 'light': 'pop', 'dark': 'midnight' };
+    if(saved && legacy[saved]) saved = legacy[saved];
+    var valid = ['pop','midnight','sunset','cyber','matcha','tryme'];
+    if(saved && valid.indexOf(saved) >= 0) {
+      document.documentElement.setAttribute('data-theme', saved);
+      // Pour TryMe, restaurer la palette tirée précédemment depuis localStorage
+      if(saved === 'tryme') {
+        var idx = parseInt(localStorage.getItem('tryme_palette_idx'), 10);
+        if(!isNaN(idx) && idx >= 0 && idx < TRYME_PALETTES.length) {
+          applyTryMePalette(idx);
+        }
+      }
+    }
+  } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div class="blob blob-1"></div>

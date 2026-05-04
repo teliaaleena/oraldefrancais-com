@@ -424,29 +424,6 @@ body {
   stroke-linejoin: round;
 }
 
-/* TryMe re-roll button: ambient yellow tone, distinguishes it from regular utility buttons */
-.util-btn-reroll {
-  background: #fef3c7;
-  color: #854d0e;
-  border: 1.5px solid #fcd34d;
-  padding: 6px 12px;
-  font-weight: 700;
-  font-size: 12px;
-}
-.util-btn-reroll:hover {
-  background: #fde68a;
-  color: #713f12;
-  transform: rotate(-2deg);
-}
-.util-btn-reroll:active {
-  transform: scale(0.95) rotate(-2deg);
-}
-.util-btn-reroll svg {
-  width: 12px;
-  height: 12px;
-  stroke-width: 2.4;
-}
-
 /* ─────────────────────────────────────────
    GENERIC TOPBAR MENUS (Outils, Fichier)
    shared dropdown pattern for hover (desktop) + tap (mobile)
@@ -1782,6 +1759,7 @@ body {
   display: flex;
   padding: 0 40px;
   gap: 8px;
+  margin-top: 24px;
   margin-bottom: 24px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -1964,19 +1942,65 @@ body {
   color: var(--ink-3);
   font-weight: 700;
 }
+.passage-readonly-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.passage-edit-btn {
+  background: var(--white);
+  border: none;
+  font-family: inherit;
+  color: var(--ink-2);
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--t-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.passage-edit-btn:hover { background: var(--electric); color: var(--ink); }
+.passage-edit-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .passage-toggle {
   background: var(--white);
   border: none;
   font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
   color: var(--ink-2);
-  padding: 6px 12px;
-  border-radius: var(--radius-pill);
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all var(--t-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .passage-toggle:hover { background: var(--pink); color: var(--ink); }
+.passage-toggle svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+}
+.passage-readonly.collapsed .passage-toggle svg {
+  transform: rotate(-90deg);
+}
 .passage-readonly-body {
   font-size: 16px;
   line-height: 1.85;
@@ -3503,7 +3527,7 @@ kbd {
   .grid-wrap { padding: 16px 20px 40px; }
   #new-text .container { padding: 20px 20px 60px; }
   .study-topbar { margin: 12px 20px 0; padding: 16px 20px; grid-template-columns: 1fr; gap: 14px; }
-  .steps-nav { padding: 0 20px; }
+  .steps-nav { padding: 0 20px; margin-top: 16px; margin-bottom: 16px; }
   .step-content { padding: 0 20px 32px; }
   .step-footer { margin: 0 20px 24px; padding: 16px 20px; }
   .fields-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -3621,12 +3645,6 @@ kbd {
             <button class="ambiance-option" data-value="matcha"   onclick="setTheme('matcha')"   role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Matcha</button>
             <button class="ambiance-option ambiance-option-tryme" data-value="tryme" onclick="setTheme('tryme')" role="menuitemradio" title="Une palette aléatoire à chaque clic"><span class="ambiance-swatch tryme-swatch" aria-hidden="true"></span>TryMe</button>
           </div>
-          <div class="ambiance-tryme-reroll" id="ambiance-tryme-reroll" style="display:none;">
-            <button class="util-btn-reroll" type="button" onclick="rerollTryMe()">
-              <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-              <span>Re-tirer une palette</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -3727,7 +3745,7 @@ kbd {
       </div>
 
       <div class="form-actions">
-        <button class="btn" onclick="showView('library')">Enregistrer dans la bibliothèque</button>
+        <button class="btn" onclick="saveToLibrary()">Enregistrer dans la bibliothèque</button>
         <button class="btn-primary" onclick="saveAndStudy()">Enregistrer et étudier →</button>
       </div>
     </div>
@@ -3754,7 +3772,7 @@ kbd {
       </div>
       <div class="step-tab locked" id="tab-2" onclick="gotoStep(2)">
         <div class="step-num">2</div>
-        <div class="step-info"><span class="step-label">Étape 2</span><span class="step-name">Phrases</span></div>
+        <div class="step-info"><span class="step-label">Étape 2</span><span class="step-name">Mouvements</span></div>
       </div>
       <div class="step-tab locked" id="tab-3" onclick="gotoStep(3)">
         <div class="step-num">3</div>
@@ -3790,9 +3808,14 @@ kbd {
           <aside class="passage-readonly">
             <div class="passage-readonly-head">
               <span class="passage-readonly-label">Passage à étudier</span>
-              <button class="passage-toggle" id="passage-toggle" onclick="togglePassageView()" aria-label="Replier/déplier">
-                <span id="passage-toggle-text">Replier</span>
-              </button>
+              <div class="passage-readonly-actions">
+                <button class="passage-edit-btn" type="button" onclick="editCurrentText()" aria-label="Modifier le passage" data-tooltip="Modifier le passage" title="">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+                <button class="passage-toggle" id="passage-toggle" onclick="togglePassageView()" aria-label="Replier ou déplier le passage" data-tooltip="Replier / déplier" title="">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </div>
             </div>
             <div class="passage-readonly-body" id="passage-readonly-body"></div>
           </aside>
@@ -3848,7 +3871,7 @@ kbd {
       </div>
     </div>
     <div class="step-footer" id="step-3-footer" style="display:none">
-      <button class="btn" onclick="gotoStep(2)">← Phrases</button>
+      <button class="btn" onclick="gotoStep(2)">← Mouvements</button>
       <span class="step-footer-hint ready">Étape finale</span>
     </div>
   </div>
@@ -4010,29 +4033,154 @@ function save() {
 const AMBIANCE_VALUES = ['pop', 'midnight', 'sunset', 'cyber', 'matcha', 'tryme'];
 const AMBIANCE_LEGACY = { 'light': 'pop', 'dark': 'midnight' }; // migration
 
-// 20 curated palettes for the "TryMe" surprise option.
-// Each: { primary, accent, bg, label } — all contrast-checked against white text on accent and ink on bg.
+// 20 palettes curées pour la fonction "TryMe surprise". Les 5 ambiances fixes
+// (Pop, Midnight, Sunset, Cyber, Matcha) restent choisissables individuellement
+// et ne sont PAS incluses ici. Mix : 12 claires + 8 sombres.
+// Tokens : cream (fond principal), cream2 (cards/panneaux), cream3 (bordures sépar.),
+// white (cards blanches/inputs), whiteLine (bordures cards),
+// ink/ink2/ink3 (texte, dégradé hiérarchie), electric (titres, key phrases),
+// pink (accents CTA, progressions). Tous testés contraste WCAG AA.
 const TRYME_PALETTES = [
-  { primary: '#0ea5e9', accent: '#ec4899', bg: '#f8fafc', label: 'Bleu & rose' },
-  { primary: '#6366f1', accent: '#f43f5e', bg: '#f8fafc', label: 'Indigo & rouge' },
-  { primary: '#0284c7', accent: '#a855f7', bg: '#f8fafc', label: 'Bleu & violet' },
-  { primary: '#0d9488', accent: '#f97316', bg: '#f8fafc', label: 'Sarcelle & orange' },
-  { primary: '#7c3aed', accent: '#fbbf24', bg: '#fafaf9', label: 'Violet & ambre' },
-  { primary: '#2563eb', accent: '#10b981', bg: '#f8fafc', label: 'Bleu & émeraude' },
-  { primary: '#be185d', accent: '#0ea5e9', bg: '#fff7fb', label: 'Magenta & ciel' },
-  { primary: '#15803d', accent: '#e11d48', bg: '#f7fdf9', label: 'Forêt & rouge' },
-  { primary: '#1e40af', accent: '#facc15', bg: '#f8fafc', label: 'Marine & soleil' },
-  { primary: '#9333ea', accent: '#06b6d4', bg: '#fbfaff', label: 'Violet & cyan' },
-  { primary: '#475569', accent: '#f43f5e', bg: '#f8fafc', label: 'Ardoise & framboise' },
-  { primary: '#0f766e', accent: '#fb923c', bg: '#f6fdfb', label: 'Sapin & abricot' },
-  { primary: '#1d4ed8', accent: '#ec4899', bg: '#f8fafc', label: 'Cobalt & rose' },
-  { primary: '#a16207', accent: '#0ea5e9', bg: '#fffbf2', label: 'Doré & ciel' },
-  { primary: '#7e22ce', accent: '#22c55e', bg: '#fbfaff', label: 'Pourpre & menthe' },
-  { primary: '#0891b2', accent: '#d946ef', bg: '#f6fcfd', label: 'Cyan & fuchsia' },
-  { primary: '#dc2626', accent: '#0ea5e9', bg: '#fefafa', label: 'Carmin & ciel' },
-  { primary: '#4338ca', accent: '#fb7185', bg: '#fafaff', label: 'Indigo & corail' },
-  { primary: '#0369a1', accent: '#facc15', bg: '#f8fbfd', label: 'Cobalt & or' },
-  { primary: '#5b21b6', accent: '#f97316', bg: '#fbf9ff', label: 'Aubergine & orange' }
+  {
+    label: 'Parchemin',
+    cream: '#fffbeb', cream2: '#fde68a', cream3: '#fcd34d',
+    white: '#fffef5', whiteLine: '#fbe086',
+    ink: '#422006', ink2: '#713f12', ink3: '#a16207',
+    electric: '#b45309', pink: '#92400e'
+  },
+  {
+    label: 'Sakura vif',
+    cream: '#fdf2f8', cream2: '#fbcfe8', cream3: '#f9a8d4',
+    white: '#fffafd', whiteLine: '#f7c2dc',
+    ink: '#500724', ink2: '#831843', ink3: '#9d174d',
+    electric: '#be185d', pink: '#db2777'
+  },
+  {
+    label: 'Lagon',
+    cream: '#ecfeff', cream2: '#a5f3fc', cream3: '#67e8f9',
+    white: '#f8feff', whiteLine: '#9dedf5',
+    ink: '#164e63', ink2: '#155e75', ink3: '#0e7490',
+    electric: '#0e7490', pink: '#0d9488'
+  },
+  {
+    label: 'Bordeaux ivoire',
+    cream: '#fef2f2', cream2: '#fecaca', cream3: '#fca5a5',
+    white: '#fff8f8', whiteLine: '#fcc1c1',
+    ink: '#450a0a', ink2: '#7f1d1d', ink3: '#991b1b',
+    electric: '#991b1b', pink: '#a16207'
+  },
+  {
+    label: 'Lavande nuit',
+    cream: '#f5f3ff', cream2: '#ddd6fe', cream3: '#c4b5fd',
+    white: '#fbfaff', whiteLine: '#d4cbfb',
+    ink: '#2e1065', ink2: '#4c1d95', ink3: '#5b21b6',
+    electric: '#6d28d9', pink: '#be185d'
+  },
+  {
+    label: 'Citron vert',
+    cream: '#f7fee7', cream2: '#d9f99d', cream3: '#bef264',
+    white: '#fcfff5', whiteLine: '#cef090',
+    ink: '#1a2e05', ink2: '#365314', ink3: '#4d7c0f',
+    electric: '#4d7c0f', pink: '#a16207'
+  },
+  {
+    label: 'Chêne brun',
+    cream: '#fafaf9', cream2: '#d6d3d1', cream3: '#a8a29e',
+    white: '#fdfcfb', whiteLine: '#cdc9c5',
+    ink: '#1c1917', ink2: '#44403c', ink3: '#57534e',
+    electric: '#78350f', pink: '#92400e'
+  },
+  {
+    label: 'Sarcelle profonde',
+    cream: '#f0fdfa', cream2: '#99f6e4', cream3: '#5eead4',
+    white: '#f8fefd', whiteLine: '#90efdd',
+    ink: '#042f2e', ink2: '#134e4a', ink3: '#115e59',
+    electric: '#115e59', pink: '#0f766e'
+  },
+  {
+    label: 'Terracotta',
+    cream: '#fffbf5', cream2: '#fed7aa', cream3: '#fdba74',
+    white: '#fffdfa', whiteLine: '#fcd0a3',
+    ink: '#422006', ink2: '#7c2d12', ink3: '#9a3412',
+    electric: '#9a3412', pink: '#b91c1c'
+  },
+  {
+    label: 'Marrakech',
+    cream: '#fef3c7', cream2: '#fcd34d', cream3: '#fbbf24',
+    white: '#fffaeb', whiteLine: '#fbcb3a',
+    ink: '#451a03', ink2: '#78350f', ink3: '#9a3412',
+    electric: '#c2410c', pink: '#15803d'
+  },
+  {
+    label: 'Brutaliste',
+    cream: '#ffffff', cream2: '#e4e4e7', cream3: '#a1a1aa',
+    white: '#ffffff', whiteLine: '#18181b',
+    ink: '#18181b', ink2: '#27272a', ink3: '#52525b',
+    electric: '#18181b', pink: '#18181b'
+  },
+  {
+    label: 'Framboise',
+    cream: '#fff1f2', cream2: '#fecdd3', cream3: '#fda4af',
+    white: '#fffafb', whiteLine: '#fbc0c8',
+    ink: '#4c0519', ink2: '#881337', ink3: '#9f1239',
+    electric: '#be123c', pink: '#9d174d'
+  },
+  {
+    label: 'Synthwave',
+    cream: '#1a0b2e', cream2: '#2d1b4e', cream3: '#4c1d95',
+    white: '#241540', whiteLine: '#5b21b6',
+    ink: '#f5f3ff', ink2: '#ddd6fe', ink3: '#c4b5fd',
+    electric: '#f0abfc', pink: '#22d3ee'
+  },
+  {
+    label: 'Terminal',
+    cream: '#0a0e0a', cream2: '#0f1a13', cream3: '#065f46',
+    white: '#0d1410', whiteLine: '#047857',
+    ink: '#d1fae5', ink2: '#a7f3d0', ink3: '#6ee7b7',
+    electric: '#34d399', pink: '#22d3ee'
+  },
+  {
+    label: 'GitHub nuit',
+    cream: '#0c1117', cream2: '#161b22', cream3: '#1e293b',
+    white: '#10161e', whiteLine: '#30363d',
+    ink: '#e6edf3', ink2: '#cbd5e1', ink3: '#94a3b8',
+    electric: '#fbbf24', pink: '#fb7185'
+  },
+  {
+    label: 'Bois & or',
+    cream: '#1a1410', cream2: '#2a1f17', cream3: '#78350f',
+    white: '#241a14', whiteLine: '#92400e',
+    ink: '#fef3c7', ink2: '#fde68a', ink3: '#fcd34d',
+    electric: '#fbbf24', pink: '#f97316'
+  },
+  {
+    label: 'Forêt nuit',
+    cream: '#0d1f17', cream2: '#15301f', cream3: '#14532d',
+    white: '#102a1a', whiteLine: '#166534',
+    ink: '#d1fae5', ink2: '#bbf7d0', ink3: '#86efac',
+    electric: '#fb923c', pink: '#fbbf24'
+  },
+  {
+    label: 'Velours rouge',
+    cream: '#1a0d0d', cream2: '#2a1414', cream3: '#7f1d1d',
+    white: '#241010', whiteLine: '#991b1b',
+    ink: '#fee2e2', ink2: '#fecaca', ink3: '#fca5a5',
+    electric: '#f87171', pink: '#fb923c'
+  },
+  {
+    label: 'Vapor',
+    cream: '#18181b', cream2: '#27272a', cream3: '#3f3f46',
+    white: '#1f1f23', whiteLine: '#52525b',
+    ink: '#fafafa', ink2: '#d4d4d8', ink3: '#a1a1aa',
+    electric: '#f472b6', pink: '#22d3ee'
+  },
+  {
+    label: 'Indigo galaxie',
+    cream: '#0e0a1a', cream2: '#1a1735', cream3: '#312e81',
+    white: '#181030', whiteLine: '#4338ca',
+    ink: '#e0e7ff', ink2: '#c7d2fe', ink3: '#a5b4fc',
+    electric: '#818cf8', pink: '#f472b6'
+  }
 ];
 
 function pickTryMePaletteIdx() {
@@ -4049,20 +4197,30 @@ function applyTryMePalette(idx) {
   const p = TRYME_PALETTES[idx];
   if(!p) return;
   const root = document.documentElement;
-  // Override the key colour vars used throughout the app
-  root.style.setProperty('--electric',      p.primary);
-  root.style.setProperty('--electric-deep', p.primary);
-  root.style.setProperty('--pink-deep',     p.accent);
-  root.style.setProperty('--pink-darker',   p.accent);
-  // The pink/cream-bg are derived but kept neutral; light bg from palette
-  root.style.setProperty('--cream',         p.bg);
+  // Application directe des 11 tokens depuis la palette curée
+  root.style.setProperty('--cream',         p.cream);
+  root.style.setProperty('--cream-2',       p.cream2);
+  root.style.setProperty('--cream-3',       p.cream3);
+  root.style.setProperty('--white',         p.white);
+  root.style.setProperty('--white-line',    p.whiteLine);
+  root.style.setProperty('--ink',           p.ink);
+  root.style.setProperty('--ink-2',         p.ink2);
+  root.style.setProperty('--ink-3',         p.ink3);
+  root.style.setProperty('--electric',      p.electric);
+  root.style.setProperty('--electric-deep', p.electric);
+  root.style.setProperty('--pink',          p.pink);
+  root.style.setProperty('--pink-deep',     p.pink);
+  root.style.setProperty('--pink-darker',   p.pink);
   localStorage.setItem('tryme_palette_idx', String(idx));
 }
 
 function clearTryMePalette() {
   // Remove inline overrides so :root vars resume normal cascade
   const root = document.documentElement;
-  ['--electric', '--electric-deep', '--pink-deep', '--pink-darker', '--cream'].forEach(v => {
+  ['--cream', '--cream-2', '--cream-3', '--white', '--white-line',
+   '--ink', '--ink-2', '--ink-3',
+   '--electric', '--electric-deep',
+   '--pink', '--pink-deep', '--pink-darker'].forEach(v => {
     root.style.removeProperty(v);
   });
 }
@@ -4090,13 +4248,6 @@ function setTheme(theme) {
     updateThemeColorMeta(theme);
   }
   localStorage.setItem('theme', theme);
-  updateRerollButton(theme);
-}
-
-function updateRerollButton(theme) {
-  // Show "Re-tirer une palette" button inside Ambiance popover only when TryMe is active
-  const wrap = document.getElementById('ambiance-tryme-reroll');
-  if(wrap) wrap.style.display = (theme === 'tryme') ? '' : 'none';
 }
 
 function updateAmbianceButtons(theme) {
@@ -4124,7 +4275,7 @@ function updateThemeColorMeta(theme) {
   if(theme === 'tryme') {
     const idx = parseInt(localStorage.getItem('tryme_palette_idx'), 10);
     const p = TRYME_PALETTES[idx];
-    if(p) color = p.bg;
+    if(p) color = p.cream;
   }
   let meta = document.querySelector('meta[name="theme-color"]:not([media])');
   if(!meta) {
@@ -4229,7 +4380,6 @@ function openAmbianceFromBanner() {
   function onReady() {
     updateAmbianceButtons(saved);
     updateThemeColorMeta(saved);
-    updateRerollButton(saved);
     // Show welcome banner only if user has never opened the picker
     if(!localStorage.getItem('ambiance_picker_seen')) {
       showWelcomeBanner();
@@ -4580,7 +4730,9 @@ function deleteText(idx) {
   renderLibrary();
 }
 
-function saveAndStudy() {
+// Helper interne : lit les inputs du formulaire, valide, sauvegarde dans texts[]
+// et localStorage. Retourne { ok, idx, isNew } ou { ok: false, reason }.
+function persistTextFromForm() {
   const title = document.getElementById('text-title-input').value.trim();
   const passage = document.getElementById('passage-input').value.trim();
   const problematiqueModele = document.getElementById('problematique-modele-input').value.trim();
@@ -4589,14 +4741,12 @@ function saveAndStudy() {
   if(!title || !passage) {
     showInlineNotice('library-notice-container', 'Remplis le titre et le passage avant d\'enregistrer.', 'error');
     document.getElementById('text-title-input').focus();
-    return;
+    return { ok: false, reason: 'missing_fields' };
   }
-  const returnStep = parseInt(sessionStorage.getItem('returnToStep') || '0');
-  const returnTextId = sessionStorage.getItem('returnToTextId');
   if(currentTextId !== null) {
     const idx = texts.findIndex(t => t.id === currentTextId);
     if(idx >= 0) {
-      // B4.3 — Si le passage a changé, reset les mouvements (offsets devenus invalides)
+      // Si le passage a changé, reset les mouvements (offsets devenus invalides)
       const oldPassage = texts[idx].passage || '';
       const passageChanged = oldPassage !== passage;
       const update = { ...texts[idx], title, passage, problematiqueModele, introductionModele, conclusionModele };
@@ -4606,22 +4756,41 @@ function saveAndStudy() {
       }
       texts[idx] = update;
       save();
-      if(returnStep && returnTextId && parseInt(returnTextId) === currentTextId) {
-        sessionStorage.removeItem('returnToStep');
-        sessionStorage.removeItem('returnToTextId');
-        openText(idx);
-        if(returnStep > 1) gotoStep(returnStep);
-        return;
-      }
-      openText(idx);
-      return;
+      return { ok: true, idx, isNew: false };
     }
   }
   const id = Date.now();
   const newT = { id, title, passage, problematique:'', mouvements:'', mouvementsData:[], introduction:'', bilan:'', ouverture:'', synthese:[], phraseAnalyses:[], phraseStatus:[], problematiqueModele, introductionModele, conclusionModele };
   texts.push(newT);
   save();
-  openText(texts.length - 1);
+  return { ok: true, idx: texts.length - 1, isNew: true };
+}
+
+function saveAndStudy() {
+  const result = persistTextFromForm();
+  if(!result.ok) return;
+  const returnStep = parseInt(sessionStorage.getItem('returnToStep') || '0');
+  const returnTextId = sessionStorage.getItem('returnToTextId');
+  if(!result.isNew && returnStep && returnTextId && parseInt(returnTextId) === currentTextId) {
+    sessionStorage.removeItem('returnToStep');
+    sessionStorage.removeItem('returnToTextId');
+    openText(result.idx);
+    if(returnStep > 1) gotoStep(returnStep);
+    return;
+  }
+  openText(result.idx);
+}
+
+function saveToLibrary() {
+  const result = persistTextFromForm();
+  if(!result.ok) return;
+  // Reset currentTextId pour éviter qu'une édition future d'un autre texte hérite de l'id
+  currentTextId = null;
+  showView('library');
+  renderLibrary();
+  showInlineNotice('library-notice-container',
+    result.isNew ? 'Texte enregistré dans la bibliothèque.' : 'Modifications enregistrées.',
+    'success');
 }
 
 // ═══════════════════════════════════════════════
@@ -4795,10 +4964,9 @@ function renderPassageInner(raw, offsetBase) {
 
 function togglePassageView() {
   const panel = document.querySelector('.passage-readonly');
-  const txtBtn = document.getElementById('passage-toggle-text');
   if(!panel) return;
   panel.classList.toggle('collapsed');
-  if(txtBtn) txtBtn.textContent = panel.classList.contains('collapsed') ? 'Déplier' : 'Replier';
+  // SVG chevron rotates via CSS .passage-readonly.collapsed selector
 }
 
 // ═══════════════════════════════════════════════

@@ -290,6 +290,48 @@ body {
 .view { display: none; flex: 1; }
 .view.active { display: flex; flex-direction: column; }
 
+/* Site footer (cohérent avec homepage et FAQ) */
+.site-footer {
+  margin-top: 48px;
+  padding: 24px 28px 0;
+  border-top: 1.5px solid var(--cream-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+.site-footer .footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+.site-footer .domain strong {
+  color: var(--pink-deep);
+  font-weight: 700;
+}
+.site-footer .credit {
+  color: var(--ink-3);
+}
+.site-footer .source-link {
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t-base), color var(--t-base);
+}
+.site-footer .source-link:hover {
+  color: var(--pink-deep);
+  border-bottom-color: var(--pink-deep);
+}
+@media (max-width: 600px) {
+  .site-footer { padding: 20px 18px 0; font-size: 11px; }
+}
+
 /* ─────────────────────────────────────────
    TOP BAR
    ───────────────────────────────────────── */
@@ -403,6 +445,127 @@ body {
   width: 12px;
   height: 12px;
   stroke-width: 2.4;
+}
+
+/* ─────────────────────────────────────────
+   GENERIC TOPBAR MENUS (Outils, Fichier)
+   shared dropdown pattern for hover (desktop) + tap (mobile)
+   ───────────────────────────────────────── */
+.menu-wrap { position: relative; }
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  transition: all var(--t-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.menu-btn:hover, .menu-btn[aria-expanded="true"] {
+  background: var(--cream-2);
+  color: var(--ink);
+}
+.menu-btn:active { transform: scale(0.96); }
+.menu-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.menu-btn .chev {
+  width: 10px;
+  height: 10px;
+  margin-left: 2px;
+  transition: transform var(--t-base);
+}
+.menu-btn[aria-expanded="true"] .chev {
+  transform: rotate(180deg);
+}
+
+.menu-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--white);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft-hover);
+  padding: 6px;
+  min-width: 220px;
+  z-index: 250;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.menu-popover.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--t-fast);
+}
+.menu-item:hover:not(:disabled) {
+  background: var(--cream-2);
+}
+.menu-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.menu-item svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.menu-item-danger { color: var(--pink-deep); }
+.menu-item-danger:hover:not(:disabled) {
+  background: var(--pink-soft, #fdf2f8);
+  color: var(--pink-darker);
+}
+.menu-divider {
+  height: 1px;
+  background: var(--cream-3);
+  margin: 6px 8px;
+}
+
+/* Desktop hover-capable: open on hover (alongside click for fallback) */
+@media (hover: hover) and (pointer: fine) {
+  .menu-wrap:hover .menu-popover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -584,8 +747,13 @@ body {
   border-radius: 50%;
   display: inline-block;
 }
-/* Instant tooltip on hover/focus — replaces native title="" delay (~1500ms) */
-.countdown-pill[data-tooltip]::after {
+/* Instant tooltip on hover/focus — replaces native title="" delay (~1500ms)
+   Generic: applies to any element with [data-tooltip] attribute.
+   Position default = below; add class .tooltip-top for above. */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   top: calc(100% + 8px);
@@ -604,17 +772,18 @@ body {
   transition: opacity 0.15s ease;
   z-index: 200;
 }
-.countdown-pill[data-tooltip]:hover::after,
-.countdown-pill[data-tooltip]:focus-visible::after {
+[data-tooltip].tooltip-top::after {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
   opacity: 1;
 }
 @media (max-width: 600px) {
-  /* On mobile, anchor tooltip to right edge to prevent overflow */
-  .countdown-pill[data-tooltip]::after {
-    left: auto;
-    right: 0;
-    transform: none;
-  }
+  /* On mobile near right edge: don't trigger tooltip on tap (touch :hover lingers) */
+  [data-tooltip]::after { display: none; }
+  .countdown-pill[data-tooltip]::after { display: block; left: auto; right: 0; transform: none; }
 }
 .countdown-pill.urgent {
   background: var(--revoir-bg);
@@ -1608,31 +1777,6 @@ body {
   transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Tools row */
-.study-tools {
-  padding: 16px 40px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.tool-btn {
-  background: transparent;
-  border: none;
-  color: var(--ink-2);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all var(--t-fast);
-}
-.tool-btn:hover { background: var(--cream-2); color: var(--ink); }
-.tool-btn:active { transform: scale(0.96); }
-.tool-btn-danger { color: var(--revoir-deep); }
-.tool-btn-danger:hover { background: var(--revoir-bg); color: var(--revoir-deep); }
-
 /* Steps nav */
 .steps-nav {
   display: flex;
@@ -1778,19 +1922,27 @@ body {
 }
 
 /* STEP 1 layout: passage left, fields right */
+/* B4.2 — Étape 1 réorganisée : Intro + Problématique en haut côte à côte,
+   passage en bas pleine largeur, cards mouvements sous le passage. */
 .step1-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.step1-top-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: start;
+  gap: 16px;
+}
+.step1-bottom-field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .passage-readonly {
   background: var(--cream-2);
   border-radius: var(--radius-lg);
   padding: 24px;
-  position: sticky;
-  top: 16px;
-  max-height: calc(100vh - 32px);
   display: flex;
   flex-direction: column;
   border: 1.5px solid var(--white-line);
@@ -1830,9 +1982,7 @@ body {
   line-height: 1.85;
   color: var(--ink);
   font-weight: 500;
-  overflow-y: auto;
   flex: 1;
-  padding-right: 8px;
 }
 .passage-readonly-body p { margin-bottom: 1em; }
 .passage-readonly-body .pkey {
@@ -1843,8 +1993,15 @@ body {
   color: white;
 }
 .passage-readonly.collapsed .passage-readonly-body { display: none; }
-.passage-readonly.collapsed { max-height: none; }
 .step1-fields { display: flex; flex-direction: column; gap: 16px; }
+
+/* B4.2 — Cards mouvements (cachées en B4.2, visibles dès B4.3) */
+.step1-mouvements-cards {
+  display: none; /* B4.3 mettra display: grid */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.step1-mouvements-cards.visible { display: grid; }
 
 /* Flashcard à trous */
 .flashcard {
@@ -2706,19 +2863,25 @@ kbd {
   letter-spacing: -0.01em;
 }
 .sim-close {
-  background: var(--cream-2);
+  background: var(--cream-3);
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 28px;
+  line-height: 1;
   color: var(--ink-2);
   font-family: inherit;
   margin-left: auto;
   transition: all var(--t-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
 }
-.sim-close:hover { background: var(--ink); color: white; }
+.sim-close:hover { background: var(--ink); color: white; transform: scale(1.05); }
+.sim-close:active { transform: scale(0.95); }
 .sim-body {
   flex: 1;
   max-width: 900px;
@@ -2844,6 +3007,10 @@ kbd {
 @media (max-width: 900px) {
   .topbar { padding: 14px 20px; flex-wrap: wrap; gap: 12px; }
   .topbar-utils { gap: 2px; }
+  /* Mobile: keep menu icons but hide text labels + chevron to fit narrow viewport */
+  .menu-btn > span,
+  .menu-btn > svg.chev { display: none; }
+  .menu-btn { padding: 8px 10px; gap: 0; }
   .util-btn { padding: 8px 12px; font-size: 13px; }
   .util-btn span.label { display: none; }
   .ambiance-btn { margin-left: 4px; padding: 7px 10px; font-size: 12px; }
@@ -2856,14 +3023,13 @@ kbd {
   .grid-wrap { padding: 16px 20px 40px; }
   #new-text .container { padding: 20px 20px 60px; }
   .study-topbar { margin: 12px 20px 0; padding: 16px 20px; grid-template-columns: 1fr; gap: 14px; }
-  .study-tools { padding: 12px 20px; }
   .steps-nav { padding: 0 20px; }
   .step-content { padding: 0 20px 32px; }
   .step-footer { margin: 0 20px 24px; padding: 16px 20px; }
   .fields-grid { grid-template-columns: 1fr; gap: 16px; }
-  .step1-layout { grid-template-columns: 1fr; gap: 16px; }
-  .passage-readonly { position: static; max-height: 300px; }
-  .passage-readonly-body { max-height: 200px; }
+  .step1-top-fields { grid-template-columns: 1fr; gap: 12px; }
+  .step1-mouvements-cards.visible { grid-template-columns: 1fr; gap: 10px; }
+  .passage-readonly-body { max-height: none; }
   .phrases-layout { grid-template-columns: 1fr; gap: 24px; }
   .analysis-panel { position: static; }
   .passage-panel { padding: 24px; font-size: 17px; }
@@ -2879,7 +3045,6 @@ kbd {
   .text-card { min-height: auto; padding: 22px; }
   .card-actions { opacity: 1; }
   .page-title { font-size: 30px; }
-  .study-tools { gap: 4px; }
   .step-tab { padding: 12px 16px; }
   .step-roman, .step-num { font-size: 12px; }
   .step-name { font-size: 14px; }
@@ -2902,18 +3067,65 @@ kbd {
     <a href="/" class="home" aria-label="Retour à l'accueil"><span class="wordmark-highlight"><span>oral</span></span><span>defrancais</span><span class="wordmark-tld">.com</span></a>
     <span class="countdown-pill" id="countdown-pill" style="display:none;" data-tooltip="Jours avant ton oral" tabindex="0"></span>
     <div class="topbar-utils">
-      <button class="util-btn" onclick="exportAllTexts()" title="Télécharger tous tes textes en JSON">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-        <span class="label">Exporter</span>
-      </button>
-      <button class="util-btn" onclick="document.getElementById('import-file').click()" title="Importer un fichier JSON exporté">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        <span class="label">Importer</span>
-      </button>
-      <button class="util-btn util-btn-reroll" id="reroll-btn" onclick="rerollTryMe()" title="Re-tirer une nouvelle palette aléatoire" style="display:none;">
-        <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-        <span class="label">Re-tirer</span>
-      </button>
+
+      <!-- Menu OUTILS (visible always; items are study-only and disabled in library) -->
+      <div class="menu-wrap" id="menu-outils-wrap">
+        <button class="menu-btn" id="menu-outils-btn" type="button"
+                aria-haspopup="true" aria-expanded="false" aria-label="Menu outils"
+                data-tooltip="Outils d'étude"
+                onclick="toggleMenu(event, 'menu-outils')">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          <span>Outils</span>
+          <svg class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="menu-popover" id="menu-outils" role="menu" aria-label="Outils d'étude">
+          <button class="menu-item" id="mi-oublis" type="button" role="menuitem" onclick="closeAllMenus(); checkOublis()">
+            <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+            Vérifier les oublis
+          </button>
+          <button class="menu-item" id="mi-simulation" type="button" role="menuitem" onclick="closeAllMenus(); openSimulation()">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            Simulation orale
+          </button>
+          <button class="menu-item" id="mi-edit" type="button" role="menuitem" onclick="closeAllMenus(); editCurrentText()">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Modifier le passage
+          </button>
+          <div class="menu-divider"></div>
+          <button class="menu-item menu-item-danger" id="mi-reset" type="button" role="menuitem" onclick="closeAllMenus(); resetProgress()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Effacer ma progression
+          </button>
+        </div>
+      </div>
+
+      <!-- Menu FICHIER -->
+      <div class="menu-wrap" id="menu-fichier-wrap">
+        <button class="menu-btn" id="menu-fichier-btn" type="button"
+                aria-haspopup="true" aria-expanded="false" aria-label="Menu fichier"
+                data-tooltip="Importer / exporter"
+                onclick="toggleMenu(event, 'menu-fichier')">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Fichier</span>
+          <svg class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="menu-popover" id="menu-fichier" role="menu" aria-label="Import / export">
+          <button class="menu-item" id="mi-export-one" type="button" role="menuitem" onclick="closeAllMenus(); exportText()">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exporter ce texte
+          </button>
+          <button class="menu-item" type="button" role="menuitem" onclick="closeAllMenus(); exportAllTexts()">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exporter tous mes textes
+          </button>
+          <div class="menu-divider"></div>
+          <button class="menu-item" type="button" role="menuitem" onclick="closeAllMenus(); document.getElementById('import-file').click()">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Importer un fichier
+          </button>
+        </div>
+      </div>
+
       <div class="ambiance-wrap" style="position:relative;">
         <button class="ambiance-btn" id="ambiance-btn" onclick="toggleAmbiancePopover(event)" aria-haspopup="true" aria-expanded="false" aria-label="Choisir l'ambiance">
           <span class="ambiance-dot" aria-hidden="true"></span>
@@ -2928,6 +3140,12 @@ kbd {
             <button class="ambiance-option" data-value="cyber"    onclick="setTheme('cyber')"    role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Cyber</button>
             <button class="ambiance-option" data-value="matcha"   onclick="setTheme('matcha')"   role="menuitemradio"><span class="ambiance-swatch" aria-hidden="true"></span>Matcha</button>
             <button class="ambiance-option ambiance-option-tryme" data-value="tryme" onclick="setTheme('tryme')" role="menuitemradio" title="Une palette aléatoire à chaque clic"><span class="ambiance-swatch tryme-swatch" aria-hidden="true"></span>TryMe</button>
+          </div>
+          <div class="ambiance-tryme-reroll" id="ambiance-tryme-reroll" style="display:none;">
+            <button class="util-btn-reroll" type="button" onclick="rerollTryMe()">
+              <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              <span>Re-tirer une palette</span>
+            </button>
           </div>
         </div>
       </div>
@@ -2946,7 +3164,7 @@ kbd {
         <p class="subtitle">Tes passages, problématiques et plans d'oral, rassemblés au même endroit.</p>
       </div>
       <div class="actions-row">
-        <button class="btn-roulette" onclick="openRoulette()" aria-label="Roulette — un texte au hasard" title="Roulette">
+        <button class="btn-roulette" onclick="openRoulette()" aria-label="Tirer un texte au hasard" data-tooltip="Tirer un texte au hasard">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="16" cy="16" r="13"/>
             <line x1="16" y1="3" x2="16" y2="29"/>
@@ -3049,14 +3267,6 @@ kbd {
       </div>
     </div>
 
-    <div class="study-tools">
-      <button class="tool-btn" onclick="checkOublis()">Vérifier les oublis</button>
-      <button class="tool-btn" onclick="openSimulation()">Simulation</button>
-      <button class="tool-btn" onclick="editCurrentText()">Modifier le passage</button>
-      <button class="tool-btn" onclick="exportText()">Exporter ce texte</button>
-      <button class="tool-btn tool-btn-danger" onclick="resetProgress()">Réinitialiser la progression</button>
-    </div>
-
     <nav class="steps-nav">
       <div class="step-tab active" id="tab-1" onclick="gotoStep(1)">
         <div class="step-num">1</div>
@@ -3074,44 +3284,50 @@ kbd {
 
     <!-- STEP 1 -->
     <div id="step-1" class="step-content">
-      <div class="stage-hint">Commence par poser le cadre : ta problématique, les mouvements du texte et ton introduction. Lis le passage pendant que tu réfléchis.</div>
+      <div class="stage-hint">Pose le cadre : ton introduction et ta problématique en haut, puis lis le passage et identifie les mouvements.</div>
 
       <div class="step1-layout">
-        <aside class="passage-readonly">
-          <div class="passage-readonly-head">
-            <span class="passage-readonly-label">Passage à étudier</span>
-            <button class="passage-toggle" id="passage-toggle" onclick="togglePassageView()" aria-label="Replier/déplier">
-              <span id="passage-toggle-text">Replier</span>
-            </button>
-          </div>
-          <div class="passage-readonly-body" id="passage-readonly-body"></div>
-        </aside>
-
-        <div class="step1-fields">
+        <!-- Bloc haut : Introduction + Problématique côte à côte -->
+        <div class="step1-top-fields">
           <div class="field-card">
             <span class="field-num">i.</span>
-            <div class="field-title">Problématique</div>
-            <div class="field-subtitle">La question qui guide ta lecture du texte.</div>
-            <textarea class="textarea" id="problematique" placeholder="En quoi ce texte... ?" oninput="updateProgress()" rows="4"></textarea>
-            <div id="problematique-flashcard-zone"></div>
-          </div>
-          <div class="field-card">
-            <span class="field-num">ii.</span>
-            <div class="field-title">Mouvements</div>
-            <div class="field-subtitle">Au moins 2 ; le 3e est optionnel.</div>
-            <textarea class="textarea" id="mouvements" placeholder="I. ...&#10;II. ...&#10;III. ... (optionnel)" oninput="updateProgress()" rows="4"></textarea>
-          </div>
-          <div class="field-card">
-            <span class="field-num">iii.</span>
             <div class="field-title">Introduction</div>
             <div class="field-subtitle">Auteur, œuvre, contexte, jusqu'à ta problématique.</div>
             <textarea class="textarea" id="introduction" placeholder="Présentation, situation du texte, problématique, annonce du plan..." oninput="updateProgress()" rows="5"></textarea>
             <div id="intro-flashcard-zone"></div>
           </div>
+          <div class="field-card">
+            <span class="field-num">ii.</span>
+            <div class="field-title">Problématique</div>
+            <div class="field-subtitle">La question qui guide ta lecture du texte.</div>
+            <textarea class="textarea" id="problematique" placeholder="En quoi ce texte... ?" oninput="updateProgress()" rows="4"></textarea>
+            <div id="problematique-flashcard-zone"></div>
+          </div>
+        </div>
+
+        <!-- Bloc bas : passage en pleine largeur + cards mouvements (cachées B4.2) -->
+        <div class="step1-bottom-field">
+          <aside class="passage-readonly">
+            <div class="passage-readonly-head">
+              <span class="passage-readonly-label">Passage à étudier</span>
+              <button class="passage-toggle" id="passage-toggle" onclick="togglePassageView()" aria-label="Replier/déplier">
+                <span id="passage-toggle-text">Replier</span>
+              </button>
+            </div>
+            <div class="passage-readonly-body" id="passage-readonly-body"></div>
+          </aside>
+
+          <!-- Cards mouvements : cachées en B4.2, rendues visibles dès B4.3 par ajout classe .visible -->
+          <div class="step1-mouvements-cards" id="step1-mouvements-cards"></div>
+
+          <!-- Champ legacy mouvements : conservé en hidden pour compatibilité étape 2/3.
+               Sera retiré en B4.3 quand mouvementsData devient source de vérité partout. -->
+          <textarea id="mouvements" style="display:none" oninput="updateProgress()"></textarea>
         </div>
       </div>
     </div>
     <div class="step-footer" id="step-1-footer" style="display:flex">
+      <button class="btn" onclick="showView('library')">← Bibliothèque</button>
       <span class="step-footer-hint" id="step1-hint">Remplis problématique, mouvements et introduction pour continuer.</span>
       <button class="btn-primary" onclick="gotoStep(2)">Étape suivante →</button>
     </div>
@@ -3127,8 +3343,8 @@ kbd {
           <div class="panel-nav">
             <span class="panel-counter" id="phrase-counter-label">Phrase <strong>1</strong> sur 0</span>
             <div class="panel-nav-btns">
-              <button onclick="prevPhrase()" aria-label="Phrase précédente" title="Précédente">‹</button>
-              <button onclick="nextPhrase()" aria-label="Phrase suivante" title="Suivante">›</button>
+              <button onclick="prevPhrase()" aria-label="Phrase précédente" data-tooltip="Phrase précédente" class="tooltip-top">‹</button>
+              <button onclick="nextPhrase()" aria-label="Phrase suivante" data-tooltip="Phrase suivante" class="tooltip-top">›</button>
             </div>
           </div>
 
@@ -3208,9 +3424,18 @@ kbd {
     <div class="step-footer" id="step-3-footer" style="display:none">
       <button class="btn" onclick="gotoStep(2)">← Phrases</button>
       <span class="step-footer-hint ready">Étape finale</span>
-      <button class="btn-primary" onclick="showView('library')">Retour à la bibliothèque</button>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">
+      <span class="domain">oraldefrancais<strong>.</strong>com</span>
+      <span class="credit">Créé par Télia Moreau</span>
+      <a href="/faq/" class="source-link">FAQ &amp; programme</a>
+      <a href="https://github.com/teliaaleena/oraldefrancais-com" class="source-link" rel="noopener">Code source ouvert</a>
+    </div>
+    <span>2026</span>
+  </footer>
 </div>
 
 <!-- SIMULATION OVERLAY -->
@@ -3318,7 +3543,22 @@ kbd {
 // ═══════════════════════════════════════════════
 // DATA & STATE
 // ═══════════════════════════════════════════════
-let texts = JSON.parse(localStorage.getItem('revision_texts') || '[]');
+
+// Migration silencieuse du schéma. Appelée pour chaque texte au chargement
+// et à la création. Idempotente : safe à rappeler plusieurs fois.
+// B4.1 ajoute mouvementsData = [{ numero, titre, startOffset, endOffset }]
+// L'ancien champ t.mouvements (string "I. ...\nII. ...") est conservé pour
+// rétro-compatibilité avec étape 2 (phrases) et étape 3 (synthèse) jusqu'à
+// migration complète en B4.3+.
+function migrateTextSchema(t) {
+  if(!t) return t;
+  if(!('mouvementsData' in t)) {
+    t.mouvementsData = [];
+  }
+  return t;
+}
+
+let texts = JSON.parse(localStorage.getItem('revision_texts') || '[]').map(migrateTextSchema);
 let currentTextId = null;
 let currentStep = 1;
 let currentPhraseIdx = 0;
@@ -3428,9 +3668,9 @@ function setTheme(theme) {
 }
 
 function updateRerollButton(theme) {
-  const btn = document.getElementById('reroll-btn');
-  if(!btn) return;
-  btn.style.display = (theme === 'tryme') ? '' : 'none';
+  // Show "Re-tirer une palette" button inside Ambiance popover only when TryMe is active
+  const wrap = document.getElementById('ambiance-tryme-reroll');
+  if(wrap) wrap.style.display = (theme === 'tryme') ? '' : 'none';
 }
 
 function updateAmbianceButtons(theme) {
@@ -3467,6 +3707,28 @@ function updateThemeColorMeta(theme) {
     document.head.appendChild(meta);
   }
   meta.setAttribute('content', color);
+}
+
+// ─── Generic top bar menus (Outils, Fichier) ─────────────
+// Click toggles open/close ; CSS @media hover handles desktop hover.
+// Click outside or Escape closes all.
+function toggleMenu(event, menuId) {
+  if(event) event.stopPropagation();
+  const pop = document.getElementById(menuId);
+  if(!pop) return;
+  const btn = document.getElementById(menuId + '-btn');
+  const isOpen = pop.classList.contains('open');
+  closeAllMenus();
+  if(!isOpen) {
+    pop.classList.add('open');
+    if(btn) btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function closeAllMenus() {
+  document.querySelectorAll('.menu-popover.open').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.menu-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
+  closeAmbiancePopover();
 }
 
 function toggleAmbiancePopover(event) {
@@ -3546,16 +3808,29 @@ function openAmbianceFromBanner() {
     if(!localStorage.getItem('ambiance_picker_seen')) {
       showWelcomeBanner();
     }
-    // Click outside closes popover
+    // Click outside closes popovers (ambiance + generic menus)
     document.addEventListener('click', (e) => {
+      // Ambiance
       const pop = document.getElementById('ambiance-popover');
       if(pop && pop.classList.contains('open') && !e.target.closest('.ambiance-wrap')) {
         closeAmbiancePopover();
       }
+      // Generic menus
+      document.querySelectorAll('.menu-popover.open').forEach(p => {
+        if(!e.target.closest('.menu-wrap')) {
+          p.classList.remove('open');
+          const btnId = p.id + '-btn';
+          const btn = document.getElementById(btnId);
+          if(btn) btn.setAttribute('aria-expanded', 'false');
+        }
+      });
     });
-    // Escape closes popover
+    // Escape closes any open menu
     document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape') closeAmbiancePopover();
+      if(e.key === 'Escape') {
+        closeAmbiancePopover();
+        closeAllMenus();
+      }
     });
   }
   if(document.readyState === 'loading') {
@@ -3639,7 +3914,18 @@ function showView(id) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if(id === 'library') renderLibrary();
+  updateToolsMenuState(id);
   window.scrollTo(0, 0);
+}
+
+// Disable study-only menu items when not in study view
+function updateToolsMenuState(viewId) {
+  const studyOnly = ['mi-oublis', 'mi-simulation', 'mi-edit', 'mi-reset', 'mi-export-one'];
+  const inStudy = (viewId === 'study');
+  studyOnly.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.disabled = !inStudy;
+  });
 }
 
 // ═══════════════════════════════════════════════
@@ -3701,8 +3987,8 @@ function renderLibrary() {
     card.onclick = () => openText(i);
     card.innerHTML = `
       <div class="card-actions">
-        <button class="card-action-btn" onclick="event.stopPropagation(); editText(${i})" aria-label="Modifier" title="Modifier">edit</button>
-        <button class="card-action-btn delete" onclick="event.stopPropagation(); deleteText(${i})" aria-label="Supprimer" title="Supprimer">×</button>
+        <button class="card-action-btn tooltip-top" onclick="event.stopPropagation(); editText(${i})" aria-label="Modifier" data-tooltip="Modifier">edit</button>
+        <button class="card-action-btn delete tooltip-top" onclick="event.stopPropagation(); deleteText(${i})" aria-label="Supprimer" data-tooltip="Supprimer">×</button>
       </div>
       <div class="card-num">${String(i+1).padStart(2,'0')}</div>
       <h3>${escapeHtml(t.title || 'Sans titre')}</h3>
@@ -3853,7 +4139,7 @@ function saveAndStudy() {
     }
   }
   const id = Date.now();
-  const newT = { id, title, passage, problematique:'', mouvements:'', introduction:'', bilan:'', ouverture:'', synthese:[], phraseAnalyses:[], phraseStatus:[], problematiqueModele, introductionModele, conclusionModele };
+  const newT = { id, title, passage, problematique:'', mouvements:'', mouvementsData:[], introduction:'', bilan:'', ouverture:'', synthese:[], phraseAnalyses:[], phraseStatus:[], problematiqueModele, introductionModele, conclusionModele };
   texts.push(newT);
   save();
   openText(texts.length - 1);
@@ -4342,7 +4628,7 @@ function importAllTexts(event) {
       incoming.forEach(t => {
         if(!t || !t.id || !t.title) { skipped++; return; }
         if(texts.some(x => x.id === t.id)) { skipped++; return; }
-        texts.push(t);
+        texts.push(migrateTextSchema(t));
         added++;
       });
       save();

@@ -8,8 +8,9 @@
 <meta property="og:title" content="FAQ et programme 2026 · Oral de français">
 <meta property="og:description" content="Œuvres au programme du bac de français 2026 et réponses aux questions fréquentes.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://oraldefrancais.com/faq">
+<meta property="og:url" content="https://oraldefrancais.com/faq/">
 <meta property="og:image" content="https://oraldefrancais.com/og-image.svg">
+<link rel="canonical" href="https://oraldefrancais.com/faq/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: dark)">
@@ -494,11 +495,20 @@ footer {
   font-weight: 600;
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 12px 24px;
+  letter-spacing: 0.02em;
 }
-footer a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t-base), color var(--t-base); }
-footer a:hover { color: var(--pink-deep); border-bottom-color: var(--pink-deep); }
+footer .footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+footer .credit { color: var(--ink-3); }
+footer a, footer .source-link { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t-base), color var(--t-base); }
+footer a:hover, footer .source-link:hover { color: var(--pink-deep); border-bottom-color: var(--pink-deep); }
 footer .domain strong { color: var(--pink-deep); font-weight: 700; }
 
 /* Mobile */
@@ -593,10 +603,11 @@ footer .domain strong { color: var(--pink-deep); font-weight: 700; }
   </main>
 
   <footer>
-    <div>
+    <div class="footer-left">
       <span class="domain">oraldefrancais<strong>.</strong>com</span>
-      &nbsp;·&nbsp;
-      <a href="https://github.com/teliaaleena/oraldefrancais-com" rel="noopener">Code source ouvert</a>
+      <span class="credit">Créé par Télia Moreau</span>
+      <a href="/faq/" class="source-link">FAQ &amp; programme</a>
+      <a href="https://github.com/teliaaleena/oraldefrancais-com" class="source-link" rel="noopener">Code source ouvert</a>
     </div>
     <span>2026</span>
   </footer>
@@ -606,8 +617,9 @@ footer .domain strong { color: var(--pink-deep); font-weight: 700; }
 <script>
 // ════════════════════════════════════════════════════════════════
 // AMBIANCE & TRYME — bloc partagé
-// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html
-// /!\ Si tu modifies, modifie les 3 fichiers et garde-les synchronisés
+// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html, 404.html
+// /!\ Si tu modifies les palettes ou un helper, modifie les 4 fichiers
+//     et garde-les synchronisés. Voir README.md > "Module Ambiance".
 // ════════════════════════════════════════════════════════════════
 const AMBIANCE_VALUES = ['pop', 'midnight', 'sunset', 'cyber', 'matcha', 'tryme'];
 const AMBIANCE_LEGACY = { 'light': 'pop', 'dark': 'midnight' };

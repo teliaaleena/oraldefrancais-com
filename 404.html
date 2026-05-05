@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Page introuvable · oraldefrancais.com</title>
 <meta name="description" content="Cette page n'existe pas.">
+<link rel="canonical" href="https://oraldefrancais.com/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: dark)">
@@ -23,6 +24,15 @@
   --pink-deep: #ec4899;
   --pink-darker: #db2777;
   --shadow-pink: 0 4px 16px rgba(236, 72, 153, 0.28);
+  --shadow-soft: 0 2px 12px rgba(30, 41, 59, 0.06);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 100px;
+  --t-fast: 150ms;
+  --t-base: 220ms;
+  --t-slow: 350ms;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
@@ -136,7 +146,7 @@ p {
   font-size: 16px;
   border-radius: 100px;
   box-shadow: var(--shadow-pink);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--t-base) var(--ease-spring);
 }
 .cta:hover {
   background: var(--pink-darker);
@@ -145,17 +155,54 @@ p {
   gap: 14px;
 }
 .cta:active { transform: scale(0.97); }
-.cta::after { content: '→'; font-size: 18px; transition: transform 0.3s; }
+.cta::after { content: '→'; font-size: 18px; transition: transform var(--t-base); }
 .cta:hover::after { transform: translateX(2px); }
 .cta:focus-visible { outline: 2.5px solid var(--pink-deep); outline-offset: 4px; }
 ::selection { background: var(--pink); color: var(--ink); }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 16px 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  letter-spacing: 0.02em;
+}
+footer .footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+footer .credit { color: var(--ink-3); }
+footer a, footer .source-link { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t-base), color var(--t-base); }
+footer a:hover, footer .source-link:hover { color: var(--pink-deep); border-bottom-color: var(--pink-deep); }
+footer .domain strong { color: var(--pink-deep); font-weight: 700; }
+@media (max-width: 600px) {
+  footer { font-size: 11px; padding: 12px 18px; }
+  body { padding-bottom: 100px; } /* leave room for fixed footer */
+}
 </style>
 <script>
 // ════════════════════════════════════════════════════════════════
 // AMBIANCE & TRYME — bloc partagé (extrait minimum pour la 404)
 // /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html, 404.html
 // /!\ Si tu modifies les palettes, modifie les 4 fichiers et garde-les synchronisés
+// /!\ La 404 n'a pas de menu Ambiance (action unique = retour accueil), elle ne fait
+//     que LIRE le thème choisi ailleurs depuis localStorage et l'appliquer.
 // ════════════════════════════════════════════════════════════════
+const AMBIANCE_VALUES = ['pop', 'midnight', 'sunset', 'cyber', 'matcha', 'tryme'];
+const AMBIANCE_LEGACY = { 'light': 'pop', 'dark': 'midnight' }; // migration
+
 const TRYME_PALETTES = [
   { label: 'Parchemin', cream: '#fffbeb', cream2: '#fde68a', cream3: '#fcd34d', white: '#fffef5', whiteLine: '#fbe086', ink: '#422006', ink2: '#713f12', ink3: '#a16207', electric: '#b45309', pink: '#92400e' },
   { label: 'Sakura vif', cream: '#fdf2f8', cream2: '#fbcfe8', cream3: '#f9a8d4', white: '#fffafd', whiteLine: '#f7c2dc', ink: '#500724', ink2: '#831843', ink3: '#9d174d', electric: '#be185d', pink: '#db2777' },
@@ -202,10 +249,8 @@ function applyTryMePalette(idx) {
 (function(){
   try {
     var saved = localStorage.getItem('theme');
-    var legacy = { 'light': 'pop', 'dark': 'midnight' };
-    if(saved && legacy[saved]) saved = legacy[saved];
-    var valid = ['pop','midnight','sunset','cyber','matcha','tryme'];
-    if(saved && valid.indexOf(saved) >= 0) {
+    if(saved && AMBIANCE_LEGACY[saved]) saved = AMBIANCE_LEGACY[saved];
+    if(saved && AMBIANCE_VALUES.indexOf(saved) >= 0) {
       document.documentElement.setAttribute('data-theme', saved);
       // Pour TryMe, restaurer la palette tirée précédemment depuis localStorage
       if(saved === 'tryme') {
@@ -217,6 +262,9 @@ function applyTryMePalette(idx) {
     }
   } catch(e) {}
 })();
+// ════════════════════════════════════════════════════════════════
+// END AMBIANCE & TRYME shared block
+// ════════════════════════════════════════════════════════════════
 </script>
 </head>
 <body>
@@ -228,5 +276,14 @@ function applyTryMePalette(idx) {
   <p>Tu es peut-être tombé sur une URL périmée, mal recopiée, ou un lien cassé.</p>
   <a href="/" class="cta">Retour à l'accueil</a>
 </main>
+<footer>
+  <div class="footer-left">
+    <span class="domain">oraldefrancais<strong>.</strong>com</span>
+    <span class="credit">Créé par Télia Moreau</span>
+    <a href="/faq/" class="source-link">FAQ &amp; programme</a>
+    <a href="https://github.com/teliaaleena/oraldefrancais-com" class="source-link" rel="noopener">Code source ouvert</a>
+  </div>
+  <span>2026</span>
+</footer>
 </body>
 </html>

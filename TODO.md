@@ -1,12 +1,27 @@
+[TODO.md](https://github.com/user-attachments/files/27384916/TODO.md)
 # TODO — oraldefrancais.com
 
-État au **4 mai 2026**, après livraison Bundle 9.
+État au **5 mai 2026**, après livraison Bundle 10 (cleanup consistency).
 
 Document interne. Ce qui est fait, ce qui reste à faire, ce qui a été décidé de ne pas faire.
 
 ---
 
-## Faits récemment (Bundle 9 — 4 mai 2026)
+## Faits récemment (Bundle 10 — 5 mai 2026)
+
+- Audit complet des 4 fichiers HTML : 30 inconsistencies détectées, ~20 corrigées (bugs latents, design tokens, a11y, docs)
+- `revision/index.html` : titre/og dépersonnalisés ("Télia Moreau" → "Oral de français"), dead code `[data-theme="dark"]` supprimé (8 occurrences CSS), 2e h1 → h2, 12 SVG décoratifs reçoivent `aria-hidden`, 16 transitions hardcoded restantes migrées vers variables canon, marqueurs `// AMBIANCE & TRYME — bloc partagé` ajoutés
+- `--shadow-soft` aligné sur version douce dans les 4 fichiers (avant : revision avait sa propre version appuyée)
+- `index.html` (landing) : tokens `--radius-sm/md/lg` alignés sur 10/16/24 (avant : 8/14/22 — divergeait des autres)
+- `404.html` : ajout variables canon (`--t-fast/base/slow`, `--ease-spring`, `--radius-*`, `--shadow-soft`), ajout `AMBIANCE_VALUES` + `AMBIANCE_LEGACY` (parité avec autres fichiers), ajout footer complet aligné sur landing
+- `faq/index.html` : footer aligné sur landing (4 items + 2026, avant : 2 items)
+- `<link rel="canonical">` ajouté sur les 4 fichiers
+- `og:url` corrigés (trailing slash systématique)
+- Commentaire "dupliqué dans 3 fichiers" → "dupliqué dans 4 fichiers" partout (404 inclus)
+- README.md : artefact ligne 1 supprimé, "teliamoreau.com" → "oraldefrancais.com" ligne ~190, schéma structure complet
+- DEPLOYMENT.md : artefact ligne 1 supprimé
+
+## Faits avant (Bundle 9 — 4 mai 2026)
 
 - Logo : carré rose remplacé par wordmark `oraldefrancais.com` avec "oral" surligné rose rotated/skewed (Direction C)
 - Favicon : nouveau "o" italique blanc dans carré rose rotated -6°
@@ -23,7 +38,6 @@ Document interne. Ce qui est fait, ce qui reste à faire, ce qui a été décid�
 
 ### P1 — Contenu
 
-- [ ] **Ajouter les textes complets aux 12 œuvres voie générale** dans un fichier `content/textes-shared.json` (ou intégré à `programme-2026.json`). Aujourd'hui, quand Télia importe une œuvre depuis le programme, elle reçoit une carte vide à remplir. Les textes complets permettraient un import "prêt à réviser".
 - [ ] Vérifier l'orthographe des œuvres et auteurs dans `programme-2026.json` (parcours Eduscol officiel)
 
 ### P2 — Modes de révision
@@ -61,6 +75,8 @@ Document interne. Ce qui est fait, ce qui reste à faire, ce qui a été décid�
 - **Logo : Direction C (surligneur).** Le logo image gaming/néon générée par DALL-E proposée le 3 mai a été rejetée (gaming, néons, drapeau français, Tour Eiffel, 6 promesses, non-reproductible, codé masculin) — voir conversation Bundle 8/9 pour le détail.
 - **Pop-up onboarding 2 étapes** sur la homepage (Ambiance + Identité). Voie + Œuvres déplacés dans `/revision/`.
 - **Force Pop par défaut au 1er chargement homepage**, ignore `prefers-color-scheme: dark`. Override seulement si choix explicite mémorisé.
+- **Pas de textes complets seedés dans la bibliothèque.** Ce sont les profs qui choisissent les passages — chaque classe aura différents textes. On propose donc seulement la liste des œuvres officielles (dans `programme-2026.json`), pas le contenu des passages eux-mêmes. L'élève importe son passage et l'analyse manuellement. Décidé le 5 mai 2026 (cf. discussion stratégie). Évite aussi tout risque juridique sur les œuvres post-1950 (Dorion, Sarraute, Ponge).
+- **Pas de partage par lien URL-encoded.** L'export/import JSON existant suffit pour transférer une bibliothèque entre 2 appareils ou la partager. Une URL de 8 000+ caractères contenant du JSON encodé serait illisible, tronquée par les messageries, et ouvrirait une surface XSS. Décidé le 5 mai 2026.
 
 ---
 

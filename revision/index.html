@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Révision orale · Télia Moreau</title>
-<meta name="description" content="Outil personnel de révision pour l'oral du bac de français. Colle ton texte, marque les phrases clés, prépare ton plan en 3 étapes.">
-<meta property="og:title" content="Révision orale · Télia Moreau">
-<meta property="og:description" content="Outil personnel de révision pour l'oral du bac de français.">
+<title>Révision orale · Oral de français</title>
+<meta name="description" content="Outil libre pour préparer l'oral du bac de français. Colle ton texte, marque les phrases clés, prépare ton plan en 3 étapes.">
+<meta property="og:title" content="Révision orale · Oral de français">
+<meta property="og:description" content="Outil libre pour préparer l'oral du bac de français.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://oraldefrancais.com/revision">
+<meta property="og:url" content="https://oraldefrancais.com/revision/">
 <meta property="og:image" content="https://oraldefrancais.com/og-image.svg">
+<link rel="canonical" href="https://oraldefrancais.com/revision/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Révision orale · Télia Moreau">
+<meta name="twitter:title" content="Révision orale · Oral de français">
 <meta name="twitter:image" content="https://oraldefrancais.com/og-image.svg">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
@@ -58,7 +59,7 @@
   /* Misc */
   --white: #ffffff;
   --white-line: rgba(255, 255, 255, 0.95);
-  --shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 2px 12px rgba(30, 41, 59, 0.06);
   --shadow-soft-hover: 0 12px 28px rgba(15, 23, 42, 0.14);
   --shadow-pink: 0 4px 16px rgba(236, 72, 153, 0.28);
   --shadow-electric: 0 4px 14px rgba(14, 165, 233, 0.22);
@@ -74,7 +75,7 @@
   --t-slow: 350ms;
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-[data-theme="midnight"], [data-theme="dark"] {
+[data-theme="midnight"] {
   /* Midnight — deep navy + cyan brillant. Révision tardive au lit. */
   --cream: #0a1929;             /* page bg — very dark navy */
   --cream-2: #102a43;           /* card bg */
@@ -239,7 +240,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow-x: hidden;
-  transition: background 0.3s, color 0.3s;
+  transition: background var(--t-base), color var(--t-base);
 }
 
 /* Skip link */
@@ -357,7 +358,7 @@ body {
   color: var(--ink-3);
   font-weight: 600;
   align-self: center;
-  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--t-base) var(--ease-spring);
 }
 .topbar .home:hover::before { transform: translateX(-3px); }
 .topbar .home .wordmark-highlight {
@@ -373,7 +374,7 @@ body {
   border-radius: 5px;
   transform: rotate(-2deg) skew(-3deg);
   z-index: 0;
-  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--t-base) var(--ease-spring);
 }
 .topbar .home .wordmark-highlight > span {
   position: relative;
@@ -483,7 +484,7 @@ body {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: opacity var(--t-fast) ease, transform var(--t-fast) ease;
 }
 .menu-popover.open {
   opacity: 1;
@@ -592,7 +593,7 @@ body {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: opacity var(--t-fast) ease, transform var(--t-fast) ease;
 }
 .ambiance-popover.open {
   opacity: 1;
@@ -746,7 +747,7 @@ body {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--t-fast) ease;
   z-index: 200;
 }
 [data-tooltip].tooltip-top::after {
@@ -858,7 +859,7 @@ body {
   justify-content: center;
   padding: 20px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--t-base) ease;
 }
 .nt-overlay.visible {
   display: flex;
@@ -1323,7 +1324,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--t-fast) var(--ease-spring);
   text-decoration: none;
 }
 .btn:hover {
@@ -1632,8 +1633,8 @@ body {
   line-height: 1.55;
   box-shadow: var(--shadow-soft);
 }
-[data-theme="midnight"] .input, [data-theme="dark"] .input,
-[data-theme="midnight"] .textarea, [data-theme="dark"] .textarea {
+[data-theme="midnight"] .input,
+[data-theme="midnight"] .textarea {
   background: #1a3a5c;
   border-color: var(--white-line);
   color: white;
@@ -1751,7 +1752,7 @@ body {
   height: 100%;
   background: var(--pink-deep);
   border-radius: var(--radius-pill);
-  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: width 0.5s var(--ease-spring);
 }
 
 /* Steps nav */
@@ -1773,7 +1774,7 @@ body {
   background: var(--cream-2);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.25s;
+  transition: all var(--t-base);
   flex-shrink: 0;
   border: 2px solid transparent;
 }
@@ -1996,7 +1997,7 @@ body {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 0.2s ease;
+  transition: transform var(--t-fast) ease;
 }
 .passage-readonly.collapsed .passage-toggle svg {
   transform: rotate(-90deg);
@@ -2397,7 +2398,7 @@ body {
   vertical-align: baseline;
   box-shadow: var(--shadow-soft);
 }
-[data-theme="midnight"] .fc-blank, [data-theme="dark"] .fc-blank {
+[data-theme="midnight"] .fc-blank {
   background: #1a3a5c;
   border-color: var(--white-line);
   color: white;
@@ -2847,7 +2848,7 @@ body {
 }
 .correction-area {
   margin-top: 12px;
-  transition: all 0.25s ease;
+  transition: all var(--t-base) ease;
   max-height: 500px;
   overflow: hidden;
 }
@@ -2882,7 +2883,7 @@ body {
   background: var(--white);
   box-shadow: var(--shadow-soft);
 }
-[data-theme="midnight"] .analysis-stack.ghost-on, [data-theme="dark"] .analysis-stack.ghost-on {
+[data-theme="midnight"] .analysis-stack.ghost-on {
   background: #1a3a5c;
 }
 .analysis-textarea {
@@ -2901,11 +2902,11 @@ body {
   outline: none;
   resize: vertical;
   min-height: 100px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
   display: block;
   box-shadow: var(--shadow-soft);
 }
-[data-theme="midnight"] .analysis-textarea, [data-theme="dark"] .analysis-textarea {
+[data-theme="midnight"] .analysis-textarea {
   background: #1a3a5c;
   border-color: var(--white-line);
   color: white;
@@ -2940,14 +2941,14 @@ body {
   overflow: hidden;
   font-style: italic;
 }
-[data-theme="midnight"] .ghost-overlay, [data-theme="dark"] .ghost-overlay { color: var(--electric); }
+[data-theme="midnight"] .ghost-overlay { color: var(--electric); }
 .analysis-stack.ghost-on .ghost-overlay { opacity: 0.65; }
 /* When ghost mode is on, textarea becomes transparent to reveal overlay underneath */
 .analysis-stack.ghost-on .analysis-textarea {
   background: transparent;
   color: var(--ink);
 }
-[data-theme="midnight"] .analysis-stack.ghost-on .analysis-textarea, [data-theme="dark"] .analysis-stack.ghost-on .analysis-textarea {
+[data-theme="midnight"] .analysis-stack.ghost-on .analysis-textarea {
   background: transparent;
   color: white;
 }
@@ -2974,7 +2975,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s, color 0.18s;
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease, background var(--t-fast), color var(--t-fast);
   box-shadow: 0 4px 0 var(--cream-3);
   user-select: none;
 }
@@ -3055,7 +3056,7 @@ kbd {
   cursor: pointer;
   border-radius: var(--radius-pill);
   box-shadow: 0 4px 0 var(--cream-3);
-  transition: transform 0.12s, box-shadow 0.12s, background 0.18s, color 0.18s;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast);
 }
 .phantom-pill:active {
   transform: translateY(3px);
@@ -3145,7 +3146,7 @@ kbd {
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--t-fast) var(--ease-spring);
 }
 .btn-review-start:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(190, 18, 60, 0.25); }
 .btn-review-start:active { transform: scale(0.97); }
@@ -3271,7 +3272,7 @@ kbd {
   transition: all var(--t-base);
   box-shadow: var(--shadow-soft);
 }
-[data-theme="midnight"] .synthese-textarea, [data-theme="dark"] .synthese-textarea {
+[data-theme="midnight"] .synthese-textarea {
   background: #1a3a5c;
   border-color: var(--white-line);
   color: white;
@@ -3593,6 +3594,60 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ─── Drag & drop overlay ─────────────────────────
+   Activé par JS (.is-active) uniquement quand un fichier est draggé sur la fenêtre
+   ET la vue library est active. Bloque les autres interactions le temps du drag. */
+.library-dropzone {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.library-dropzone.is-active {
+  display: flex;
+  pointer-events: auto;
+}
+.library-dropzone-card {
+  background: var(--white, #ffffff);
+  color: var(--ink);
+  border: 3px dashed var(--pink-deep);
+  border-radius: var(--radius-lg);
+  padding: 48px 56px;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.4);
+}
+.library-dropzone-card svg {
+  width: 64px;
+  height: 64px;
+  color: var(--pink-deep);
+  margin-bottom: 16px;
+}
+.library-dropzone-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.library-dropzone-sub {
+  font-size: 14px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .library-dropzone-card { padding: 32px 28px; }
+  .library-dropzone-card svg { width: 48px; height: 48px; }
+  .library-dropzone-title { font-size: 18px; }
+}
 </style>
 </head>
 <body>
@@ -3613,26 +3668,26 @@ kbd {
                 aria-haspopup="true" aria-expanded="false" aria-label="Menu outils"
                 data-tooltip="Outils d'étude"
                 onclick="toggleMenu(event, 'menu-outils')">
-          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
           <span>Outils</span>
-          <svg class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg aria-hidden="true" class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="menu-popover" id="menu-outils" role="menu" aria-label="Outils d'étude">
           <button class="menu-item" id="mi-oublis" type="button" role="menuitem" onclick="closeAllMenus(); checkOublis()">
-            <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
             Vérifier les oublis
           </button>
           <button class="menu-item" id="mi-simulation" type="button" role="menuitem" onclick="closeAllMenus(); openSimulation()">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
             Simulation orale
           </button>
           <button class="menu-item" id="mi-edit" type="button" role="menuitem" onclick="closeAllMenus(); editCurrentText()">
-            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Modifier le passage
           </button>
           <div class="menu-divider"></div>
           <button class="menu-item menu-item-danger" id="mi-reset" type="button" role="menuitem" onclick="closeAllMenus(); resetProgress()">
-            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
             Effacer ma progression
           </button>
         </div>
@@ -3644,22 +3699,26 @@ kbd {
                 aria-haspopup="true" aria-expanded="false" aria-label="Menu fichier"
                 data-tooltip="Importer / exporter"
                 onclick="toggleMenu(event, 'menu-fichier')">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span>Fichier</span>
-          <svg class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg aria-hidden="true" class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="menu-popover" id="menu-fichier" role="menu" aria-label="Import / export">
           <button class="menu-item" id="mi-export-one" type="button" role="menuitem" onclick="closeAllMenus(); exportText()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Exporter ce texte
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            Exporter ce texte (lisible)
+          </button>
+          <button class="menu-item" id="mi-export-one-json" type="button" role="menuitem" onclick="closeAllMenus(); exportTextJSON()">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exporter ce texte (partageable)
           </button>
           <button class="menu-item" type="button" role="menuitem" onclick="closeAllMenus(); exportAllTexts()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Exporter tous mes textes
           </button>
           <div class="menu-divider"></div>
           <button class="menu-item" type="button" role="menuitem" onclick="closeAllMenus(); document.getElementById('import-file').click()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Importer un fichier
           </button>
         </div>
@@ -3698,7 +3757,7 @@ kbd {
       </div>
       <div class="actions-row">
         <button class="btn-roulette" onclick="openRoulette()" aria-label="Tirer un texte au hasard" data-tooltip="Tirer un texte au hasard">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="16" cy="16" r="13"/>
             <line x1="16" y1="3" x2="16" y2="29"/>
             <line x1="3" y1="16" x2="29" y2="16"/>
@@ -3734,7 +3793,7 @@ kbd {
   <div id="new-text" class="view">
     <div class="container">
       <button class="page-back" onclick="showView('library')">Retour à la bibliothèque</button>
-      <h1 class="page-title" id="new-text-title">Nouveau <em>texte</em></h1>
+      <h2 class="page-title" id="new-text-title">Nouveau <em>texte</em></h2>
       <p class="page-subtitle">Donne un titre à ton passage, puis colle le texte avec des [crochets] autour des phrases à analyser.</p>
 
       <div class="stats-row">
@@ -4062,9 +4121,12 @@ function save() {
   localStorage.setItem('revision_texts', JSON.stringify(texts));
 }
 
-// ═══════════════════════════════════════════════
-// AMBIANCE (theme picker — 5 palettes)
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════
+// AMBIANCE & TRYME — bloc partagé
+// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html, 404.html
+// /!\ Si tu modifies les palettes ou un helper, modifie les 4 fichiers
+//     et garde-les synchronisés. Voir README.md > "Module Ambiance".
+// ════════════════════════════════════════════════════════════════
 const AMBIANCE_VALUES = ['pop', 'midnight', 'sunset', 'cyber', 'matcha', 'tryme'];
 const AMBIANCE_LEGACY = { 'light': 'pop', 'dark': 'midnight' }; // migration
 
@@ -4362,6 +4424,9 @@ function closeAmbiancePopover() {
   if(pop) pop.classList.remove('open');
   if(btn) btn.setAttribute('aria-expanded', 'false');
 }
+// ════════════════════════════════════════════════════════════════
+// END AMBIANCE & TRYME shared block
+// ════════════════════════════════════════════════════════════════
 
 // ── Welcome banner (1st visit only) ────────────
 function markAmbiancePickerSeen() {
@@ -4549,7 +4614,7 @@ function showView(id) {
 
 // Disable study-only menu items when not in study view
 function updateToolsMenuState(viewId) {
-  const studyOnly = ['mi-oublis', 'mi-simulation', 'mi-edit', 'mi-reset', 'mi-export-one'];
+  const studyOnly = ['mi-oublis', 'mi-simulation', 'mi-edit', 'mi-reset', 'mi-export-one', 'mi-export-one-json'];
   const inStudy = (viewId === 'study');
   studyOnly.forEach(id => {
     const el = document.getElementById(id);
@@ -6144,6 +6209,34 @@ function exportText() {
 }
 
 // ═══════════════════════════════════════════════
+// EXPORT (single text, .json — réimportable, partageable)
+// Format identique à exportAllTexts mais avec un seul élément dans `texts`,
+// donc importable à l'identique par importAllTexts.
+// ═══════════════════════════════════════════════
+function exportTextJSON() {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  saveCurrentAnalysis(); // be sure latest edits are persisted before export
+  const fresh = texts.find(x => x.id === currentTextId);
+  const payload = { schemaVersion: 1, exportedAt: new Date().toISOString(), texts: [fresh] };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+  // Filename: revision-<slug-titre>-<date>.json
+  const date = new Date().toISOString().slice(0, 10);
+  const slug = (fresh.title || 'texte')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40) || 'texte';
+  const filename = `revision-${slug}-${date}.json`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  // No inline notice in study view (no library-notice-container visible)
+}
+
+// ═══════════════════════════════════════════════
 // EDIT CURRENT TEXT (from study view)
 // ═══════════════════════════════════════════════
 function editCurrentText() {
@@ -6210,6 +6303,18 @@ function exportAllTexts() {
 function importAllTexts(event) {
   const file = event.target.files[0];
   if(!file) return;
+  importTextsFromFile(file);
+  event.target.value = '';
+}
+
+// Helper réutilisable : prend un File (depuis input ou depuis drop), tente de l'importer.
+function importTextsFromFile(file) {
+  if(!file) return;
+  // Garde-fou : taille raisonnable (5 Mo). Au-delà c'est probablement pas un export.
+  if(file.size > 5 * 1024 * 1024) {
+    showInlineNotice('library-notice-container', 'Fichier trop gros (> 5 Mo). Vérifie que c\'est bien un export JSON.', 'error');
+    return;
+  }
   const reader = new FileReader();
   reader.onload = e => {
     try {
@@ -6232,8 +6337,67 @@ function importAllTexts(event) {
     }
   };
   reader.readAsText(file);
-  event.target.value = '';
 }
+
+// ── Drag & drop import ──────────────────────────
+// Sur la vue library uniquement, accepter un fichier JSON déposé n'importe où dans la fenêtre.
+(function setupDragDropImport(){
+  const dropzone = document.getElementById('library-dropzone');
+  if(!dropzone) return;
+  let dragDepth = 0; // compteur dragenter/dragleave (events imbriqués sur enfants)
+
+  function isLibraryActive() {
+    const lib = document.getElementById('library');
+    return lib && lib.classList.contains('active');
+  }
+  function dragHasFiles(e) {
+    if(!e.dataTransfer) return false;
+    const types = e.dataTransfer.types;
+    if(!types) return false;
+    for(let i = 0; i < types.length; i++) {
+      if(types[i] === 'Files') return true;
+    }
+    return false;
+  }
+
+  window.addEventListener('dragenter', (e) => {
+    if(!isLibraryActive() || !dragHasFiles(e)) return;
+    e.preventDefault();
+    dragDepth++;
+    dropzone.classList.add('is-active');
+    dropzone.setAttribute('aria-hidden', 'false');
+  });
+  window.addEventListener('dragover', (e) => {
+    if(!isLibraryActive() || !dragHasFiles(e)) return;
+    e.preventDefault(); // requis pour que le drop fonctionne
+    if(e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+  });
+  window.addEventListener('dragleave', (e) => {
+    if(!isLibraryActive() || !dragHasFiles(e)) return;
+    dragDepth = Math.max(0, dragDepth - 1);
+    if(dragDepth === 0) {
+      dropzone.classList.remove('is-active');
+      dropzone.setAttribute('aria-hidden', 'true');
+    }
+  });
+  window.addEventListener('drop', (e) => {
+    if(!isLibraryActive()) return;
+    e.preventDefault();
+    dragDepth = 0;
+    dropzone.classList.remove('is-active');
+    dropzone.setAttribute('aria-hidden', 'true');
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if(!files || files.length === 0) return;
+    const file = files[0]; // un seul fichier à la fois
+    // Filtre type/extension : on accepte JSON
+    const isJson = file.type === 'application/json' || /\.json$/i.test(file.name);
+    if(!isJson) {
+      showInlineNotice('library-notice-container', 'Seuls les fichiers JSON sont acceptés.', 'error');
+      return;
+    }
+    importTextsFromFile(file);
+  });
+})();
 
 // ═══════════════════════════════════════════════
 // SIMULATION
@@ -6739,6 +6903,19 @@ document.addEventListener('keydown', (e) => {
 // ═══════════════════════════════════════════════
 renderLibrary();
 </script>
+
+<!-- DRAG & DROP IMPORT OVERLAY — affiché par JS quand un fichier est draggé sur la fenêtre, vue library uniquement -->
+<div id="library-dropzone" class="library-dropzone" aria-hidden="true">
+  <div class="library-dropzone-card">
+    <svg aria-hidden="true" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 28v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-8"/>
+      <polyline points="32 16 24 8 16 16"/>
+      <line x1="24" y1="8" x2="24" y2="32"/>
+    </svg>
+    <div class="library-dropzone-title">Lâche le fichier pour l'importer</div>
+    <div class="library-dropzone-sub">Format JSON exporté par cet outil</div>
+  </div>
+</div>
 
 </body>
 </html>

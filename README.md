@@ -1,11 +1,12 @@
-[README.md](https://github.com/user-attachments/files/27366893/README.md)
+[README.md](https://github.com/user-attachments/files/27384911/README.md)
 # oraldefrancais.com — site
 
-Site statique de révision de l'oral de français (EAF). 3 pages :
+Site statique de révision de l'oral de français (EAF). 3 pages + 1 page d'erreur :
 
 - **`/` (`index.html` à la racine)** — Landing + onboarding modal (1ʳᵉ visite).
 - **`/faq/`** — FAQ et programme bac de français 2026.
 - **`/revision/`** — Outil de révision (cœur de l'app).
+- **`/404.html`** — Page d'erreur (servie auto par Cloudflare Pages quand l'URL n'existe pas).
 
 Pas de framework, pas de build step. HTML + CSS + JS vanilla. Cloudflare Pages auto-deploy au push sur `main`.
 
@@ -18,9 +19,14 @@ Pas de framework, pas de build step. HTML + CSS + JS vanilla. Cloudflare Pages a
 │   └── index.html           ← FAQ + programme
 ├── revision/
 │   └── index.html           ← outil de révision (cœur ~6700 lignes)
+├── 404.html                 ← page d'erreur (servie par Cloudflare Pages)
 ├── content/
-│   └── programme-2026.json  ← données du programme bac (lu par /faq)
-└── README.md
+│   └── programme-2026.json  ← données du programme bac (lu par /faq et /revision)
+├── favicon.svg              ← icône du site
+├── og-image.svg             ← image partage social (Open Graph)
+├── README.md                ← ce fichier
+├── DEPLOYMENT.md            ← procédure de déploiement et dépannage
+└── TODO.md                  ← chantiers ouverts et décisions arrêtées
 ```
 
 Pas de monorepo, pas de workspaces, pas de package.json. Si tu peux ouvrir un fichier dans GitHub web UI et le modifier, tu peux maintenir le site.
@@ -182,7 +188,7 @@ Push sur `main` → Cloudflare Pages déploie automatiquement en 30-60s.
 
 - Repo : `github.com/teliaaleena/oraldefrancais-com`
 - Cloudflare Pages settings : framework=None, build command=(empty), output=`/`, root=`/`, branch=`main`
-- Domaine : `teliamoreau.com` (DNS Cloudflare, compte Vincent)
+- Domaine : `oraldefrancais.com` (DNS Cloudflare, compte Vincent)
 
 Voir `DEPLOYMENT.md` pour les détails complets de setup (à créer si besoin).
 

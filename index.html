@@ -8,8 +8,9 @@
 <meta property="og:title" content="Oral de français · Outil de révision">
 <meta property="og:description" content="Outil libre pour préparer l'oral du bac de français. Phrase par phrase, à ton rythme, sans compte.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://oraldefrancais.com">
+<meta property="og:url" content="https://oraldefrancais.com/">
 <meta property="og:image" content="https://oraldefrancais.com/og-image.svg">
+<link rel="canonical" href="https://oraldefrancais.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Oral de français · Outil de révision">
 <meta name="twitter:image" content="https://oraldefrancais.com/og-image.svg">
@@ -40,9 +41,9 @@
   --shadow-soft: 0 2px 12px rgba(30, 41, 59, 0.06);
   --shadow-electric: 0 4px 14px rgba(14, 165, 233, 0.22);
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-pill: 100px;
 
   /* Canonical transition durations + spring easing */
@@ -1248,11 +1249,12 @@ function onbUpdateNav() {
 
 // ── STEP 1 — AMBIANCE ─────────────────────
 // ── TryMe palette: 20 curated combos shared with /revision/ ──
-// ════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════
 // AMBIANCE & TRYME — bloc partagé (palettes 13-tokens)
-// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html
-// /!\ Si tu modifies, modifie les 3 fichiers
-// ════════════════════════════════════════════════
+// /!\ Dupliqué dans index.html (root), faq/index.html, revision/index.html, 404.html
+// /!\ Si tu modifies les palettes ou un helper, modifie les 4 fichiers
+//     et garde-les synchronisés. Voir README.md > "Module Ambiance".
+// ════════════════════════════════════════════════════════════════
 const TRYME_PALETTES = [
   { label: 'Parchemin',          cream: '#fffbeb', cream2: '#fde68a', cream3: '#fcd34d', white: '#fffef5', whiteLine: '#fbe086', ink: '#422006', ink2: '#713f12', ink3: '#a16207', electric: '#b45309', pink: '#92400e' },
   { label: 'Sakura vif',         cream: '#fdf2f8', cream2: '#fbcfe8', cream3: '#f9a8d4', white: '#fffafd', whiteLine: '#f7c2dc', ink: '#500724', ink2: '#831843', ink3: '#9d174d', electric: '#be185d', pink: '#db2777' },

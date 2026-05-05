@@ -1,4 +1,4 @@
-[DEPLOYMENT.md](https://github.com/user-attachments/files/27366879/DEPLOYMENT.md)
+[DEPLOYMENT.md](https://github.com/user-attachments/files/27384908/DEPLOYMENT.md)
 # DEPLOYMENT — oraldefrancais.com
 
 Comment le site se déploie, où sont les comptes, quoi faire si quelque chose casse.

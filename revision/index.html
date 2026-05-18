@@ -4086,7 +4086,14 @@ kbd {
 // ═══════════════════════════════════════════════
 // DATA & STATE
 // ═══════════════════════════════════════════════
-
+// ── Apostrophe fix ──────────────────────────────────────────
+function normalise(str) {
+  return str
+    .replace(/[\u2018\u2019\u02BC\u0060\u00B4]/g, "'")
+    .trim()
+    .toLowerCase();
+}
+// ────────────────────────────────────────────────────────────
 // Migration silencieuse du schéma. Appelée pour chaque texte au chargement
 // et à la création. Idempotente : safe à rappeler plusieurs fois.
 // B4.1 ajoute mouvementsData = [{ numero, titre, startOffset, endOffset }]

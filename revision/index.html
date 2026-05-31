@@ -4149,17 +4149,14 @@ function normalise(str) {
     .toLowerCase();
 }
 // ── Vue complète JavaScript ──────────────────────────────────────────
-  function openVueComplete() {
+function openVueComplete() {
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
   renderVueComplete(t);
-  // Scroll the view div to top, not window
-  const el = document.getElementById('vue-complete');
-  if(el) el.scrollTop = 0;
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-   showView('vue-complete');
+  showView('vue-complete');
+  const shell = document.getElementById('main-app');
+  if(shell) shell.scrollTop = 0;
+  document.getElementById('vue-complete').scrollIntoView({block: 'start'});
   window.addEventListener('scroll', vcScrollHandler, {passive:true});
 }
    

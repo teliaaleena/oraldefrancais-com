@@ -34,151 +34,6 @@
   --ink-3: #64748b;            /* tertiary text */
   --ink-4: #94a3b8;            /* quaternary */
 
-   function openVueComplete() {
-  const t = texts.find(x => x.id === currentTextId);
-  if(!t) return;
-  renderVueComplete(t);
-  showView('vue-complete');
-  window.scrollTo(0,0);
-  const el = document.getElementById('vue-complete');
-  if(el) el.addEventListener('scroll', vcScrollHandler, {passive:true});
-  window.addEventListener('scroll', vcScrollHandler, {passive:true});
-}
-
-function closeVueComplete() {
-  window.removeEventListener('scroll', vcScrollHandler);
-  showView('study');
-}
-
-function vcScrollHandler() {
-  const h = document.documentElement;
-  const pct = Math.round(h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) || 0;
-  const fill = document.getElementById('vc-progress-fill');
-  const label = document.getElementById('vc-progress-label');
-  if(fill) fill.style.width = pct + '%';
-  if(label) label.textContent = pct + '% lu';
-}
-
-function renderVueComplete(t) {
-  const COLORS = { 1:'#0ea5e9', 2:'#ec4899', 3:'#15803d' };
-  const movs = (t.mouvementsData || []).sort((a,b) => a.numero - b.numero);
-  const ph = phrases.length ? phrases : extractPhrases(t.passage || '');
-  if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
-
-  // Reading time estimate (~200 wpm)
-  const allText = [t.introduction||'', t.passage||'', t.bilan||'', t.ouverture||''].join(' ');
-  const words = allText.trim().split(/\s+/).length;
-  const mins = Math.max(1, Math.round(words / 200));
-
-  // Header
-  let html = `<div class="vc-header">
-    <div class="vc-eyebrow">Fiche de révision · Vue complète</div>
-    <div class="vc-title">${escapeHtml(t.title || 'Sans titre')}</div>
-    <div class="vc-reading-time">⏱ Temps de lecture estimé : ${mins} min</div>
-  </div>`;
-
- // Introduction
-  if(t.introduction || t.introductionModele) {
-    const intro = t.introduction || t.introductionModele;
-    html += vcSection('Introduction', `<div class="vc-prose">${escapeHtml(intro)}</div>`);
-  }
-     
-  // Problématique
-  if(t.problematique || t.problematiqueModele) {
-    const prob = t.problematique || t.problematiqueModele;
-    html += vcSection('Problématique', `<div class="vc-problematique">${escapeHtml(prob)}</div>`);
-  }
-
-  // Mouvements plan
-  if(movs.length) {
-    const pillsHtml = movs.map(m =>
-      `<div class="vc-mov-pill" style="--mov-color:${COLORS[m.numero]||'var(--cream-3)'}">
-        <span class="vc-mov-roman">${roman(m.numero)}.</span>
-        <span class="vc-mov-name">${escapeHtml(m.titre || '')}</span>
-      </div>`).join('');
-    html += vcSection(`Plan du texte · ${movs.length} mouvement${movs.length>1?'s':''}`,
-      `<div class="vc-mov-list">${pillsHtml}</div>`);
-  }
-
-  // Full text + analyses grouped by mouvement
-  if(ph.length) {
-    let bodyHtml = '';
-    if(movs.length) {
-      movs.forEach(m => {
-        const color = COLORS[m.numero] || 'var(--cream-3)';
-        const mPhrases = ph.filter(p => {
-          if(p.startOffset === undefined) return false;
-          return p.startOffset >= m.startOffset && p.endOffset <= m.endOffset;
-        });
-        // Fallback: if offset matching fails, show all phrases under first mouvement only
-        const phrasesToShow = mPhrases.length ? mPhrases : (m.numero === 1 ? ph : []);
-        if(!phrasesToShow.length && mPhrases.length === 0 && m.numero !== 1) {
-          bodyHtml += `<div class="vc-mov-group">
-            <div class="vc-mov-group-hd" style="--mov-color:${color}">
-              <span class="vc-mov-group-num">${roman(m.numero)}.</span>
-              <span class="vc-mov-group-name">${escapeHtml(m.titre||'')}</span>
-            </div>
-          </div>`;
-          return;
-        }
-        bodyHtml += `<div class="vc-mov-group">
-          <div class="vc-mov-group-hd" style="--mov-color:${color}">
-            <span class="vc-mov-group-num">${roman(m.numero)}.</span>
-            <span class="vc-mov-group-name">${escapeHtml(m.titre||'')}</span>
-          </div>
-          ${phrasesToShow.map(p => vcQA(p)).join('')}
-        </div>`;
-      });
-    } else {
-      bodyHtml = ph.map(p => vcQA(p)).join('');
-    }
-    html += vcSection('Texte & analyses', bodyHtml);
-  }
-
-  // Conclusion
-  if(t.bilan || t.conclusionModele) {
-    const conclu = t.bilan || t.conclusionModele;
-    let concluHtml = `<div class="vc-prose">${escapeHtml(conclu)}</div>`;
-    if(t.ouverture) {
-      concluHtml += `<div style="margin-top:14px">
-        <div class="vc-analysis-label">Ouverture</div>
-        <div class="vc-ouverture">${escapeHtml(t.ouverture)}</div>
-      </div>`;
-    }
-    html += vcSection('Conclusion', concluHtml);
-  }
-
-  document.getElementById('vc-content').innerHTML = html;
-
-  // Attach collapse toggles
-  document.querySelectorAll('.vc-section-hd').forEach(hd => {
-    hd.addEventListener('click', () => {
-      hd.closest('.vc-section').classList.toggle('collapsed');
-    });
-  });
-}
-
-function vcSection(label, bodyHtml) {
-  return `<div class="vc-section">
-    <div class="vc-section-hd">
-      <span class="vc-section-label">${label}</span>
-      <span class="vc-chevron">›</span>
-    </div>
-    <div class="vc-section-body">${bodyHtml}</div>
-  </div>`;
-}
-
-function vcQA(p) {
-  const hasAnalysis = p.analysis && p.analysis.trim();
-  return `<div class="vc-qa">
-    <div class="vc-quote"><span class="vc-quote-label">Citation</span>${escapeHtml(p.text)}</div>
-    <div class="vc-analysis${hasAnalysis?'':' vc-no-analysis'}">
-      <span class="vc-analysis-label">Analyse</span>
-      ${hasAnalysis ? escapeHtml(p.analysis) : '— pas encore rédigée —'}
-    </div>
-  </div>`;
-}
-
   /* Status palette — punchy in light, deeper in dark */
   --neutral-bg: #ffffff;
   --neutral-border: #e2e8f0;
@@ -4290,6 +4145,151 @@ function normalise(str) {
     .replace(/[\u2018\u2019\u02BC\u0060\u00B4]/g, "'")
     .trim()
     .toLowerCase();
+}
+// ── Vue complète JavaScript ──────────────────────────────────────────
+   function openVueComplete() {
+  const t = texts.find(x => x.id === currentTextId);
+  if(!t) return;
+  renderVueComplete(t);
+  showView('vue-complete');
+  window.scrollTo(0,0);
+  const el = document.getElementById('vue-complete');
+  if(el) el.addEventListener('scroll', vcScrollHandler, {passive:true});
+  window.addEventListener('scroll', vcScrollHandler, {passive:true});
+}
+
+function closeVueComplete() {
+  window.removeEventListener('scroll', vcScrollHandler);
+  showView('study');
+}
+
+function vcScrollHandler() {
+  const h = document.documentElement;
+  const pct = Math.round(h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) || 0;
+  const fill = document.getElementById('vc-progress-fill');
+  const label = document.getElementById('vc-progress-label');
+  if(fill) fill.style.width = pct + '%';
+  if(label) label.textContent = pct + '% lu';
+}
+
+function renderVueComplete(t) {
+  const COLORS = { 1:'#0ea5e9', 2:'#ec4899', 3:'#15803d' };
+  const movs = (t.mouvementsData || []).sort((a,b) => a.numero - b.numero);
+  const ph = phrases.length ? phrases : extractPhrases(t.passage || '');
+  if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
+
+  // Reading time estimate (~200 wpm)
+  const allText = [t.introduction||'', t.passage||'', t.bilan||'', t.ouverture||''].join(' ');
+  const words = allText.trim().split(/\s+/).length;
+  const mins = Math.max(1, Math.round(words / 200));
+
+  // Header
+  let html = `<div class="vc-header">
+    <div class="vc-eyebrow">Fiche de révision · Vue complète</div>
+    <div class="vc-title">${escapeHtml(t.title || 'Sans titre')}</div>
+    <div class="vc-reading-time">⏱ Temps de lecture estimé : ${mins} min</div>
+  </div>`;
+
+  // Problématique
+  if(t.problematique || t.problematiqueModele) {
+    const prob = t.problematique || t.problematiqueModele;
+    html += vcSection('Problématique', `<div class="vc-problematique">${escapeHtml(prob)}</div>`);
+  }
+
+  // Introduction
+  if(t.introduction || t.introductionModele) {
+    const intro = t.introduction || t.introductionModele;
+    html += vcSection('Introduction', `<div class="vc-prose">${escapeHtml(intro)}</div>`);
+  }
+
+  // Mouvements plan
+  if(movs.length) {
+    const pillsHtml = movs.map(m =>
+      `<div class="vc-mov-pill" style="--mov-color:${COLORS[m.numero]||'var(--cream-3)'}">
+        <span class="vc-mov-roman">${roman(m.numero)}.</span>
+        <span class="vc-mov-name">${escapeHtml(m.titre || '')}</span>
+      </div>`).join('');
+    html += vcSection(`Plan du texte · ${movs.length} mouvement${movs.length>1?'s':''}`,
+      `<div class="vc-mov-list">${pillsHtml}</div>`);
+  }
+
+  // Full text + analyses grouped by mouvement
+  if(ph.length) {
+    let bodyHtml = '';
+    if(movs.length) {
+      movs.forEach(m => {
+        const color = COLORS[m.numero] || 'var(--cream-3)';
+        const mPhrases = ph.filter(p => {
+          if(p.startOffset === undefined) return false;
+          return p.startOffset >= m.startOffset && p.endOffset <= m.endOffset;
+        });
+        // Fallback: if offset matching fails, show all phrases under first mouvement only
+        const phrasesToShow = mPhrases.length ? mPhrases : (m.numero === 1 ? ph : []);
+        if(!phrasesToShow.length && mPhrases.length === 0 && m.numero !== 1) {
+          bodyHtml += `<div class="vc-mov-group">
+            <div class="vc-mov-group-hd" style="--mov-color:${color}">
+              <span class="vc-mov-group-num">${roman(m.numero)}.</span>
+              <span class="vc-mov-group-name">${escapeHtml(m.titre||'')}</span>
+            </div>
+          </div>`;
+          return;
+        }
+        bodyHtml += `<div class="vc-mov-group">
+          <div class="vc-mov-group-hd" style="--mov-color:${color}">
+            <span class="vc-mov-group-num">${roman(m.numero)}.</span>
+            <span class="vc-mov-group-name">${escapeHtml(m.titre||'')}</span>
+          </div>
+          ${phrasesToShow.map(p => vcQA(p)).join('')}
+        </div>`;
+      });
+    } else {
+      bodyHtml = ph.map(p => vcQA(p)).join('');
+    }
+    html += vcSection('Texte & analyses', bodyHtml);
+  }
+
+  // Conclusion
+  if(t.bilan || t.conclusionModele) {
+    const conclu = t.bilan || t.conclusionModele;
+    let concluHtml = `<div class="vc-prose">${escapeHtml(conclu)}</div>`;
+    if(t.ouverture) {
+      concluHtml += `<div style="margin-top:14px">
+        <div class="vc-analysis-label">Ouverture</div>
+        <div class="vc-ouverture">${escapeHtml(t.ouverture)}</div>
+      </div>`;
+    }
+    html += vcSection('Conclusion', concluHtml);
+  }
+
+  document.getElementById('vc-content').innerHTML = html;
+
+  // Attach collapse toggles
+  document.querySelectorAll('.vc-section-hd').forEach(hd => {
+    hd.addEventListener('click', () => {
+      hd.closest('.vc-section').classList.toggle('collapsed');
+    });
+  });
+}
+
+function vcSection(label, bodyHtml) {
+  return `<div class="vc-section">
+    <div class="vc-section-hd">
+      <span class="vc-section-label">${label}</span>
+      <span class="vc-chevron">›</span>
+    </div>
+    <div class="vc-section-body">${bodyHtml}</div>
+  </div>`;
+}
+
+function vcQA(p) {
+  const hasAnalysis = p.analysis && p.analysis.trim();
+  return `<div class="vc-qa">
+    <div class="vc-quote"><span class="vc-quote-label">Citation</span>${escapeHtml(p.text)}</div>
+    <div class="vc-analysis${hasAnalysis?'':' vc-no-analysis'}">
+      <span class="vc-analysis-label">Analyse</span>
+      ${hasAnalysis ? escapeHtml(p.analysis) : '— pas encore rédigée —'}
+    </div>
+  </div>`;
 }
 // ────────────────────────────────────────────────────────────
 // Migration silencieuse du schéma. Appelée pour chaque texte au chargement

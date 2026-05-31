@@ -4148,17 +4148,20 @@ function normalise(str) {
     .toLowerCase();
 }
 // ── Vue complète JavaScript ──────────────────────────────────────────
-   function openVueComplete() {
+  function openVueComplete() {
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
   renderVueComplete(t);
   showView('vue-complete');
-  window.scrollTo(0,0);
+  // Scroll the view div to top, not window
   const el = document.getElementById('vue-complete');
-  if(el) el.addEventListener('scroll', vcScrollHandler, {passive:true});
+  if(el) el.scrollTop = 0;
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   window.addEventListener('scroll', vcScrollHandler, {passive:true});
 }
-
+   
 function closeVueComplete() {
   window.removeEventListener('scroll', vcScrollHandler);
   showView('study');
@@ -4176,7 +4179,12 @@ function vcScrollHandler() {
 function renderVueComplete(t) {
   const COLORS = { 1:'#0ea5e9', 2:'#ec4899', 3:'#15803d' };
   const movs = (t.mouvementsData || []).sort((a,b) => a.numero - b.numero);
-  const ph = extractPhrases(t.passage || '');
+  const rawMatches = (t.passage || '').match(/\[([^\]]+)\]/g) || [];
+const ph = extractPhrases(t.passage || '');
+ph.forEach((p, i) => {
+  if(rawMatches[i]) p.raw = rawMatches[i].slice(1, -1); // strip [ ]
+});
+if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
   if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
 
   const allText = [t.introduction||'', t.passage||'', t.bilan||'', t.ouverture||''].join(' ');
@@ -4292,37 +4300,28 @@ function vcHighlight(text) {
 }
 
 function vcQA(p) {
-  // Use correction (the model answer from [texte|correction]) not user's typed analysis
-  const correction = p.correction && p.correction.trim();
-  const userAnalysis = p.analysis && p.analysis.trim();
+  // p.correction comes from extractPhrases parsing [text|correction]
+  // p.analysis comes from user-typed analysis
+  // For Vue Complète we prioritise the correction field
+  let correctionRaw = '';
+  // Try p.correction first (set by extractPhrases from the | part)
+  if(p.correction && p.correction.trim()) {
+    correctionRaw = p.correction.trim();
+  }
+  // Fallback: re-parse from p.raw if available
+  if(!correctionRaw && p.raw) {
+    const pipeIdx = p.raw.indexOf('|');
+    if(pipeIdx !== -1) correctionRaw = p.raw.slice(pipeIdx + 1).replace(/\]$/, '').trim();
+  }
+  const hasCorrection = !!correctionRaw;
   return `<div class="vc-qa">
     <div class="vc-quote"><span class="vc-quote-label">Citation</span>${escapeHtml(p.text)}</div>
-    <div class="vc-analysis${correction ? '' : ' vc-no-analysis'}">
+    <div class="vc-analysis${hasCorrection ? '' : ' vc-no-analysis'}">
       <span class="vc-analysis-label">Correction</span>
-      ${correction ? escapeHtml(correction) : (userAnalysis ? escapeHtml(userAnalysis) : '— pas de correction —')}
+      ${hasCorrection ? escapeHtml(correctionRaw) : '— pas de correction —'}
     </div>
   </div>`;
 }
-
-function vcSection(label, bodyHtml) {
-  return `<div class="vc-section">
-    <div class="vc-section-hd">
-      <span class="vc-section-label">${label}</span>
-      <span class="vc-chevron">›</span>
-    </div>
-    <div class="vc-section-body">${bodyHtml}</div>
-  </div>`;
-}
-
-function vcQA(p) {
-  const hasAnalysis = p.analysis && p.analysis.trim();
-  return `<div class="vc-qa">
-    <div class="vc-quote"><span class="vc-quote-label">Citation</span>${escapeHtml(p.text)}</div>
-    <div class="vc-analysis${hasAnalysis?'':' vc-no-analysis'}">
-      <span class="vc-analysis-label">Analyse</span>
-      ${hasAnalysis ? escapeHtml(p.analysis) : '— pas encore rédigée —'}
-    </div>
-  </div>`;
 }
 // ────────────────────────────────────────────────────────────
 // Migration silencieuse du schéma. Appelée pour chaque texte au chargement

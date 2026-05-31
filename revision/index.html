@@ -290,7 +290,7 @@ body {
 }
 .view { display: none; flex: 1; }
 .view.active { display: flex; flex-direction: column; }
-#vue-complete.active { display: block; overflow-y: auto; }
+#vue-complete.active { display: block; overflow-y: auto; min-height: 100dvh; }
 
 /* Site footer (cohérent avec homepage et FAQ) */
 .site-footer {
@@ -4153,13 +4153,13 @@ function normalise(str) {
   const t = texts.find(x => x.id === currentTextId);
   if(!t) return;
   renderVueComplete(t);
-  showView('vue-complete');
   // Scroll the view div to top, not window
   const el = document.getElementById('vue-complete');
   if(el) el.scrollTop = 0;
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+   showView('vue-complete');
   window.addEventListener('scroll', vcScrollHandler, {passive:true});
 }
    

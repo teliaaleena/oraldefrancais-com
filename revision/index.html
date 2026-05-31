@@ -4166,6 +4166,16 @@ function closeVueComplete() {
   window.removeEventListener('scroll', vcScrollHandler);
   showView('study');
 }
+   
+function vcSection(label, bodyHtml) {
+  return `<div class="vc-section">
+    <div class="vc-section-hd">
+      <span class="vc-section-label">${label}</span>
+      <span class="vc-chevron">›</span>
+    </div>
+    <div class="vc-section-body">${bodyHtml}</div>
+  </div>`;
+}   
 
 function vcScrollHandler() {
   const h = document.documentElement;
@@ -4185,8 +4195,6 @@ ph.forEach((p, i) => {
   if(rawMatches[i]) p.raw = rawMatches[i].slice(1, -1); // strip [ ]
 });
 if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
-  if(t.phraseAnalyses) ph.forEach((p,i) => { if(t.phraseAnalyses[i]) p.analysis = t.phraseAnalyses[i]; });
-
   const allText = [t.introduction||'', t.passage||'', t.bilan||'', t.ouverture||''].join(' ');
   const words = allText.trim().split(/\s+/).length;
   const mins = Math.max(1, Math.round(words / 200));

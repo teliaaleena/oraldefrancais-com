@@ -5960,8 +5960,8 @@ function applyCorrectionVisibility() {
 }
 
 function applyPhantomMode() {
-  const stack = document.querySelector('.analysis-stack');
   const overlay = document.getElementById('ghost-overlay');
+  const stack = overlay ? overlay.closest('.analysis-stack') : null;
   const pill = document.getElementById('phantom-pill');
   const stateLabel = document.getElementById('phantom-state');
   if(!stack || !overlay || !pill) return;

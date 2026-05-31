@@ -4880,12 +4880,10 @@ function persistTextFromForm() {
     if(idx >= 0) {
       // Si le passage a changé, reset les mouvements (offsets devenus invalides)
       const oldPassage = texts[idx].passage || '';
-      const passageChanged = oldPassage !== passage;
-      const update = { ...texts[idx], title, passage, problematiqueModele, introductionModele, conclusionModele };
-      if(passageChanged) {
-        update.mouvementsData = [];
-        update.mouvements = '';
-      }
+     const update = { ...texts[idx], title, passage, problematiqueModele, introductionModele, conclusionModele };
+// Mouvements are preserved even if the passage text changes.
+// They are only reset if the user explicitly deletes them via the UI.
+// (Offsets may be slightly off after edits but mouvements stay visible.)
       texts[idx] = update;
       save();
       return { ok: true, idx, isNew: false };
